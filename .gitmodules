@@ -1,0 +1,3 @@
+[submodule "grillsay"]
+	path = grillsay
+	url = https://github.com/itsnotqwerty/grillsay
