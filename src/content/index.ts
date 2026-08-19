@@ -1,7 +1,7 @@
 /**
  * Shared, cached access to validated JSON content (design §4).
  */
-import type { CraftingRecipe, Item, Npc, Quest, Region } from "../types.ts";
+import type { CraftingRecipe, Decree, Encounter, Item, Npc, Quest, Region } from "../types.ts";
 import { loadContentOrThrow } from "./load.ts";
 
 type Content = {
@@ -10,6 +10,8 @@ type Content = {
   regions: Region[];
   items: Item[];
   recipes: CraftingRecipe[];
+  decrees: Decree[];
+  encounters: Encounter[];
 };
 
 let cache: Content | null = null;
@@ -37,6 +39,14 @@ export async function getItems(): Promise<Item[]> {
 
 export async function getRecipes(): Promise<CraftingRecipe[]> {
   return (await getContent()).recipes;
+}
+
+export async function getDecrees(): Promise<Decree[]> {
+  return (await getContent()).decrees;
+}
+
+export async function getEncounters(): Promise<Encounter[]> {
+  return (await getContent()).encounters;
 }
 
 /** Reset the cache (tests / hot reload). */

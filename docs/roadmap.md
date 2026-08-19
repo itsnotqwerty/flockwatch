@@ -42,9 +42,9 @@ Goal: scrap becomes items; items become a market. ✅ *(core achieved)*
 - [x] Workbench crafting from recipes (spec §3.6.2, §4.5)
 - [x] Starter recipe set: cutters, signal jammer, tradeable goods
 - [x] Player market: atomic listings, buy/sell, withdraw (spec §3.3)
-- [ ] Per-item price history
-- [ ] Currency sinks and sources balanced against camera wages
-- [ ] First Ministry of Valuation decree event (live-ops price modifier)
+- [x] Per-item price history
+- [x] Currency sinks and sources balanced against camera wages *(workbench licensing fee, travel costs, espionage bribes, flag surcharges vs. wages/quest/intercept payouts)*
+- [x] First Ministry of Valuation decree event (live-ops price modifier)
 
 ## Phase 4 — Regions
 
@@ -54,8 +54,8 @@ Goal: the US map exists; regional statistics and economies diverge. ✅ *(core a
 - [x] Per-region stats: coverage, unrest, prosperity, Flock presence, population mood
 - [x] Travel between regions with cost scaled by destination Flock presence
 - [x] Region-scoped NPC rosters and camera ledgers
-- [ ] Per-region market instances (listings currently global)
-- [ ] Cross-region trade/arbitrage viability pass
+- [x] Per-region market instances (listings, fees, and decree modifiers are per-region)
+- [x] Cross-region trade/arbitrage viability pass *(divergent wage multipliers, decree spreads, and travel costs make hauling goods between boards profitable)*
 - [ ] Expand to full US region set
 
 ### Activity-based refresh timers
@@ -65,13 +65,13 @@ Goal: the US map exists; regional statistics and economies diverge. ✅ *(core a
 
 ## Phase 5 — Combat & Espionage
 
-Goal: teeth. The world pushes back.
+Goal: teeth. The world pushes back. ✅ *(achieved)*
 
-- [ ] Turn-based text encounter system (spec §3.4)
-- [ ] Enemy roster tied to region stats (high-coverage regions spawn patrol encounters)
-- [ ] Espionage actions: tailing, intercepts, intel gathering (spec §3.5)
-- [ ] Espionage failure consequences: flags, restricted areas, market fees
-- [ ] First multi-phase boss encounter
+- [x] Turn-based text encounter system (spec §3.4)
+- [x] Enemy roster tied to region stats (high-coverage regions spawn patrol encounters)
+- [x] Espionage actions: tailing, intercepts, intel gathering (spec §3.5)
+- [x] Espionage failure consequences: flags, restricted areas, market fees
+- [x] First multi-phase boss encounter *(Regional Director Hale, New York)*
 
 ## Phase 6 — Multiplayer
 
@@ -85,7 +85,7 @@ Goal: the MMO part of the MMORPG.
 
 ## Phase 7 — Live World
 
-- [ ] Twilio integration for out-of-game notifications (Flock alerts, decree announcements)
+- [ ] Email integration for out-of-game notifications (Flock alerts, decree announcements)
 - [ ] Recurring live-ops events per region
 - [ ] Seasonal camera-war resets / escalation arcs
 - [ ] Deno Deploy production pipeline with scoped permissions

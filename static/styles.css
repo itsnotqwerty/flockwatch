@@ -87,13 +87,94 @@ header nav {
 }
 
 main {
-  max-width: 44rem;
+  max-width: 88rem;
   margin: 2rem auto;
   padding: 0 1.5rem;
+  /* Modern grid: intro spans the top row; boards tile beneath it. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Intro copy spans the full width; boards tile below it. */
+main > h2,
+main > p,
+main > ul.npc-list,
+main > form:last-child {
+  grid-column: 1 / -1;
+}
+
+/* Every board renders as a panel card. */
+main > section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--surveillance);
+  padding: 1rem 1.25rem;
+  margin: 0;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+main > section > h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+main > section > h4 {
+  margin: 0.75rem 0 0.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Tighter list rhythm inside cards. */
+main > section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+main > section ul li {
+  padding: 0.3rem 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+main > section ul li:last-child {
+  border-bottom: none;
+}
+
+main > section li form {
+  display: inline;
+}
+
+/* The active encounter is urgent: full-width banner above the boards. */
+main > section.encounter {
+  grid-column: 1 / -1;
+  border-top-color: var(--stamp);
+}
+
+/* Encounter move buttons sit side by side. */
+ul.encounter-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+ul.encounter-moves li {
+  border-bottom: none;
+  padding: 0;
+}
+
+@media (max-width: 50rem) {
+  main {
+    grid-template-columns: 1fr;
+  }
 }
 
 footer {
-  max-width: 44rem;
+  max-width: 88rem;
   margin: 3rem auto 2rem;
   padding: 1rem 1.5rem 0;
   border-top: 1px solid var(--line);
@@ -117,6 +198,7 @@ h2 {
   font-weight: 600;
   border-bottom: 1px solid var(--line);
   padding-bottom: 0.25rem;
+  margin: 0;
 }
 
 a { color: var(--surveillance); }

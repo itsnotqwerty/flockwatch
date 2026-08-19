@@ -2,9 +2,11 @@
  * Content loader: reads region-namespaced JSON content files from content/
  * (design §4), validates them, and returns the assembled roster.
  */
-import type { CraftingRecipe, Item, Npc, Quest, Region } from "../types.ts";
+import type { CraftingRecipe, Decree, Encounter, Item, Npc, Quest, Region } from "../types.ts";
 import {
   validateCrossReferences,
+  validateDecrees,
+  validateEncounters,
   validateItems,
   validateNpcs,
   validateQuests,
@@ -21,6 +23,8 @@ export interface LoadedContent {
   regions: Region[];
   items: Item[];
   recipes: CraftingRecipe[];
+  decrees: Decree[];
+  encounters: Encounter[];
   issues: ContentIssue[];
 }
 
@@ -31,6 +35,8 @@ export async function loadContent(): Promise<LoadedContent> {
   const regions: Region[] = [];
   const items: Item[] = [];
   const recipes: CraftingRecipe[] = [];
+  const decrees: Decree[] = [];
+  const encounters: Encounter[] = [];
   const issues: ContentIssue[] = [];
 
   for await (const entry of Deno.readDir(CONTENT_DIR)) {
@@ -58,13 +64,19 @@ export async function loadContent(): Promise<LoadedContent> {
     } else if (entry.name === "recipes.json") {
       issues.push(...validateRecipes(data, entry.name));
       recipes.push(...(data as CraftingRecipe[]));
+    } else if (entry.name === "decrees.json") {
+      issues.push(...validateDecrees(data, entry.name));
+      decrees.push(...(data as Decree[]));
+    } else if (entry.name === "encounters.json") {
+      issues.push(...validateEncounters(data, entry.name));
+      encounters.push(...(data as Encounter[]));
     }
   }
 
   if (issues.length === 0) {
     issues.push(...validateCrossReferences(npcs, quests, "content/"));
   }
-  return { npcs, quests, regions, items, recipes, issues };
+  return { npcs, quests, regions, items, recipes, decrees, encounters, issues };
 }
 
 /** Load content, throwing on any validation issue. */
@@ -74,11 +86,13 @@ export async function loadContentOrThrow(): Promise<{
   regions: Region[];
   items: Item[];
   recipes: CraftingRecipe[];
+  decrees: Decree[];
+  encounters: Encounter[];
 }> {
-  const { npcs, quests, regions, items, recipes, issues } = await loadContent();
+  const { npcs, quests, regions, items, recipes, decrees, encounters, issues } = await loadContent();
   if (issues.length > 0) {
     const detail = issues.map((i) => `  ${i.file}: ${i.message}`).join("\n");
     throw new Error(`Content validation failed:\n${detail}`);
   }
-  return { npcs, quests, regions, items, recipes };
+  return { npcs, quests, regions, items, recipes, decrees, encounters };
 }

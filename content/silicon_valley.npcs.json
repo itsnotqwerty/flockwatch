@@ -214,5 +214,63 @@
         ]
       }
     ]
+  },
+  {
+    "id": "sv_brad",
+    "name": "Brad Kellerman",
+    "role": "Quant, Perpetual Motion Capital (Series C)",
+    "region": "silicon_valley",
+    "art": "financebro",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Surveillance is the last unpriced externality, bro. Every camera is a yield-bearing asset. I am long pigeons. Long, bro. LONG.",
+        "options": [
+          {
+            "id": "ask_fund",
+            "label": "Ask about the fund",
+            "response": "We securitize foot traffic. Bundle the crosswalks, tranche the jaywalkers, sell the alpha back to the city. It's basically free money. The city is the exit liquidity.",
+            "next": "fund"
+          },
+          {
+            "id": "ask_cameras",
+            "label": "Ask about the cameras",
+            "response": "Cameras? Bullish. Each unit is a data oil well. I tried to buy one off a guy once. He said they're not for sale. Everything is for sale, bro. He just didn't like my term sheet.",
+            "next": null
+          },
+          {
+            "id": "ask_losses",
+            "label": "Ask about his losses",
+            "response": "We don't say losses. We say 'pre-profit turbulence.' I was down 90% on artisanal pickle futures in Q2. Q3 I'm down 95%. That's called doubling your conviction.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Walk away mid-pitch",
+            "response": "Your loss, bro! Actually it's alpha decay! I'll invoice you for the exposure!",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "fund",
+        "line": "Our moat is that nobody understands the product, including us. Comprehension is a liability. It creates doubt, and doubt is unhedgeable.",
+        "options": [
+          {
+            "id": "ask_moat",
+            "label": "Ask about the moat",
+            "response": "Patent pending. Trademark pending. Product pending. But the deck? The deck is READY, bro. Sixty slides of pure slope.",
+            "next": "reset"
+          },
+          {
+            "id": "fund_leave",
+            "label": "Nod like you understand",
+            "response": "You get it. You don't get it. Same thing at our level. Welcome aboard. I'll have legal send you nothing.",
+            "next": null
+          }
+        ]
+      }
+    ]
   }
 ]

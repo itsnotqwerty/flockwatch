@@ -10,6 +10,26 @@ import {
   seedContent,
 } from "./content.ts";
 import { npcs, quests } from "../game/fixtures.ts";
+import { getPriceHistory, PRICE_HISTORY_LIMIT, recordSale } from "./market.ts";
+
+Deno.test("price history records sales capped at the limit", async () => {
+  const store = createMemoryStore();
+  const listing = { id: "lst_1", sellerId: "s1", itemId: "binoculars", price: 40, listedAt: "" };
+  await recordSale(listing, store);
+  await recordSale({ ...listing, price: 60 }, store);
+  const history = await getPriceHistory("binoculars", store);
+  assertEquals(history.map((p) => p.price), [40, 60]);
+  assertEquals(history[0].itemId, "binoculars");
+  assertEquals(await getPriceHistory("nothing_sold", store), []);
+
+  // Cap: older entries drop off once the limit is exceeded.
+  for (let i = 0; i < PRICE_HISTORY_LIMIT + 5; i++) {
+    await recordSale({ ...listing, price: i }, store);
+  }
+  const capped = await getPriceHistory("binoculars", store);
+  assertEquals(capped.length, PRICE_HISTORY_LIMIT);
+  assertEquals(capped[capped.length - 1].price, PRICE_HISTORY_LIMIT + 4);
+});
 
 Deno.test("memory store round-trips values", async () => {
   const store = createMemoryStore();

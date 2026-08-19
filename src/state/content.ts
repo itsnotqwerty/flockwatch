@@ -26,7 +26,7 @@ export async function seedContent(
  * Player state (quests held, inventory, currency) is never touched — only
  * the static content records.
  */
-export const CONTENT_VERSION = 5;
+export const CONTENT_VERSION = 7;
 
 const versionKey = ["meta", "content_version"];
 

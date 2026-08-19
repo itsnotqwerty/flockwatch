@@ -82,5 +82,12 @@
     "description": "Track four is just serial numbers off the Peachtree units. It charted.",
     "rarity": "rare",
     "tradeable": true
+  },
+  {
+    "id": "circuit_board_cache",
+    "name": "Intercepted Circuit Board Cache",
+    "description": "Pulled from a van that will not be missed. Dense with resale value.",
+    "rarity": "uncommon",
+    "tradeable": true
   }
 ]

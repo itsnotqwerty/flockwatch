@@ -56,8 +56,108 @@ export interface MarketListing {
   id: string;
   sellerId: string;
   itemId: string;
+  /** Region whose market board carries this listing (spec §3.0 local economies). */
+  regionId: string;
+  /** Asking price before any Ministry of Valuation decree modifiers. */
   price: number;
   listedAt: string; // ISO 8601
+}
+
+/** A recorded sale, kept per item for price history (spec §3.3). */
+export interface PricePoint {
+  itemId: string;
+  /** Price actually paid (after decree modifiers). */
+  price: number;
+  soldAt: string; // ISO 8601
+}
+
+/**
+ * A Ministry of Valuation decree (spec §3.3): a live-ops price modifier
+ * applied to every market transaction while active.
+ */
+export interface Decree {
+  id: string;
+  title: string;
+  proclamation: string;
+  /** Price multiplier; 1.2 means prices rise 20%. */
+  priceMultiplier: number;
+  /** "national" applies everywhere; "regional" applies to `region` only. */
+  scope: "national" | "regional";
+  /** Required when scope is "regional". */
+  region: string | null;
+  issuedAt: string; // ISO 8601
+  expiresAt: string; // ISO 8601
+}
+
+// ── §4.7 Espionage ─────────────────────────────────────────────────────────
+
+export type EspionageActionType = "tail" | "intercept" | "gather_intel";
+
+/** Persistent consequence of a blown espionage operation (spec §3.5). */
+export interface EspionageFlag {
+  id: string;
+  region: string;
+  action: EspionageActionType;
+  reason: string;
+  flaggedAt: string; // ISO 8601
+}
+
+// ── §4.8 Encounters ────────────────────────────────────────────────────────
+
+export interface EncounterMove {
+  id: string;
+  label: string;
+  /** Flat damage dealt to the enemy. */
+  damage: number;
+  /** Flat damage suffered by the player. */
+  selfDamage: number;
+  /** Suspicion delta applied on use. */
+  suspicion: number;
+  /** Intel gained on use (espionage encounters). */
+  intel?: number;
+  /** Currency spent on use (e.g., a bribe). */
+  cost?: number;
+  /** Ends the encounter immediately in escape. */
+  flees?: boolean;
+}
+
+export type EncounterKind = "patrol" | "boss";
+
+export interface Encounter {
+  id: string;
+  name: string;
+  art: string;
+  kind: EncounterKind;
+  /** Regions where this encounter can spawn. */
+  regions: string[];
+  /** Minimum regional Flock presence required for a patrol spawn. */
+  minFlockPresence: number;
+  maxHp: number;
+  moves: EncounterMove[];
+  victoryLine: string;
+  defeatLine: string;
+  /** Currency paid on victory. */
+  payout: number;
+  /** Items granted on victory. */
+  drops: string[];
+  /** Suspicion cleared on victory. */
+  clearsSuspicion?: number;
+  /** Bosses only: flavored phase-change announcements at these hp fractions. */
+  phases?: Array<{ at: number; line: string }>;
+}
+
+export type EncounterStatus = "ongoing" | "victory" | "defeat" | "fled";
+
+/** A live encounter instance for one player. */
+export interface EncounterState {
+  encounterId: string;
+  playerId: string;
+  region: string;
+  enemyHp: number;
+  status: EncounterStatus;
+  /** Boss phase index already announced. */
+  phaseIndex: number;
+  log: string[];
 }
 
 // ── §4.4 Camera ─────────────────────────────────────────────────────────────
@@ -182,4 +282,10 @@ export interface Player {
   suspicion: number;
   region: string;
   quests: PlayerQuest[];
+  /** Persistent espionage flags from blown operations (spec §3.5). */
+  flags: EspionageFlag[];
+  /** Dossier intel gathered through espionage, per region. */
+  intel: Partial<Record<string, number>>;
+  /** Regions where patrol encounters are suppressed (restricted — player is known). */
+  restricted: string[];
 }

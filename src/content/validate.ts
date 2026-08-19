@@ -2,7 +2,7 @@
  * JSON content validation (design §4). Checks structural shape and
  * cross-references for NPC and quest content files before merge/load.
  */
-import type { CraftingRecipe, Item, Npc, Quest, Region } from "../types.ts";
+import type { CraftingRecipe, Decree, Encounter, Item, Npc, Quest, Region } from "../types.ts";
 
 export interface ContentIssue {
   file: string;
@@ -194,6 +194,90 @@ export function validateRecipes(data: unknown, file: string): ContentIssue[] {
       }
     }
     if (typeof raw.workbench !== "boolean") issues.push({ file, message: at("workbench must be boolean") });
+  }
+  return issues;
+}
+
+export function validateDecrees(data: unknown, file: string): ContentIssue[] {
+  const issues: ContentIssue[] = [];
+  if (!Array.isArray(data)) return [{ file, message: "root must be an array of decrees" }];
+  const seen = new Set<string>();
+  for (const raw of data as Decree[]) {
+    const at = (m: string) => `${raw?.id ?? "?"}: ${m}`;
+    if (!isObject(raw)) {
+      issues.push({ file, message: "decree entry must be an object" });
+      continue;
+    }
+    for (const f of ["id", "title", "proclamation", "issuedAt", "expiresAt"]) {
+      if (!requireString(raw[f as keyof Decree])) issues.push({ file, message: at(`missing ${f}`) });
+    }
+    if (seen.has(raw.id)) issues.push({ file, message: at("duplicate decree id") });
+    seen.add(raw.id);
+    if (typeof raw.priceMultiplier !== "number" || raw.priceMultiplier <= 0) {
+      issues.push({ file, message: at("priceMultiplier must be a positive number") });
+    }
+    if (raw.scope !== "national" && raw.scope !== "regional") {
+      issues.push({ file, message: at(`bad scope "${String(raw.scope)}"`) });
+    }
+    if (raw.scope === "regional" && !requireString(raw.region)) {
+      issues.push({ file, message: at("regional decree must name a region") });
+    }
+    if (isObject(raw) && Number.isFinite(Date.parse(raw.expiresAt)) && Number.isFinite(Date.parse(raw.issuedAt))) {
+      if (Date.parse(raw.expiresAt) <= Date.parse(raw.issuedAt)) {
+        issues.push({ file, message: at("expiresAt must be after issuedAt") });
+      }
+    }
+  }
+  return issues;
+}
+
+const ENCOUNTER_KINDS = new Set(["patrol", "boss"]);
+
+export function validateEncounters(data: unknown, file: string): ContentIssue[] {
+  const issues: ContentIssue[] = [];
+  if (!Array.isArray(data)) return [{ file, message: "root must be an array of encounters" }];
+  const seen = new Set<string>();
+  for (const raw of data as Encounter[]) {
+    const at = (m: string) => `${raw?.id ?? "?"}: ${m}`;
+    if (!isObject(raw)) {
+      issues.push({ file, message: "encounter entry must be an object" });
+      continue;
+    }
+    for (const f of ["id", "name", "art", "victoryLine", "defeatLine"]) {
+      if (!requireString(raw[f as keyof Encounter])) issues.push({ file, message: at(`missing ${f}`) });
+    }
+    if (seen.has(raw.id)) issues.push({ file, message: at("duplicate encounter id") });
+    seen.add(raw.id);
+    if (!ENCOUNTER_KINDS.has(raw.kind)) issues.push({ file, message: at(`bad kind "${String(raw.kind)}"`) });
+    if (!Array.isArray(raw.regions) || raw.regions.length === 0) {
+      issues.push({ file, message: at("regions must be a non-empty array") });
+    }
+    if (typeof raw.minFlockPresence !== "number" || raw.minFlockPresence < 0 || raw.minFlockPresence > 1) {
+      issues.push({ file, message: at("minFlockPresence must be 0.0–1.0") });
+    }
+    if (typeof raw.maxHp !== "number" || raw.maxHp <= 0) {
+      issues.push({ file, message: at("maxHp must be positive") });
+    }
+    if (!Array.isArray(raw.moves) || raw.moves.length === 0) {
+      issues.push({ file, message: at("moves must be a non-empty array") });
+    } else {
+      for (const m of raw.moves) {
+        if (!requireString(m?.id) || !requireString(m?.label)) {
+          issues.push({ file, message: at("move missing id or label") });
+          continue;
+        }
+        for (const k of ["damage", "selfDamage", "suspicion"] as const) {
+          if (typeof m[k] !== "number") issues.push({ file, message: at(`move ${m.id}: ${k} must be a number`) });
+        }
+      }
+    }
+    if (typeof raw.payout !== "number" || raw.payout < 0) {
+      issues.push({ file, message: at("payout must be a non-negative number") });
+    }
+    if (!Array.isArray(raw.drops)) issues.push({ file, message: at("drops must be an array") });
+    if (raw.kind === "boss" && (!Array.isArray(raw.phases) || raw.phases.length < 1)) {
+      issues.push({ file, message: at("boss encounters require at least one phase") });
+    }
   }
   return issues;
 }

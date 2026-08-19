@@ -22,7 +22,9 @@ import { getNpc, listNpcs } from "../state/content.ts";
 import { ensurePlayer, getPlayer, savePlayer } from "../state/players.ts";
 import { camerasInRegion, getCamera, listCameras, saveCamera } from "../state/cameras.ts";
 import { getRegion, saveRegion } from "../state/regions.ts";
-import { deleteListing, getListing, listListings, saveListing } from "../state/market.ts";
+import { deleteListing, getListing, getPriceHistory, listListings, recordSale, saveListing } from "../state/market.ts";
+import { activeDecrees } from "../state/decrees.ts";
+import { clearEncounter, getEncounter, saveEncounter } from "../state/encounters.ts";
 import {
   cooldownRemaining,
   coverageLevel,
@@ -30,11 +32,13 @@ import {
   installCamera,
   totalScrap,
 } from "../game/cameras.ts";
-import { canCraft, craft, describeCost } from "../game/crafting.ts";
-import { buyListing, cancelListing, createListing } from "../game/market.ts";
+import { canAffordCraft, CRAFT_FEE, craft, describeCost } from "../game/crafting.ts";
+import { buyListing, cancelListing, createListing, purchasePrice, summarizePrices } from "../game/market.ts";
+import { performEspionage, isRestricted } from "../game/espionage.ts";
+import { applyMove, rollEncounter, startEncounter } from "../game/encounters.ts";
 import { travel, travelCost, hasBureaucratsStamp } from "../game/travel.ts";
-import { getItems, getQuests, getRecipes, getRegionContent } from "../content/index.ts";
-import type { Item, Player } from "../types.ts";
+import { getEncounters, getItems, getQuests, getRecipes, getRegionContent } from "../content/index.ts";
+import type { EspionageActionType, Item, Player } from "../types.ts";
 
 export const playRouter = new Router();
 
@@ -80,6 +84,9 @@ playRouter.get("/", async (context) => {
   const workbench = await renderWorkbench(player);
   const market = await renderMarket(player);
   const travelBoard = await renderTravel(player);
+  const decrees = await renderDecrees(player);
+  const espionage = await renderEspionage(player);
+  const encounter = await renderEncounterBoard(player);
 
   context.response.type = "text/html";
   context.response.body = renderPage({
@@ -89,9 +96,12 @@ playRouter.get("/", async (context) => {
 <ul class="npc-list">
 ${items}
 </ul>
+${encounter}
 ${cameraBoard}
 ${workbench}
 ${market}
+${espionage}
+${decrees}
 ${travelBoard}
 ${postButton("log", "Review your assignments")}`,
   });
@@ -168,6 +178,7 @@ playRouter.post("/", async (context) => {
   // ── Market (spec §3.3) ────────────────────────────────────────────────
   if (action === "sell" || action === "buy" || action === "cancel") {
     const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const decrees = await activeDecrees(player.region);
     if (action === "sell") {
       const item = (await getItems()).find((i) => i.id === fields.item);
       const price = Number(fields.price);
@@ -179,24 +190,104 @@ playRouter.post("/", async (context) => {
         }
       }
     } else if (action === "buy") {
-      const listing = await getListing(fields.lst ?? "");
+      const listing = await getListing(player.region, fields.lst ?? "");
       if (listing) {
         const seller = await ensurePlayer(listing.sellerId, "Seller");
-        const result = buyListing(player, seller, listing);
+        const result = buyListing(player, seller, listing, decrees);
         if (result.ok) {
           await savePlayer(result.value.buyer);
           await savePlayer(result.value.seller);
-          await deleteListing(listing.id);
+          await deleteListing(listing.regionId, listing.id);
+          await recordSale({ ...listing, price: result.value.paid });
         }
       }
     } else {
-      const listing = await getListing(fields.lst ?? "");
+      const listing = await getListing(player.region, fields.lst ?? "");
       if (listing) {
         const result = cancelListing(player, listing);
         if (result.ok) {
           await savePlayer(result.value.seller);
-          await deleteListing(listing.id);
+          await deleteListing(listing.regionId, listing.id);
         }
+      }
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  // ── Espionage (spec §3.5) ─────────────────────────────────────────────
+  if (action === "espionage") {
+    let player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const region = await getRegion(player.region);
+    const espAction = fields.op as EspionageActionType;
+    if (region && ["tail", "intercept", "gather_intel"].includes(espAction)) {
+      const outcome = performEspionage(espAction, player, region, Math.random());
+      if (outcome.ok) {
+        player = outcome.player;
+        await savePlayer(player);
+        context.response.type = "text/html";
+        context.response.body = renderPage({
+          title: "Fieldwork",
+          body: `<h2>Fieldwork</h2>
+<p>${escapeHtml(outcome.narrative)}</p>
+${outcome.success ? `<p>Intel in ${escapeHtml(region.name)}: ${player.intel[region.id] ?? 0}${outcome.payout > 0 ? ` · Skimmed ${outcome.payout}cr` : ""}</p>` : ""}
+${outcome.flag ? `<p class="flag-note">You have been flagged: ${escapeHtml(outcome.flag.reason)}. Market fees apply.</p>` : ""}
+${postButton("home", "Melt into the crowd")}`,
+        });
+        return;
+      }
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  // ── Encounters (spec §3.4) ────────────────────────────────────────────
+  if (action === "encounter_start") {
+    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const region = await getRegion(player.region);
+    if (region && !(await getEncounter(player.id))) {
+      const rolled = rollEncounter(await getEncounters(), region, player, Math.random());
+      if (rolled) await saveEncounter(startEncounter(rolled, player));
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "boss_start") {
+    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    if (!(await getEncounter(player.id))) {
+      const boss = (await getEncounters()).find((e) => e.id === fields.enc && e.kind === "boss");
+      if (boss) await saveEncounter(startEncounter(boss, player));
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "move") {
+    let player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const state = await getEncounter(player.id);
+    const encounter = (await getEncounters()).find((e) => e.id === state?.encounterId);
+    if (state && encounter) {
+      const turn = applyMove(encounter, state, player, fields.move ?? "");
+      if (turn) {
+        player = turn.player;
+        await savePlayer(player);
+        if (turn.state.status === "ongoing") {
+          await saveEncounter(turn.state);
+        } else {
+          await clearEncounter(player.id);
+        }
+        context.response.type = "text/html";
+        context.response.body = renderPage({
+          title: encounter.name,
+          body: `<h2>${escapeHtml(encounter.name)}</h2>
+<ul class="encounter-log">
+${turn.state.log.map((l) => `<li>${escapeHtml(l)}</li>`).join("\n")}
+</ul>
+${turn.state.status === "ongoing" ? `<p>Composure holds. The exchange continues.</p>` : ""}
+${postButton("home", "Continue")}`,
+        });
+        return;
       }
     }
     context.response.redirect("/");
@@ -357,7 +448,7 @@ async function renderWorkbench(player: Player): Promise<string> {
   const rows = recipes
     .map((r) => {
       const name = itemName.get(r.result) ?? r.result;
-      const afford = canCraft(player, r);
+      const afford = canAffordCraft(player, r);
       const btn = afford
         ? `<form method="post" action="/">
   <input type="hidden" name="a" value="craft">
@@ -365,24 +456,39 @@ async function renderWorkbench(player: Player): Promise<string> {
   <button type="submit" class="dialogue-option">Craft</button>
 </form>`
         : `<em>insufficient</em>`;
-      return `<li><strong>${name}</strong> — ${describeCost(r)} ${btn}</li>`;
+      return `<li><strong>${name}</strong> — ${describeCost(r)} · ${CRAFT_FEE}cr license ${btn}</li>`;
     })
     .join("\n");
 
   return `<section class="workbench">
 <h3>Workbench</h3>
 <p>Scrap: ${scrapLine}</p>
+<p class="fee-note">The Bureau of Workmanship levies a ${CRAFT_FEE}cr licensing fee per craft.</p>
 <ul class="recipe-list">
 ${rows}
 </ul>
 </section>`;
 }
 
-/** The player market (spec §3.3). */
+/** The player market (spec §3.3) — regional board with decree-adjusted prices. */
 async function renderMarket(player: Player): Promise<string> {
-  const listings = await listListings();
+  const listings = await listListings(player.region);
   const items = await getItems();
   const byId = new Map(items.map((i) => [i.id, i]));
+  const decrees = await activeDecrees(player.region);
+
+  // Per-item price history summaries for everything currently on the board.
+  const history = new Map<string, string>();
+  const historyItemIds = [...new Set(listings.map((l) => l.itemId))];
+  for (const itemId of historyItemIds) {
+    const summary = summarizePrices(await getPriceHistory(itemId));
+    if (summary) {
+      history.set(
+        itemId,
+        ` <em class="price-history">last ${summary.last}cr · avg ${summary.average}cr · ${summary.min}–${summary.max}cr over ${summary.sales} sale${summary.sales === 1 ? "" : "s"}</em>`,
+      );
+    }
+  }
 
   // Sellable items the player currently holds.
   const held = player.inventory
@@ -409,6 +515,7 @@ async function renderMarket(player: Player): Promise<string> {
         const item = byId.get(l.itemId);
         const name = item?.name ?? l.itemId;
         const own = l.sellerId === player.id;
+        const price = purchasePrice(l, player, decrees);
         const action = own
           ? `<form method="post" action="/">
   <input type="hidden" name="a" value="cancel">
@@ -420,13 +527,15 @@ async function renderMarket(player: Player): Promise<string> {
   <input type="hidden" name="lst" value="${l.id}">
   <button type="submit" class="dialogue-option">Buy</button>
 </form>`;
-        return `<li><strong>${name}</strong> — ${l.price}cr ${own ? "(yours) " : ""}${action}</li>`;
+        const adjusted = price !== l.price ? ` <em>(decree-adjusted from ${l.price}cr)</em>` : "";
+        return `<li><strong>${name}</strong> — ${price}cr ${own ? "(yours) " : ""}${action}${adjusted}${history.get(l.itemId) ?? ""}</li>`;
       })
       .join("\n")
     : `<li>The board is bare. The Ministry blames supply chains.</li>`;
 
+  const region = await getRegion(player.region);
   return `<section class="market">
-<h3>The Market</h3>
+<h3>The Market — ${escapeHtml(region?.name ?? player.region)}</h3>
 <p>Funds: ${player.currency} credits</p>
 <h4>Sell from your pack</h4>
 <ul class="market-sell">
@@ -436,6 +545,112 @@ ${sellRows}
 <ul class="market-list">
 ${buyRows}
 </ul>
+</section>`;
+}
+
+/** Espionage fieldwork board (spec §3.5). */
+async function renderEspionage(player: Player): Promise<string> {
+  const region = await getRegion(player.region);
+  if (!region) return "";
+  if (isRestricted(player, region.id)) {
+    return `<section class="espionage">
+<h3>Fieldwork</h3>
+<p>The checkpoints here have your photograph. ${escapeHtml(region.name)} is closed to you.</p>
+</section>`;
+  }
+  const intel = player.intel[region.id] ?? 0;
+  const flags = player.flags.length;
+  const ops: Array<[EspionageActionType, string]> = [
+    ["tail", "Tail a courier"],
+    ["intercept", "Intercept a relay"],
+    ["gather_intel", "Gather intel"],
+  ];
+  const rows = ops
+    .map(
+      ([op, label]) => `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="espionage">
+  <input type="hidden" name="op" value="${op}">
+  <button type="submit" class="dialogue-option">${label}</button>
+</form>
+</li>`,
+    )
+    .join("\n");
+  return `<section class="espionage">
+<h3>Fieldwork</h3>
+<p>Intel here: ${intel} · Flags on your file: ${flags}${flags > 0 ? " (market fees apply)" : ""}</p>
+<ul class="espionage-list">
+${rows}
+</ul>
+</section>`;
+}
+
+/** Ministry of Valuation decrees in force here (spec §3.3 live-ops). */
+async function renderDecrees(player: Player): Promise<string> {
+  const decrees = await activeDecrees(player.region);
+  if (decrees.length === 0) return "";
+  const rows = decrees
+    .map(
+      (d) => `<li><strong>${escapeHtml(d.title)}</strong> — ${escapeHtml(d.proclamation)} <em>(prices ×${d.priceMultiplier})</em></li>`,
+    )
+    .join("\n");
+  return `<section class="decrees">
+<h3>Ministry of Valuation — Decrees in Force</h3>
+<ul class="decree-list">
+${rows}
+</ul>
+</section>`;
+}
+
+/** Active encounter, or the means to provoke one (spec §3.4). */
+async function renderEncounterBoard(player: Player): Promise<string> {
+  const state = await getEncounter(player.id);
+  if (state) {
+    const encounter = (await getEncounters()).find((e) => e.id === state.encounterId);
+    if (!encounter) return "";
+    const moves = encounter.moves
+      .map(
+        (m) => `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="move">
+  <input type="hidden" name="move" value="${m.id}">
+  <button type="submit" class="dialogue-option">${escapeHtml(m.label)}${m.cost ? ` (${m.cost}cr)` : ""}</button>
+</form>
+</li>`,
+      )
+      .join("\n");
+    const log = state.log.slice(-6).map((l) => `<li>${escapeHtml(l)}</li>`).join("\n");
+    return `<section class="encounter">
+<h3>⚠ ${escapeHtml(encounter.name)} — ${state.enemyHp}/${encounter.maxHp} hp</h3>
+<ul class="encounter-log">
+${log}
+</ul>
+<ul class="encounter-moves">
+${moves}
+</ul>
+</section>`;
+  }
+  const bosses = (await getEncounters()).filter(
+    (e) => e.kind === "boss" && e.regions.includes(player.region) && !player.restricted.includes(player.region),
+  );
+  const bossRows = bosses
+    .map(
+      (b) => `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="boss_start">
+  <input type="hidden" name="enc" value="${b.id}">
+  <button type="submit" class="dialogue-option">Confront ${escapeHtml(b.name)}</button> <em>(boss — solo attempts are unwise)</em>
+</form>
+</li>`,
+    )
+    .join("\n");
+  return `<section class="encounter-board">
+<h3>Trouble</h3>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="encounter_start">
+  <button type="submit" class="link-button">Walk the perimeter (risk a patrol)</button>
+</form>
+${bossRows ? `<ul class="boss-list">\n${bossRows}\n</ul>` : ""}
 </section>`;
 }
 

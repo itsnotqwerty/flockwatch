@@ -1,0 +1,22 @@
+[
+  {
+    "id": "decree_emergency_valuation_1",
+    "title": "Emergency Valuation № 114",
+    "proclamation": "By order of the Ministry of Valuation: the intrinsic worth of privately-held goods is hereby 20% higher than previously assessed. Sellers are reminded that gratitude is mandatory.",
+    "priceMultiplier": 1.2,
+    "scope": "national",
+    "region": null,
+    "issuedAt": "2026-08-19T00:00:00Z",
+    "expiresAt": "2026-09-19T00:00:00Z"
+  },
+  {
+    "id": "decree_rust_belt_scrap_levy",
+    "title": "Scrap Reclamation Surcharge (Rust Belt)",
+    "proclamation": "Unlicensed metallurgical abundance in the Rust Belt has been reclassified as hoarding. Prices adjusted accordingly.",
+    "priceMultiplier": 1.1,
+    "scope": "regional",
+    "region": "rust_belt",
+    "issuedAt": "2026-08-19T00:00:00Z",
+    "expiresAt": "2026-09-02T00:00:00Z"
+  }
+]

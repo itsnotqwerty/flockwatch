@@ -9,6 +9,9 @@ export interface CraftResult {
   reason: string | null;  // why crafting failed, if it did
 }
 
+/** Workbench consumables licensing fee (§3.3 currency sink). */
+export const CRAFT_FEE = 10;
+
 /** True when the player holds enough of every required component. */
 export function canCraft(player: Player, recipe: CraftingRecipe): boolean {
   return Object.entries(recipe.components).every(
@@ -16,13 +19,22 @@ export function canCraft(player: Player, recipe: CraftingRecipe): boolean {
   );
 }
 
+/** True when the player can pay the fee and cover the components. */
+export function canAffordCraft(player: Player, recipe: CraftingRecipe): boolean {
+  return canCraft(player, recipe) && player.currency >= CRAFT_FEE;
+}
+
 /**
- * Craft a recipe: consume the components from scrap and add the result item
- * to inventory. Fails cleanly when components are short.
+ * Craft a recipe: pay the workbench licensing fee, consume the components
+ * from scrap, and add the result item to inventory. Fails cleanly when
+ * components or funds are short.
  */
 export function craft(player: Player, recipe: CraftingRecipe): CraftResult {
   if (!canCraft(player, recipe)) {
     return { player, crafted: null, reason: "Missing components." };
+  }
+  if (player.currency < CRAFT_FEE) {
+    return { player, crafted: null, reason: `Workbench licensing fee is ${CRAFT_FEE}cr.` };
   }
   const scrap = { ...player.scrap };
   for (const [comp, need] of Object.entries(recipe.components)) {
@@ -30,7 +42,12 @@ export function craft(player: Player, recipe: CraftingRecipe): CraftResult {
     scrap[key] = (scrap[key] ?? 0) - (need ?? 0);
   }
   return {
-    player: { ...player, scrap, inventory: [...player.inventory, recipe.result] },
+    player: {
+      ...player,
+      scrap,
+      currency: player.currency - CRAFT_FEE,
+      inventory: [...player.inventory, recipe.result],
+    },
     crafted: recipe.result,
     reason: null,
   };
