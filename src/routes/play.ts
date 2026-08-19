@@ -32,7 +32,7 @@ import {
 } from "../game/cameras.ts";
 import { canCraft, craft, describeCost } from "../game/crafting.ts";
 import { buyListing, cancelListing, createListing } from "../game/market.ts";
-import { travel, travelCost } from "../game/travel.ts";
+import { travel, travelCost, hasBureaucratsStamp } from "../game/travel.ts";
 import { getItems, getQuests, getRecipes, getRegionContent } from "../content/index.ts";
 import type { Item, Player } from "../types.ts";
 
@@ -441,9 +441,10 @@ ${buyRows}
 async function renderTravel(player: Player): Promise<string> {
   const regions = (await getRegionContent()).filter((r) => r.id !== player.region);
   if (regions.length === 0) return "";
+  const stamped = hasBureaucratsStamp(player);
   const rows = regions
     .map((r) => {
-      const cost = travelCost(r);
+      const cost = travelCost(r, player);
       const afford = player.currency >= cost;
       const action = afford
         ? `<form method="post" action="/">
@@ -456,8 +457,12 @@ async function renderTravel(player: Player): Promise<string> {
       return `<li><strong>${r.name}</strong> — <em>${mood}</em> ${action}</li>`;
     })
     .join("\n");
+  const stampNote = stamped
+    ? `<p class="stamp-note">Your Bureaucrat's Stamp expedites all paperwork. Fares halved.</p>`
+    : "";
   return `<section class="travel">
 <h3>Elsewhere in the Union</h3>
+${stampNote}
 <ul class="travel-list">
 ${rows}
 </ul>

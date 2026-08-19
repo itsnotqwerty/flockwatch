@@ -18,11 +18,20 @@
             "next": "farms"
           },
           {
+            "id": "cover_sheet_12f",
+            "label": "Ask about a routing cover sheet",
+            "response": "A paper cover sheet? Retro. I found one in Building 7's recycle queue. Downloading it to paper now. Do not ask what else was in the queue.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [1]
+          },
+          {
             "id": "report_form_27b",
             "label": "Mention the Form 27-B you are definitely not filling in",
             "response": "A paper form? Here? That's adorable. I've already queued it for archival. By mentioning it, you filed it.",
             "next": null,
-            "advancesQuest": "q_form_27b"
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
           },
           {
             "id": "report_orientation",
@@ -82,6 +91,37 @@
             "label": "Ask about a ladder permit",
             "response": "Ladder permits are issued by the ladder permit office. This is the zoning desk. The ladder office is also me, on Tuesdays.",
             "next": null
+          },
+          {
+            "id": "ask_form_27b",
+            "label": "Ask about Form 27-B",
+            "response": "27-B is handled by the Bureau. The Bureau is everywhere. The Bureau is also me, on Wednesdays. Take this. Read nothing into it.",
+            "next": null,
+            "grantsQuest": "q_form_27b"
+          },
+          {
+            "id": "process_form_12f",
+            "label": "Present Boomer Dave's Form 12-F",
+            "response": "A paper 12-F! Scanning... valid. Missing: one routing cover sheet. The cover sheet department is deprecated. Seek an unofficial channel. This desk denies saying that.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [0]
+          },
+          {
+            "id": "process_form_27b",
+            "label": "Submit the form for review",
+            "response": "Processing... complete. Outstanding requirement: one (1) agent signature. Note: agent signatures are mythical. This is noted in the notes.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
+          },
+          {
+            "id": "turn_in_form_27b",
+            "label": "Present the signed Form 27-B",
+            "response": "A genuine agent signature. I will stop asking how. The Bureau recognizes you. Take the stamp. It halves the paperwork of existence itself.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [3]
           },
           {
             "id": "ask_forms",
@@ -156,6 +196,14 @@
             "label": "Ask about the mowing drones",
             "response": "They mow at night. I supervise. Supervising means I stand here so the drones see a human in charge. Morale purposes.",
             "next": null
+          },
+          {
+            "id": "ask_records",
+            "label": "Ask about timesheet records",
+            "response": "Ray's timesheets? Sure. The campus compost log doubles as an HR archive. Dug 'em out. They need an official stamp or HQ pretends paper isn't real. Good luck.",
+            "next": null,
+            "advancesQuest": "q_foreman_wages",
+            "atStages": [0]
           },
           {
             "id": "leave",

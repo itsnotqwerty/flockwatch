@@ -18,11 +18,20 @@
             "next": "grid"
           },
           {
+            "id": "cover_sheet_12f",
+            "label": "Ask about a routing cover sheet",
+            "response": "Everything exists in this city if you know where to look. One cover sheet, slightly pre-owned. The previous owner was a form. The form is fine.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [1]
+          },
+          {
             "id": "report_form_27b",
             "label": "Mention the Form 27-B you are definitely not filling in",
             "response": "27-B? Cute. In this city forms breed in filing cabinets. Yours already has three offspring in a basement on Chambers Street.",
             "next": null,
-            "advancesQuest": "q_form_27b"
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
           },
           {
             "id": "report_orientation",
@@ -90,6 +99,14 @@
             "next": null
           },
           {
+            "id": "ask_backing",
+            "label": "Pitch the tape premiere",
+            "response": "Anti-surveillance rap, gallery premiere, guaranteed press? I'm in. I'm so in. Signed. If it flops it's a tax write-off, if it charts it's a movement. Either way I win. That's called hedging.",
+            "next": null,
+            "advancesQuest": "q_rap_distro",
+            "atStages": [1]
+          },
+          {
             "id": "leave",
             "label": "Let him get back to the terminal",
             "response": "Buy the dip. There is always a dip. That's the thing about watching everyone — you see the dips coming.",
@@ -142,6 +159,14 @@
             "next": null
           },
           {
+            "id": "ask_premiere",
+            "label": "Ask about premiering a tape",
+            "response": "A tape about the cameras, premiered under the cameras? That's not a show, that's a mirror. I'll do it. But mirrors need frames — and frames need money. Wall Street money, ideally. Ironic money is the best money.",
+            "next": null,
+            "advancesQuest": "q_rap_distro",
+            "atStages": [0]
+          },
+          {
             "id": "leave",
             "label": "Leave the studio",
             "response": "The show opens Friday. The cameras are invited. They never RSVP, but they always attend.",
@@ -186,6 +211,14 @@
             "label": "Ask about the trains",
             "response": "The turnstiles count your teeth. I counted back. The number was different every time. Every time!",
             "next": "trains"
+          },
+          {
+            "id": "ask_dampener",
+            "label": "Ask about a HONK DAMPENER",
+            "response": "HAD one. Kept the announcements out of my molars. Traded it to a shrimpcaster for fourteen batteries and a sandwich. The sandwich was ALSO a battery. Check the Gulf.",
+            "next": null,
+            "advancesQuest": "q_cyberhorse2",
+            "atStages": [0]
           },
           {
             "id": "ask_foil",

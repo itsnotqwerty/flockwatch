@@ -79,6 +79,30 @@
             "grantsQuest": "q_form_27b"
           },
           {
+            "id": "process_form_12f",
+            "label": "Present Boomer Dave's Form 12-F",
+            "response": "A 12-F? Lawn ownership. Straightforward. It requires a routing cover sheet. The cover sheet office was abolished in 1997. Inquire... informally.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [0]
+          },
+          {
+            "id": "process_form_27b",
+            "label": "Submit the form for review",
+            "response": "Review complete. It requires the signature of an agent of the Flock. They sign nothing. Nothing is ever signed. Good luck.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
+          },
+          {
+            "id": "turn_in_form_27b",
+            "label": "Present the signed Form 27-B",
+            "response": "A signature. On a 27-B. In all my years at the counter — here. The Bureau recognizes you now. The stamp never runs dry.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [3]
+          },
+          {
             "id": "ask_number",
             "label": "Take a number",
             "response": "Your number is 9,412. Now serving: 3.",
@@ -132,11 +156,20 @@
             "grantsQuest": "q_flock_orientation"
           },
           {
+            "id": "cover_sheet_12f",
+            "label": "Ask about a routing cover sheet",
+            "response": "Cover sheets, huh. The office is gone but the paper survives. I know a drawer. It's yours. This never happened, obviously.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [1]
+          },
+          {
             "id": "report_form_27b",
             "label": "Mention the Form 27-B you are definitely not filling in",
             "response": "You didn't get that from me. The Forms move through people like me. Consider it moved.",
             "next": null,
-            "advancesQuest": "q_form_27b"
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
           },
           {
             "id": "report_orientation",
@@ -198,6 +231,21 @@
             "next": "reset"
           },
           {
+            "id": "ask_errand",
+            "label": "Ask if he needs anything",
+            "response": "Now that you mention it — the county wants a Form 12-F. Proof of lawn ownership. I've owned this lawn forty years! You look spry. Run it down to a clerk for me, would ya?",
+            "next": null,
+            "grantsQuest": "q_boomer_errand"
+          },
+          {
+            "id": "return_form_12f",
+            "label": "Hand over the processed Form 12-F",
+            "response": "Processed, stamped, and everything! You see this? THIS is customer service. Here — take my spare cushion. Finest floral print money could buy in 1987.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [2]
+          },
+          {
             "id": "leave",
             "label": "Leave Boomer alone",
             "response": "You kids just don't know hard work and freedom. You kids just don't know hard work and freedom and America.",
@@ -225,6 +273,22 @@
             "response": "The GEESE have stolen my INFINITE CARBURETOR. Retrieve it and know glory.",
             "next": "task1",
             "grantsQuest": "q_cyberhorse"
+          },
+          {
+            "id": "ask_quest_again",
+            "label": "Ask how you may serve again",
+            "response": "CHAMPION. The geese grow bold. Their HONKS disrupt my frequencies. I require a HONK DAMPENER. Begin with the platform-dweller in New York. He counts teeth. He has connections.",
+            "next": null,
+            "grantsQuest": "q_cyberhorse2",
+            "requiresQuestCompleted": "q_cyberhorse"
+          },
+          {
+            "id": "deliver_dampener",
+            "label": "Present the HONK DAMPENER",
+            "response": "THE DAMPENER. The geese are silenced. Their honks are now muffled and legally actionable. Take this horseshoe. It is gold. It is NOT gold. Do not tell the geese which.",
+            "next": null,
+            "advancesQuest": "q_cyberhorse2",
+            "atStages": [2]
           },
           {
             "id": "squint",

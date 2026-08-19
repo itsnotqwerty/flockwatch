@@ -18,11 +18,20 @@
             "next": "hq"
           },
           {
+            "id": "cover_sheet_12f",
+            "label": "Ask about a routing cover sheet",
+            "response": "Cover sheets run through HQ like sweet tea. I can skim one off the top. They print ten for every form. Waste is a feature.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [1]
+          },
+          {
             "id": "report_form_27b",
             "label": "Mention the Form 27-B you are definitely not filling in",
             "response": "Paper moves through this city like humidity. Give it time. It's already somewhere it needs to be.",
             "next": null,
-            "advancesQuest": "q_form_27b"
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
           },
           {
             "id": "report_orientation",
@@ -124,6 +133,21 @@
             "next": null
           },
           {
+            "id": "ask_backpay",
+            "label": "Ask about his pay",
+            "response": "Three weeks of timesheets, gone. 'System migration,' they said. The system migrated my overtime into the sea. Walt out west keeps real records — paper, dirt under the nails. Get 'em stamped and back to me, there's a cut in it for you.",
+            "next": null,
+            "grantsQuest": "q_foreman_wages"
+          },
+          {
+            "id": "deliver_timesheets",
+            "label": "Hand over the stamped timesheets",
+            "response": "Stamped, official, and everything. Twenty years I begged payroll; you did it in a week. Here's your cut. And the vest — you've earned the vest.",
+            "next": null,
+            "advancesQuest": "q_foreman_wages",
+            "atStages": [2]
+          },
+          {
             "id": "leave",
             "label": "Leave the crew to it",
             "response": "Watch for the orange cones. And the lenses. Mostly the lenses.",
@@ -174,6 +198,21 @@
             "label": "Ask about the chain",
             "response": "It's a camera. Gold-plated. Doesn't work. That's the statement.",
             "next": null
+          },
+          {
+            "id": "ask_distro",
+            "label": "Ask about getting the tape out there",
+            "response": "The tape's done but it needs a premiere that ain't a parking lot. Marin Voss runs a gallery in the Villages. She owes the streets a favor. Tell her the hook sent you.",
+            "next": null,
+            "grantsQuest": "q_rap_distro"
+          },
+          {
+            "id": "deliver_deal",
+            "label": "Report the signed distribution deal",
+            "response": "A gallery AND a backer? The tape drops citywide, camera-serial track and all. Here's your finder's fee, and the first pressing. Number zero. That's the one they can't surveil.",
+            "next": null,
+            "advancesQuest": "q_rap_distro",
+            "atStages": [2]
           },
           {
             "id": "leave",
@@ -232,6 +271,14 @@
             "label": "Ask about working for Flock",
             "response": "We're always hiring eyes. You look like someone with a lot of neighbors. Ever considered being compensated for that?",
             "next": "job"
+          },
+          {
+            "id": "get_signature",
+            "label": "Request an agent's signature on a form",
+            "response": "A 27-B! I haven't seen one since orientation. Agents don't sign forms, friend — but I like your initiative. There. A signature that says nothing, on a form that doesn't exist. Frame it.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [2]
           },
           {
             "id": "leave",

@@ -17,7 +17,9 @@ export function getNode(npc: Npc, nodeId: string): DialogueNode | null {
  * forever when the player leaves the branch early. Re-selecting it is safe —
  * resolveSelection never re-grants. An option that advances a quest is hidden
  * unless the player currently holds that quest as accepted (turn-in/stage
- * options only appear once the assignment exists).
+ * options only appear once the assignment exists); when the option declares
+ * atStages, it is further gated to those stage indexes, so ordered steps
+ * (process → sign → return) can't be skipped.
  */
 export function availableOptions(
   npc: Npc,
@@ -27,14 +29,20 @@ export function availableOptions(
   const node = getNode(npc, nodeId);
   if (!node) return [];
   return node.options.filter((o) => {
+    if (o.requiresQuestCompleted) {
+      const prereq = player.quests.find((q) => q.questId === o.requiresQuestCompleted);
+      if (!prereq || prereq.status !== "completed") return false;
+    }
     if (o.grantsQuest) {
       const held = player.quests.find((q) => q.questId === o.grantsQuest);
       if (held && held.status !== "accepted") return false;
     }
     if (o.advancesQuest) {
-      return player.quests.some(
+      const held = player.quests.find(
         (q) => q.questId === o.advancesQuest && q.status === "accepted",
       );
+      if (!held) return false;
+      if (o.atStages && !o.atStages.includes(held.stageIndex)) return false;
     }
     return true;
   });

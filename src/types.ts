@@ -126,10 +126,21 @@ export interface DialogueOption {
   /** Quest secretly assigned when this option is selected. */
   grantsQuest?: string;
   /**
+   * Gate for grantsQuest options: the named quest must already be completed
+   * before this option is visible (quest chains / follow-up assignments).
+   */
+  requiresQuestCompleted?: string;
+  /**
    * Advance the named accepted quest by one stage when selected. On the final
    * stage the quest is turned in: it completes and pays out rewards.
    */
   advancesQuest?: string;
+  /**
+   * Optional stage gate for advancesQuest options: the option is only visible
+   * while the player's quest is at one of these stage indexes. Without it the
+   * option is available at any accepted stage.
+   */
+  atStages?: number[];
 }
 
 export interface DialogueNode {

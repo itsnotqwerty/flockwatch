@@ -152,15 +152,75 @@ Deno.test("all content dialogue lines wrap within 40 columns", () => {
     }
   }
   // Every grantsQuest option has a matching quest with a matching trigger.
+  // A quest may be shared across an NPC family (e.g. every clerk grants the
+  // form quest), so the trigger matches either the npc id or the art family.
   for (const npc of npcs) {
     for (const node of npc.nodes) {
       for (const opt of node.options) {
         if (!opt.grantsQuest) continue;
         const quest = quests.find((q) => q.id === opt.grantsQuest);
         assert(quest, `missing quest for option ${opt.id}`);
-        assertEquals(quest.trigger.npc, npc.id);
+        assert(
+          quest.trigger.npc === npc.id || quest.trigger.npc === npc.art,
+          `${opt.grantsQuest} trigger "${quest.trigger.npc}" matches neither ${npc.id} nor art ${npc.art}`,
+        );
         assertEquals(quest.trigger.dialogueOption, opt.id);
       }
     }
   }
+});
+
+Deno.test("requiresQuestCompleted hides follow-up quests until the prereq is done", () => {
+  const horse = npcs.find((n) => n.id === "cyberhorse")!;
+  const first = quests.find((q) => q.id === "q_cyberhorse")!;
+
+  // No progress on the first quest: the follow-up is hidden.
+  let options = availableOptions(horse, "start", freshPlayer());
+  assert(options.every((o) => o.id !== "ask_quest_again"));
+
+  // Accepted but not completed: still hidden.
+  let player = acceptQuest(freshPlayer(), first);
+  options = availableOptions(horse, "start", player);
+  assert(options.every((o) => o.id !== "ask_quest_again"));
+
+  // Completed: the follow-up appears and grants the chained quest.
+  player = completeQuest(player, first);
+  options = availableOptions(horse, "start", player);
+  const followUp = options.find((o) => o.id === "ask_quest_again");
+  assert(followUp, "follow-up quest option should appear after completion");
+  const result = resolveSelection(horse, "start", followUp.id, player, quests);
+  assertEquals(result?.grantedQuest?.id, "q_cyberhorse2");
+});
+
+Deno.test("atStages gates advance options to specific quest stages", () => {
+  const clerk = npcs.find((n) => n.id === "clerk")!;
+  const langley = npcs.find((n) => n.id === "atl_garrett")!;
+  const quest = quests.find((q) => q.id === "q_form_27b")!;
+
+  // Stage 0: clerks can process the form, but the signature option is hidden
+  // and the turn-in option is hidden.
+  let player = acceptQuest(freshPlayer(), quest);
+  let clerkOptions = availableOptions(clerk, "start", player);
+  assert(clerkOptions.some((o) => o.id === "process_form_27b"));
+  assert(clerkOptions.every((o) => o.id !== "turn_in_form_27b"));
+  assert(availableOptions(langley, "start", player).every((o) => o.id !== "get_signature"));
+
+  // Stage 2: the agent's signature becomes available; processing is done.
+  player = {
+    ...player,
+    quests: [{ questId: quest.id, status: "accepted", stageIndex: 2 }],
+  };
+  assert(availableOptions(langley, "start", player).some((o) => o.id === "get_signature"));
+  clerkOptions = availableOptions(clerk, "start", player);
+  assert(clerkOptions.every((o) => o.id !== "process_form_27b"));
+  assert(clerkOptions.every((o) => o.id !== "turn_in_form_27b"));
+
+  // Stage 3 (final): any clerk accepts the signed form for turn-in.
+  player = {
+    ...player,
+    quests: [{ questId: quest.id, status: "accepted", stageIndex: 3 }],
+  };
+  clerkOptions = availableOptions(clerk, "start", player);
+  assert(clerkOptions.some((o) => o.id === "turn_in_form_27b"));
+  assert(clerkOptions.every((o) => o.id !== "process_form_27b"));
 });

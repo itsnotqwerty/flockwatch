@@ -9,5 +9,17 @@
       { "id": "s2", "objective": "Deliver nothing to no one. You were never here." }
     ],
     "rewards": { "currency": 60, "items": ["cutters"] }
+  },
+  {
+    "id": "q_rap_distro",
+    "title": "Street Distribution",
+    "hidden": true,
+    "trigger": { "npc": "atl_lil_peep", "dialogueOption": "ask_distro" },
+    "stages": [
+      { "id": "s1", "objective": "Peep-Peep's tape needs a gallery premiere. Marin Voss in New York's Villages curates such things." },
+      { "id": "s2", "objective": "The premiere needs a backer. Chadwick Brennan III on Wall Street funds anything that charts." },
+      { "id": "s3", "objective": "Return to Lil Peep-Peep in Atlanta with the deal signed." }
+    ],
+    "rewards": { "currency": 110, "items": ["limited_vinyl"] }
   }
 ]

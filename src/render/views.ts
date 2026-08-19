@@ -28,7 +28,10 @@ export function renderPage({ title, body }: PageOptions): string {
 <body>
 <header>
   <h1>FlockWatch</h1>
-  <nav><a href="/">The Park</a></nav>
+  <nav>
+    <a href="/">The Park</a>
+    <span class="alpha-info" tabindex="0" role="note" aria-label="Alpha notice: This game is in an experimental alpha. Content may change and your playthrough may get reset.">ⓘ<span class="alpha-tooltip">This game is in an experimental alpha. Content may change and your playthrough may get reset.</span></span>
+  </nav>
 </header>
 <main>
 ${body}

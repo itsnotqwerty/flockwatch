@@ -14,6 +14,13 @@
     "tradeable": true
   },
   {
+    "id": "bureaucrats_stamp",
+    "name": "Bureaucrat's Stamp",
+    "description": "A rubber stamp of indefinite authority. Travel paperwork processes itself in your presence. (Travel costs halved.)",
+    "rarity": "rare",
+    "tradeable": false
+  },
+  {
     "id": "ladder_permit",
     "name": "Ladder Permit",
     "description": "Authorizes the bearer to hold a ladder near state infrastructure.",
@@ -45,6 +52,34 @@
     "id": "sci_fi_sunglasses",
     "name": "Tactical Optics (Gift Shop)",
     "description": "Cool sci-fi sunglasses. Slightly horse-scented. Not actually tactical.",
+    "rarity": "rare",
+    "tradeable": true
+  },
+  {
+    "id": "lawn_chair_cushion",
+    "name": "Lawn Chair Cushion (Floral)",
+    "description": "Boomer-grade comfort. Smells faintly of freedom and cut grass.",
+    "rarity": "common",
+    "tradeable": true
+  },
+  {
+    "id": "golden_horseshoe",
+    "name": "Golden Horseshoe",
+    "description": "A token of equine gratitude. Not real gold. The sentiment is real.",
+    "rarity": "rare",
+    "tradeable": false
+  },
+  {
+    "id": "orange_vest",
+    "name": "High-Visibility Vest",
+    "description": "Foreman-grade. Wear it near a camera pole and no one questions you. Ever.",
+    "rarity": "uncommon",
+    "tradeable": true
+  },
+  {
+    "id": "limited_vinyl",
+    "name": "Limited Pressing: 'Blind Spots'",
+    "description": "Track four is just serial numbers off the Peachtree units. It charted.",
     "rarity": "rare",
     "tradeable": true
   }

@@ -47,3 +47,12 @@ Deno.test("travel rejects staying put and insufficient funds", () => {
   assert(!broke.ok);
   assert(broke.reason?.includes("credits"));
 });
+
+Deno.test("Bureaucrat's Stamp halves travel cost", () => {
+  const dest = region("gulf_coast", 0.85);
+  const stamped = player({ inventory: ["bureaucrats_stamp"] });
+  assertEquals(travelCost(dest, stamped), Math.round(travelCost(dest) / 2));
+  const result = travel(stamped, dest);
+  assert(result.ok);
+  assertEquals(result.player.currency, 100 - travelCost(dest, stamped));
+});
