@@ -9,6 +9,8 @@ Group=flockwatch
 WorkingDirectory=__APP_DIR__
 Environment=PORT=8000
 Environment=HOST=127.0.0.1
+# Use the dependency cache pre-warmed by install.sh (no JSR access at runtime).
+Environment=DENO_DIR=__APP_DIR__/.deno_cache
 # Scoped permissions matching the `start` task.
 ExecStart=__DENO_BIN__ run --allow-read=./static,./tools,./src,./content --allow-net --allow-env --unstable-kv main.ts
 Restart=on-failure
@@ -18,6 +20,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full
 ProtectHome=true
+ReadWritePaths=__APP_DIR__
 
 [Install]
 WantedBy=multi-user.target

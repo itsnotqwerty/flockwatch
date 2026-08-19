@@ -102,6 +102,14 @@ if [[ "$USE_SERVICE" -eq 1 ]]; then
   id -u flockwatch >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin flockwatch
   chown -R flockwatch:flockwatch "$APP_DIR"
 
+  # Pre-warm Deno's dependency cache as the service user so the app never needs
+  # to reach JSR/npm at boot (fixes "JSR package manifest failed to load").
+  log "pre-warming Deno dependency cache"
+  runuser -u flockwatch -- env DENO_DIR="$APP_DIR/.deno_cache" \
+    "$DENO_BIN" cache --node-modules-dir=auto "$APP_DIR/main.ts" \
+    || warn "cache pre-warm failed; the app will fetch deps on first start"
+  chown -R flockwatch:flockwatch "$APP_DIR"
+
   log "installing systemd unit"
   sed -e "s|__APP_DIR__|$APP_DIR|g" \
       -e "s|__DENO_BIN__|$DENO_BIN|g" \
