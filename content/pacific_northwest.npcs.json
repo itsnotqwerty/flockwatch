@@ -19,6 +19,20 @@
             "grantsQuest": "q_pnw_courier"
           },
           {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Paper gets wet up here. Wet paper gets lost. Consider yours lost in exactly the right direction.",
+            "next": null,
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "I heard. The ridge heard. The cameras that work heard. You're on the roster. Bring rain gear.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
             "id": "ask_scrap",
             "label": "Ask where the scrap goes",
             "response": "Up the logging roads, mostly. Cameras up here are half unplugged. The other half are watching the wrong ridge.",

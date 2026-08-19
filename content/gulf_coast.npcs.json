@@ -19,6 +19,20 @@
             "grantsQuest": "q_gulf_salvage"
           },
           {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Forms drift in with the tide. I make sure they drift back out. Consider it filed. Or not filed. Whichever is safer.",
+            "next": null,
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "The delta hears things. You're cleared for ladder work. The mosquitoes are also cleared. For you.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
             "id": "ask_manifest",
             "label": "Ask about manifests",
             "response": "Every crate has a manifest. Every manifest has a lie in it. I collect the lies.",

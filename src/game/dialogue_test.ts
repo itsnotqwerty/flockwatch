@@ -77,12 +77,40 @@ Deno.test("acceptQuest moves quest undiscovered → accepted", () => {
   assertEquals(acceptQuest(player, quest).quests.length, 1);
 });
 
-Deno.test("quest options are hidden after the quest is held", () => {
+Deno.test("quest options stay visible while the quest is accepted", () => {
   const quest = quests.find((q) => q.id === "q_pigeon_audit")!;
   const player = acceptQuest(freshPlayer(), quest);
   const options = availableOptions(groundskeeper, "start", player);
+  // The grant option must remain reachable: it is the only path back into
+  // the branch holding the advance option, and re-selecting it never
+  // re-grants (resolveSelection flags alreadyHad).
+  assert(options.some((o) => o.id === "ask_about_birds"));
+  assertEquals(options.length, 3);
+});
+
+Deno.test("quest options are hidden once the quest is finished", () => {
+  const quest = quests.find((q) => q.id === "q_pigeon_audit")!;
+  const player = completeQuest(acceptQuest(freshPlayer(), quest), quest);
+  const options = availableOptions(groundskeeper, "start", player);
   assert(options.every((o) => o.id !== "ask_about_birds"));
   assertEquals(options.length, 2); // work + leave remain
+});
+
+Deno.test("advance node stays reachable after leaving the branch early", () => {
+  const quest = quests.find((q) => q.id === "q_pigeon_audit")!;
+  const player = acceptQuest(freshPlayer(), quest);
+  // Player accepted the quest, then picked "What new ones?" (next: null) —
+  // the conversation ended before they could report the count.
+  // Re-entering the conversation must still expose the advance option.
+  const startOptions = availableOptions(groundskeeper, "start", player);
+  const reentry = startOptions.find((o) => o.id === "ask_about_birds");
+  assert(reentry, "grant option should re-open the quest branch");
+  const result = resolveSelection(groundskeeper, "start", reentry.id, player, quests);
+  assertEquals(result?.grantedQuest, null);
+  assertEquals(result?.alreadyHad, true);
+  assertEquals(result?.option.next, "birds");
+  const birdsOptions = availableOptions(groundskeeper, "birds", player);
+  assert(birdsOptions.some((o) => o.advancesQuest === "q_pigeon_audit"));
 });
 
 Deno.test("resolveSelection flags already-held quests", () => {

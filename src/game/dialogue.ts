@@ -9,11 +9,15 @@ export function getNode(npc: Npc, nodeId: string): DialogueNode | null {
 }
 
 /**
- * Options visible at a node. An option that grants a quest is hidden once the
- * player already has (or has finished) that quest — hidden quests are not
- * re-offered, and undiscovered quests are never marked as such. An option that
- * advances a quest is hidden unless the player currently holds that quest as
- * accepted (turn-in/stage options only appear once the assignment exists).
+ * Options visible at a node. An option that grants a quest is hidden only once
+ * the quest is finished (completed or failed) — hidden quests are not
+ * re-offered, and undiscovered quests are never marked as such. While the
+ * quest is still accepted the option stays visible: it is the only path back
+ * into the quest's dialogue branch, and hiding it would strand the quest
+ * forever when the player leaves the branch early. Re-selecting it is safe —
+ * resolveSelection never re-grants. An option that advances a quest is hidden
+ * unless the player currently holds that quest as accepted (turn-in/stage
+ * options only appear once the assignment exists).
  */
 export function availableOptions(
   npc: Npc,
@@ -23,8 +27,9 @@ export function availableOptions(
   const node = getNode(npc, nodeId);
   if (!node) return [];
   return node.options.filter((o) => {
-    if (o.grantsQuest && player.quests.some((q) => q.questId === o.grantsQuest)) {
-      return false;
+    if (o.grantsQuest) {
+      const held = player.quests.find((q) => q.questId === o.grantsQuest);
+      if (held && held.status !== "accepted") return false;
     }
     if (o.advancesQuest) {
       return player.quests.some(

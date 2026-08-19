@@ -132,6 +132,20 @@
             "grantsQuest": "q_flock_orientation"
           },
           {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "You didn't get that from me. The Forms move through people like me. Consider it moved.",
+            "next": null,
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "Word travels. You're on the ladder roster now. Try not to fall off anything official.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
             "id": "ask_resistance",
             "label": "Ask who takes cameras down",
             "response": "People who like scrap more than wages. People with cutters. People like you, maybe.",

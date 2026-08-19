@@ -26,6 +26,7 @@ EMAIL=""
 TLS_MODE=""
 APP_PORT=8000
 APP_DIR=/opt/flockwatch
+DATA_DIR=${APP_DIR}/data
 USE_SERVICE=1
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -95,12 +96,13 @@ log "deno: $DENO_BIN ($("$DENO_BIN" --version | head -1))"
 if [[ "$USE_SERVICE" -eq 1 ]]; then
   log "deploying app to $APP_DIR"
   mkdir -p "$APP_DIR"
+  mkdir -p "$DATA_DIR"
   rsync -a --delete \
     --exclude node_modules --exclude .git --exclude '.env*' \
     "$SRC_DIR/" "$APP_DIR/"
 
   id -u flockwatch >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin flockwatch
-  chown -R flockwatch:flockwatch "$APP_DIR"
+  chown -R flockwatch:flockwatch "$APP_DIR" "$DATA_DIR"
 
   # Pre-warm Deno's dependency cache as the service user so the app never needs
   # to reach JSR/npm at boot (fixes "JSR package manifest failed to load").
@@ -108,7 +110,7 @@ if [[ "$USE_SERVICE" -eq 1 ]]; then
   runuser -u flockwatch -- env DENO_DIR="$APP_DIR/.deno_cache" \
     "$DENO_BIN" cache --node-modules-dir=auto "$APP_DIR/main.ts" \
     || warn "cache pre-warm failed; the app will fetch deps on first start"
-  chown -R flockwatch:flockwatch "$APP_DIR"
+  chown -R flockwatch:flockwatch "$APP_DIR" "$DATA_DIR"
 
   log "installing systemd unit"
   sed -e "s|__APP_DIR__|$APP_DIR|g" \
