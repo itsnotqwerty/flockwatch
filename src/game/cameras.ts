@@ -5,7 +5,7 @@
  * (scrap). Takedowns accrue suspicion; regional coverage derives from the
  * count of active cameras.
  */
-import type { Camera, Player } from "../types.ts";
+import type { Camera, CameraCooldowns, Player } from "../types.ts";
 
 let cameraCounter = 0;
 
@@ -42,50 +42,56 @@ export const ACTIVITY_COOLDOWNS = {
 
 export type CameraActivity = keyof typeof ACTIVITY_COOLDOWNS;
 
-/** Milliseconds until the player may perform the activity again (0 = ready). */
+/**
+ * Cooldowns are region-wide: installing a camera puts the whole region on
+ * cooldown for every player, so Flock installation proceeds at a steady pace.
+ */
 export function cooldownRemaining(
-  player: Player,
+  cooldowns: CameraCooldowns | undefined,
   activity: CameraActivity,
   now = Date.now(),
 ): number {
-  const readyAt = player.timers?.[activity] ?? 0;
+  const readyAt = cooldowns?.[activity] ?? 0;
   return Math.max(0, readyAt - now);
 }
 
-export function canPerform(player: Player, activity: CameraActivity, now = Date.now()): boolean {
-  return cooldownRemaining(player, activity, now) === 0;
-}
-
-/** Stamp the activity's refresh timer to now + its cooldown. */
-export function stampActivity(
-  player: Player,
+export function canPerform(
+  cooldowns: CameraCooldowns | undefined,
   activity: CameraActivity,
   now = Date.now(),
-): Player {
-  return {
-    ...player,
-    timers: { ...player.timers, [activity]: now + ACTIVITY_COOLDOWNS[activity] },
-  };
+): boolean {
+  return cooldownRemaining(cooldowns, activity, now) === 0;
+}
+
+/** Stamp the region's activity refresh timer to now + its cooldown. */
+export function stampActivity(
+  cooldowns: CameraCooldowns | undefined,
+  activity: CameraActivity,
+  now = Date.now(),
+): CameraCooldowns {
+  return { ...cooldowns, [activity]: now + ACTIVITY_COOLDOWNS[activity] };
 }
 
 /**
  * Fulfill a contract: the camera goes active and the installer is paid wages
  * (scaled by the region's wage multiplier). No-op for non-contracted cameras
- * or while the install refresh timer is still running.
+ * or while the region's install refresh timer is still running.
  */
 export function installCamera(
   camera: Camera,
   player: Player,
+  cooldowns: CameraCooldowns | undefined,
   wageMultiplier = 1,
   now = Date.now(),
-): { camera: Camera; player: Player; wages: number } {
-  if (camera.status !== "contracted" || !canPerform(player, "install", now)) {
-    return { camera, player, wages: 0 };
+): { camera: Camera; player: Player; cooldowns: CameraCooldowns; wages: number } {
+  if (camera.status !== "contracted" || !canPerform(cooldowns, "install", now)) {
+    return { camera, player, cooldowns: cooldowns ?? {}, wages: 0 };
   }
   const wages = Math.round(camera.wageValue * wageMultiplier);
   return {
     camera: { ...camera, status: "active", installedBy: player.id },
-    player: { ...stampActivity(player, "install", now), currency: player.currency + wages },
+    player: { ...player, currency: player.currency + wages },
+    cooldowns: stampActivity(cooldowns, "install", now),
     wages,
   };
 }
@@ -98,16 +104,17 @@ export function suspicionForTakedown(coverage: number): number {
 /**
  * Dismantle an active camera: the player gains its scrap yield and accrues
  * suspicion scaled by regional coverage. No-op for non-active cameras or while
- * the dismantle refresh timer is still running.
+ * the region's dismantle refresh timer is still running.
  */
 export function dismantleCamera(
   camera: Camera,
   player: Player,
+  cooldowns: CameraCooldowns | undefined,
   coverage: number,
   now = Date.now(),
-): { camera: Camera; player: Player } {
-  if (camera.status !== "active" || !canPerform(player, "dismantle", now)) {
-    return { camera, player };
+): { camera: Camera; player: Player; cooldowns: CameraCooldowns } {
+  if (camera.status !== "active" || !canPerform(cooldowns, "dismantle", now)) {
+    return { camera, player, cooldowns: cooldowns ?? {} };
   }
   const scrap = { ...player.scrap };
   for (const component of camera.scrapYield) {
@@ -116,10 +123,11 @@ export function dismantleCamera(
   return {
     camera: { ...camera, status: "dismantled" },
     player: {
-      ...stampActivity(player, "dismantle", now),
+      ...player,
       scrap,
       suspicion: player.suspicion + suspicionForTakedown(coverage),
     },
+    cooldowns: stampActivity(cooldowns, "dismantle", now),
   };
 }
 

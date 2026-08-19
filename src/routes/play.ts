@@ -21,7 +21,7 @@ import {
 import { getNpc, listNpcs } from "../state/content.ts";
 import { ensurePlayer, getPlayer, savePlayer } from "../state/players.ts";
 import { camerasInRegion, getCamera, listCameras, saveCamera } from "../state/cameras.ts";
-import { getRegion } from "../state/regions.ts";
+import { getRegion, saveRegion } from "../state/regions.ts";
 import { deleteListing, getListing, listListings, saveListing } from "../state/market.ts";
 import {
   cooldownRemaining,
@@ -139,13 +139,15 @@ playRouter.post("/", async (context) => {
 
     if (action === "install") {
       const wageMultiplier = region?.economyProfile.wageMultiplier ?? 1;
-      const result = installCamera(camera, player, wageMultiplier);
+      const result = installCamera(camera, player, region?.cameraCooldowns, wageMultiplier);
       await saveCamera(result.camera);
       await savePlayer(result.player);
+      if (region) await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
     } else {
-      const result = dismantleCamera(camera, player, coverage);
+      const result = dismantleCamera(camera, player, region?.cameraCooldowns, coverage);
       await saveCamera(result.camera);
       await savePlayer(result.player);
+      if (region) await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
     }
     context.response.redirect("/");
     return;
@@ -300,8 +302,8 @@ async function renderCameraBoard(player: Player): Promise<string> {
   const coverage = coverageLevel(await listCameras(), player.region);
   const coveragePct = Math.round(coverage * 100);
 
-  const installWait = Math.ceil(cooldownRemaining(player, "install") / 1000);
-  const dismantleWait = Math.ceil(cooldownRemaining(player, "dismantle") / 1000);
+  const installWait = Math.ceil(cooldownRemaining(region?.cameraCooldowns, "install") / 1000);
+  const dismantleWait = Math.ceil(cooldownRemaining(region?.cameraCooldowns, "dismantle") / 1000);
 
   const rows = cameras.length
     ? cameras

@@ -107,7 +107,15 @@ export interface Region {
   locations: string[];
   stats: RegionStats;
   economyProfile: EconomyProfile;
+  /**
+   * Region-wide camera work cooldowns (§3.6), shared by all players: maps an
+   * activity key to the epoch-ms time when anyone may next perform it here.
+   */
+  cameraCooldowns?: CameraCooldowns;
 }
+
+/** Cooldowns for camera activities, enforced per region across all players. */
+export type CameraCooldowns = Partial<Record<"install" | "dismantle", number>>;
 
 // ── Dialogue (spec §3.1–3.2) ────────────────────────────────────────────────
 
@@ -165,12 +173,6 @@ export interface Npc {
 
 // ── Player ──────────────────────────────────────────────────────────────────
 
-/**
- * Cooldowns for camera activities (install/dismantle). Maps an activity key to
- * the epoch-ms time when the player may next perform it. Absent/zero = ready.
- */
-export type ActivityTimers = Partial<Record<"install" | "dismantle", number>>;
-
 export interface Player {
   id: string;
   name: string;
@@ -180,6 +182,4 @@ export interface Player {
   suspicion: number;
   region: string;
   quests: PlayerQuest[];
-  /** Activity-based refresh timers for camera work. */
-  timers?: ActivityTimers;
 }

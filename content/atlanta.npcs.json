@@ -118,31 +118,31 @@
     "nodes": [
       {
         "id": "start",
-        "line": "Pole 40 needs a unit by Friday. Pole 41 needed one last Friday. The grid doesn't sleep and neither does my crew, apparently.",
+        "line": "Back in my day a crew was a clipboard and a handshake. A clipboard and a handshake and a pole that stayed up. Now it's firmware this and grid that and nobody holds a ladder anymore.",
         "options": [
           {
             "id": "ask_work",
             "label": "Ask about the work",
-            "response": "Ladders, brackets, firmware, repeat. Pay's steady. Steady is all anyone asks for down here.",
+            "response": "The work is honest. The work is steady. The work is steady and honest. I hung my first pole in '78 with a paper timesheet and a pen that worked. You kids got apps. Apps and dead pens.",
             "next": "work"
           },
           {
             "id": "ask_quota",
             "label": "Ask about the quota",
-            "response": "HQ wants the whole metro lit by Christmas. I want a sandwich. One of us is getting what we want.",
+            "response": "HQ wants the whole metro lit by Christmas. Lit and catalogued and stamped in triplicate. In my day we finished a job and went home and had a sandwich. That's the whole quota a man needs.",
             "next": null
           },
           {
             "id": "ask_backpay",
             "label": "Ask about his pay",
-            "response": "Three weeks of timesheets, gone. 'System migration,' they said. The system migrated my overtime into the sea. Walt out west keeps real records — paper, dirt under the nails. Get 'em stamped and back to me, there's a cut in it for you.",
+            "response": "Three weeks of timesheets, gone. 'System migration,' they said. Migrated my overtime right into the sea. Back in my day the pay came in an envelope and the envelope was full. Walt out west keeps real records — paper, dirt under the nails, the way God intended. Get 'em stamped and back to me, there's a cut in it for you.",
             "next": null,
             "grantsQuest": "q_foreman_wages"
           },
           {
             "id": "deliver_timesheets",
             "label": "Hand over the stamped timesheets",
-            "response": "Stamped, official, and everything. Twenty years I begged payroll; you did it in a week. Here's your cut. And the vest — you've earned the vest.",
+            "response": "Stamped, official, and everything! You see this? THIS is paperwork done right. Twenty years I begged payroll; you did it in a week. Here's your cut. And the vest — you've earned the vest.",
             "next": null,
             "advancesQuest": "q_foreman_wages",
             "atStages": [2]
@@ -150,14 +150,14 @@
           {
             "id": "leave",
             "label": "Leave the crew to it",
-            "response": "Watch for the orange cones. And the lenses. Mostly the lenses.",
+            "response": "You kids just don't know hard work. You kids just don't know hard work and a good pen.",
             "next": null
           }
         ]
       },
       {
         "id": "work",
-        "line": "You hold a ladder straight, you got a job. You ask what the units are for, you got a problem. Simple arrangement.",
+        "line": "You hold a ladder straight, you got a job. A job and a clipboard. That's the whole arrangement. That's the whole grand arrangement.",
         "options": [
           {
             "id": "work_accept",
@@ -168,7 +168,7 @@
           {
             "id": "work_decline",
             "label": "Ask what the units are for",
-            "response": "Safety. Progress. Synergy. Pick whichever one lets you sleep. That's what I do.",
+            "response": "Safety. Progress. Synergy. They put it in the memo and the memo's got a stamp and that's all a man needs to know. That's all a man needs to know to sleep.",
             "next": null
           }
         ]
