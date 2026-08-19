@@ -1,7 +1,7 @@
 import { Application } from "oak";
 import { viewsRouter } from "./src/routes/views.ts";
 import { playRouter } from "./src/routes/play.ts";
-import { seedContent } from "./src/state/content.ts";
+import { CONTENT_VERSION, ensureContentCurrent } from "./src/state/content.ts";
 import { seedRegions } from "./src/state/regions.ts";
 import { listCameras, seedCameras } from "./src/state/cameras.ts";
 import { listRegions, saveRegion } from "./src/state/regions.ts";
@@ -12,7 +12,11 @@ import { getContent } from "./src/content/index.ts";
 const PORT = Deno.env.get("PORT") ? Number(Deno.env.get("PORT")) : 8000;
 
 const { npcs, quests, regions } = await getContent();
-await seedContent(npcs, quests);
+// Seeds missing content and overwrites stale records when CONTENT_VERSION
+// has moved on, so content fixes reach already-seeded stores.
+if (await ensureContentCurrent(npcs, quests)) {
+  console.log(`Content updated to version ${CONTENT_VERSION}`);
+}
 await seedRegions(regions);
 
 // Seed a couple of camera contracts for the test region if none exist.

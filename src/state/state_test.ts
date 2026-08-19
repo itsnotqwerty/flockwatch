@@ -1,7 +1,14 @@
-import { assertEquals } from "$assert";
+import { assert, assertEquals } from "$assert";
 import { createMemoryStore } from "./store.ts";
 import { defaultPlayer, ensurePlayer, getPlayer, savePlayer } from "./players.ts";
-import { getNpc, getQuest, listNpcs, seedContent } from "./content.ts";
+import {
+  CONTENT_VERSION,
+  ensureContentCurrent,
+  getNpc,
+  getQuest,
+  listNpcs,
+  seedContent,
+} from "./content.ts";
 import { npcs, quests } from "../game/fixtures.ts";
 
 Deno.test("memory store round-trips values", async () => {
@@ -34,5 +41,24 @@ Deno.test("seedContent stores NPCs and quests without overwriting", async () => 
   const clerk = (await getNpc("clerk", store))!;
   await store.set(["npcs", "clerk"], { ...clerk, name: "Clerk Gusteau (Acting)" });
   await seedContent(npcs, quests, store);
+  assertEquals((await getNpc("clerk", store))?.name, "Clerk Gusteau (Acting)");
+});
+
+Deno.test("ensureContentCurrent refreshes stale content on version bump", async () => {
+  const store = createMemoryStore();
+  // Simulate a store seeded by an older build (stale record, old version).
+  await seedContent(npcs, quests, store);
+  const clerk = (await getNpc("clerk", store))!;
+  await store.set(["npcs", "clerk"], { ...clerk, name: "Clerk Gusteau (Acting)" });
+  await store.set(["meta", "content_version"], CONTENT_VERSION - 1);
+
+  // Version moved on → records are overwritten, marker is updated.
+  assert(await ensureContentCurrent(npcs, quests, store));
+  assertEquals((await getNpc("clerk", store))?.name, "Clerk Gusteau");
+  assertEquals(await store.get(["meta", "content_version"]), CONTENT_VERSION);
+
+  // Same version → no-op.
+  await store.set(["npcs", "clerk"], { ...clerk, name: "Clerk Gusteau (Acting)" });
+  assert(!(await ensureContentCurrent(npcs, quests, store)));
   assertEquals((await getNpc("clerk", store))?.name, "Clerk Gusteau (Acting)");
 });
