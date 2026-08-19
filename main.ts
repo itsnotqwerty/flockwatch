@@ -3,9 +3,9 @@ import { viewsRouter } from "./src/routes/views.ts";
 import { playRouter } from "./src/routes/play.ts";
 import { CONTENT_VERSION, ensureContentCurrent } from "./src/state/content.ts";
 import { seedRegions } from "./src/state/regions.ts";
-import { listCameras, seedCameras } from "./src/state/cameras.ts";
+import { camerasInRegion, listCameras, seedCameras } from "./src/state/cameras.ts";
 import { listRegions, saveRegion } from "./src/state/regions.ts";
-import { createContract } from "./src/game/cameras.ts";
+import { makeContract } from "./src/game/cameras.ts";
 import { tickAllRegions } from "./src/game/tick.ts";
 import { getContent } from "./src/content/index.ts";
 
@@ -19,13 +19,23 @@ if (await ensureContentCurrent(npcs, quests)) {
 }
 await seedRegions(regions);
 
-// Seed a couple of camera contracts for the test region if none exist.
-if ((await listCameras()).length === 0) {
-  await seedCameras([
-    createContract("rust_belt", 85),
-    createContract("rust_belt", 60),
-    createContract("rust_belt", 120),
-  ]);
+// Offer installation contracts in every region (spec §3.6). Seeding is
+// per-region and idempotent (stable ids), so regions added later — or an
+// existing store that only ever seeded rust_belt — still get contracts.
+const CONTRACT_WAGES: Record<string, number[]> = {
+  rust_belt: [85, 60, 120],
+  gulf_coast: [100, 140, 90],
+  pacific_northwest: [70, 55, 110],
+  atlanta: [130, 95, 160, 110],
+  silicon_valley: [180, 220],
+  new_york: [150, 200, 175, 125, 240],
+};
+for (const region of regions) {
+  if ((await camerasInRegion(region.id)).length > 0) continue;
+  const wages = CONTRACT_WAGES[region.id] ?? [75, 60, 90];
+  await seedCameras(
+    wages.map((w, i) => makeContract(`cam_${region.id}_${i + 1}`, region.id, w)),
+  );
 }
 
 const app = new Application();

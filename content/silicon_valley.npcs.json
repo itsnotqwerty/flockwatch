@@ -1,0 +1,170 @@
+[
+  {
+    "id": "sv_ping",
+    "name": "\"Ping\"",
+    "role": "Informant, Server Farm Perimeter",
+    "region": "silicon_valley",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Keep walking. Don't look at the cooling towers. Everyone looks at the cooling towers. That's how they sort you.",
+        "options": [
+          {
+            "id": "ask_farms",
+            "label": "Ask about the server farms",
+            "response": "Every camera in the Union phones home here. The footage never leaves. Nothing here ever leaves. Including some of the staff.",
+            "next": "farms"
+          },
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "A paper form? Here? That's adorable. I've already queued it for archival. By mentioning it, you filed it.",
+            "next": null,
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "The badge reader blinked twice when you walked up. That means you're on the roster. Or flagged. Same system.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
+            "id": "ask_turnover",
+            "label": "Ask about the turnover",
+            "response": "People rotate out. Contractors rotate in. The badges stay. The badges always stay.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Keep walking",
+            "response": "We never spoke. But your gait is in the system now. Nothing personal. It's just good data.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "farms",
+        "line": "Building 7 hums louder than the others. Nobody's badge opens Building 7. Building 7 opens you, if you catch my drift.",
+        "options": [
+          {
+            "id": "ask_building7",
+            "label": "Ask about Building 7",
+            "response": "I've said too much. It's a cooling facility. For cooling. Say it back to me: a cooling facility.",
+            "next": "reset"
+          },
+          {
+            "id": "leave_farms",
+            "label": "Let it go",
+            "response": "Good instinct. Curiosity is a metrics event here.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sv_clerk_miriam",
+    "name": "Clerk Miriam",
+    "role": "Permits Desk, Office of Zoning Compliance",
+    "region": "silicon_valley",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The desk is virtual. I am the desk. Your appointment expired in 2019. Would you like to reschedule it retroactively?",
+        "options": [
+          {
+            "id": "ask_permit",
+            "label": "Ask about a ladder permit",
+            "response": "Ladder permits are issued by the ladder permit office. This is the zoning desk. The ladder office is also me, on Tuesdays.",
+            "next": null
+          },
+          {
+            "id": "ask_forms",
+            "label": "Ask where the forms are",
+            "response": "The forms are online. The site is down. The outage notice is a form. You may fill it out online.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Abandon the desk",
+            "response": "Your departure has been timestamped. Your arrival never was. You were never here, officially.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sv_boomer_greg",
+    "name": "Boomer Greg",
+    "role": "Angel Investor (Retired), Cul-de-Sac Heights",
+    "region": "silicon_valley",
+    "art": "boomer",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "I bought this place in '91 for two hundred grand and a firm handshake. Now the hedge funds pay ten million to live next to my lemon tree.",
+        "options": [
+          {
+            "id": "ask_startup",
+            "label": "Ask about his startup",
+            "response": "We put a modem in a toaster in 1999. Lost everything. Beautiful time to be alive. You kids with your cameras have no vision.",
+            "next": "reset"
+          },
+          {
+            "id": "ask_cameras",
+            "label": "Ask about the street cameras",
+            "response": "Fine by me. I sit on the porch and wave at them. Some kid in a warehouse gets paid to wave back. That's the economy.",
+            "next": "reset"
+          },
+          {
+            "id": "leave",
+            "label": "Leave Greg to his lemons",
+            "response": "Pull yourself up by your bootstraps. That's what the cameras are doing, incidentally.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sv_groundskeeper_walt",
+    "name": "Groundskeeper Walt",
+    "role": "Campus Loop Landscaping",
+    "region": "silicon_valley",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Thirty acres of lawn and not one blade out of place. The grass is monitored. The grass monitors back.",
+        "options": [
+          {
+            "id": "ask_grass",
+            "label": "Ask about the grass",
+            "response": "Sensors in the turf. Footsteps, weight, dwell time. I mow around them. They're sensitive. We have an understanding.",
+            "next": null
+          },
+          {
+            "id": "ask_drone",
+            "label": "Ask about the mowing drones",
+            "response": "They mow at night. I supervise. Supervising means I stand here so the drones see a human in charge. Morale purposes.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step off the lawn",
+            "response": "Good. The lawn logged you at an acceptable distance. Keep it that way.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

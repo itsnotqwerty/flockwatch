@@ -1,0 +1,224 @@
+[
+  {
+    "id": "nyc_sable",
+    "name": "\"Sable\"",
+    "role": "Informant, Times Square",
+    "region": "new_york",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Don't stand still. Standing still is how the billboards read you. Walk. Talk while you walk.",
+        "options": [
+          {
+            "id": "ask_grid",
+            "label": "Ask about the grid",
+            "response": "Eight million stories and every single one has a lens on it. The trick isn't hiding. It's being boring at scale.",
+            "next": "grid"
+          },
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "27-B? Cute. In this city forms breed in filing cabinets. Yours already has three offspring in a basement on Chambers Street.",
+            "next": null,
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "The pigeons at Bowling Green told me before you did. You're on the roster. The ladders here are taller. So is the pay.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
+            "id": "ask_pigeons",
+            "label": "Ask about the pigeons",
+            "response": "New York pigeons don't work for anybody. That's what makes them useful. And terrifying.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Keep walking",
+            "response": "Smart. In this city the conversation never ends. It just changes cameras.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "grid",
+        "line": "The cameras here don't watch you. They watch everyone, and you're in the crowd. The crowd is the only privacy left. Cherish it.",
+        "options": [
+          {
+            "id": "ask_blindspots",
+            "label": "Ask about blind spots",
+            "response": "Subway tunnels, mostly. The rats down there have seniority. Even Flock respects seniority.",
+            "next": "reset"
+          },
+          {
+            "id": "leave_grid",
+            "label": "Blend into the crowd",
+            "response": "There you go. You're learning. Be the crowd.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nyc_chad",
+    "name": "Chadwick \"Chad\" Brennan III",
+    "role": "Portfolio Manager, Wall Street",
+    "region": "new_york",
+    "art": "financebro",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Flock's up fourteen points this quarter. I'm long on surveillance. I'm long on everything, but especially surveillance.",
+        "options": [
+          {
+            "id": "ask_stock",
+            "label": "Ask about the stock",
+            "response": "Every camera is a cash flow. Every citizen is a dividend. I don't make the rules. Actually, my golf buddy does.",
+            "next": "stock"
+          },
+          {
+            "id": "ask_office",
+            "label": "Ask about his office",
+            "response": "Corner office, sixty floors up. I can see the whole grid. The grid can see me. It's called transparency. It's beautiful.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Let him get back to the terminal",
+            "response": "Buy the dip. There is always a dip. That's the thing about watching everyone — you see the dips coming.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "stock",
+        "line": "My thesis is simple: people will always do things, and someone will always want to watch. That's a moat, baby.",
+        "options": [
+          {
+            "id": "ask_ethics",
+            "label": "Ask about the ethics",
+            "response": "Ethics? I have a guy for ethics. He's up two points this quarter.",
+            "next": "reset"
+          },
+          {
+            "id": "stock_leave",
+            "label": "Slowly back away",
+            "response": "Hey, it's a free market. Mostly. Sort of. The market is free to watch. Walk away while you still can.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nyc_marin",
+    "name": "Marin Voss",
+    "role": "Artist-in-Residence, The Villages",
+    "region": "new_york",
+    "art": "artho",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "My latest piece is forty hours of my own surveillance footage, projected back onto the camera that took it. The gallery called it 'confrontational.'",
+        "options": [
+          {
+            "id": "ask_art",
+            "label": "Ask about the art",
+            "response": "If they're going to watch me, I'm going to make it worth watching. Every lens is an audience. Every audience can be disappointed.",
+            "next": "art"
+          },
+          {
+            "id": "ask_grant",
+            "label": "Ask who funds it",
+            "response": "A Flock arts grant. They fund dissent that photographs well. I take their money and spend it being unphotogenic. It's dialectics.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the studio",
+            "response": "The show opens Friday. The cameras are invited. They never RSVP, but they always attend.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "art",
+        "line": "I spray-painted eyes on the cameras so they can see themselves being seen. Three were removed. That was the exhibition.",
+        "options": [
+          {
+            "id": "ask_next_piece",
+            "label": "Ask about the next piece",
+            "response": "I'm teaching pigeons to spell. Banner messages, in formation. The sky is the one canvas they haven't metered yet.",
+            "next": "reset"
+          },
+          {
+            "id": "art_leave",
+            "label": "Say nothing, appreciatively",
+            "response": "Exactly. Silence is the last unrecorded medium. You understand the work.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nyc_raymond",
+    "name": "Raymond",
+    "role": "Unaffiliated, Subway Platform B",
+    "region": "new_york",
+    "art": "schizo",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The trains aren't trains. They're scanners. Every ride is an MRI for your intentions. I walk everywhere now. Forty blocks. Sixty. They can't scan calves.",
+        "options": [
+          {
+            "id": "ask_trains",
+            "label": "Ask about the trains",
+            "response": "The turnstiles count your teeth. I counted back. The number was different every time. Every time!",
+            "next": "trains"
+          },
+          {
+            "id": "ask_foil",
+            "label": "Ask about the hat",
+            "response": "It's not foil. It's mesh. Foil is amateurs. Mesh breathes. The thoughts stay in, the signals stay out, and my scalp stays cool.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Back toward the stairs",
+            "response": "Take the stairs! The escalators report your weight to a wellness bureau! It's in the terms of service!",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "trains",
+        "line": "The announcements. 'Stand clear of the closing doors.' Why do the doors need to know where I'm standing? Think about it. THINK.",
+        "options": [
+          {
+            "id": "ask_doors",
+            "label": "Ask about the doors",
+            "response": "They close when you approach. They close WHEN YOU APPROACH. That's not a sensor, that's a JUDGMENT.",
+            "next": "reset"
+          },
+          {
+            "id": "trains_leave",
+            "label": "Nod very slowly",
+            "response": "You get it. Walk. Keep walking. The pigeons down here are clean. I checked. I checked every one.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

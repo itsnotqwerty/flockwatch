@@ -1,0 +1,300 @@
+[
+  {
+    "id": "atl_peaches",
+    "name": "\"Peaches\"",
+    "role": "Informant, Peachtree Strip",
+    "region": "atlanta",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "You just flew in, or you just rolled off the freight line. Either way, you just got here — and HQ knew it first.",
+        "options": [
+          {
+            "id": "ask_hq",
+            "label": "Ask about Flock HQ",
+            "response": "The tower watches the whole grid from downtown. Cameras grow faster than peaches around here. Sweeter margins, too.",
+            "next": "hq"
+          },
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Paper moves through this city like humidity. Give it time. It's already somewhere it needs to be.",
+            "next": null,
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "HQ keeps its own roster, but word trickles down. You're cleared. The ladder racks are by the freight elevator.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
+            "id": "ask_streets",
+            "label": "Ask what the streets are saying",
+            "response": "Same thing they always say, just louder now that the poles have ears. You didn't get that from me.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Move along",
+            "response": "Stay sweet. The city likes that. It's watching how sweet you stay.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "hq",
+        "line": "Langley runs it all from up there. 'Community safety,' he calls it. The community feels real safe. Safe and observed.",
+        "options": [
+          {
+            "id": "ask_langley",
+            "label": "Ask about Langley",
+            "response": "Smiles like a neighbor, counts like a census. He'll shake your hand and log your grip strength.",
+            "next": "reset"
+          },
+          {
+            "id": "leave_hq",
+            "label": "Drop the subject",
+            "response": "Wise. The tower has long ears and a longer memory.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "atl_boomer_hank",
+    "name": "Boomer Hank",
+    "role": "Retiree, Cul-de-Sac Heights South",
+    "region": "atlanta",
+    "art": "boomer",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Back in my day we didn't need cameras. We had neighbors. Nosy, God-fearing neighbors with nothing better to do.",
+        "options": [
+          {
+            "id": "ask_house",
+            "label": "Ask about his house",
+            "response": "Bought it in '74 for the price of a decent truck. Best decision I ever made. You people buy coffee instead of houses. That's the whole problem.",
+            "next": "reset"
+          },
+          {
+            "id": "ask_cameras",
+            "label": "Ask about the new cameras",
+            "response": "Love 'em. Caught a raccoon on mine Tuesday. Emailed the footage to the whole homeowners' association. Twice.",
+            "next": "reset"
+          },
+          {
+            "id": "leave",
+            "label": "Leave Hank to his porch",
+            "response": "You kids just don't know hard work. My lawn mower is older than you and it starts on the first pull.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "atl_foreman_ray",
+    "name": "Foreman Ray",
+    "role": "Flock Installation Crew, Sector 4",
+    "region": "atlanta",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Pole 40 needs a unit by Friday. Pole 41 needed one last Friday. The grid doesn't sleep and neither does my crew, apparently.",
+        "options": [
+          {
+            "id": "ask_work",
+            "label": "Ask about the work",
+            "response": "Ladders, brackets, firmware, repeat. Pay's steady. Steady is all anyone asks for down here.",
+            "next": "work"
+          },
+          {
+            "id": "ask_quota",
+            "label": "Ask about the quota",
+            "response": "HQ wants the whole metro lit by Christmas. I want a sandwich. One of us is getting what we want.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the crew to it",
+            "response": "Watch for the orange cones. And the lenses. Mostly the lenses.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "line": "You hold a ladder straight, you got a job. You ask what the units are for, you got a problem. Simple arrangement.",
+        "options": [
+          {
+            "id": "work_accept",
+            "label": "Say you can hold a ladder",
+            "response": "Good. Report to any pole with a gold bracket. The ladder remembers your hands. Don't ask how.",
+            "next": "reset"
+          },
+          {
+            "id": "work_decline",
+            "label": "Ask what the units are for",
+            "response": "Safety. Progress. Synergy. Pick whichever one lets you sleep. That's what I do.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "atl_lil_peep",
+    "name": "Lil Peep-Peep",
+    "role": "Rapper, The Yard",
+    "region": "atlanta",
+    "art": "rapper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Yuh. They put a camera on the block, so I put the block on a track. Stream it everywhere. Can't surveil what you can't mute.",
+        "options": [
+          {
+            "id": "ask_music",
+            "label": "Ask about the music",
+            "response": "Every verse is a map of the blind spots. You memorize the flow, you know where the lenses ain't. That's distribution.",
+            "next": "music"
+          },
+          {
+            "id": "ask_chain",
+            "label": "Ask about the chain",
+            "response": "It's a camera. Gold-plated. Doesn't work. That's the statement.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Nod and bounce",
+            "response": "Tell the tower I said the mixtape drops Friday. It already knows. It pre-ordered.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "music",
+        "line": "Track four is just me reading the serial numbers off the units on Peachtree. It charted. The tower filed a noise complaint against itself.",
+        "options": [
+          {
+            "id": "ask_blindspots",
+            "label": "Ask for the blind spots",
+            "response": "I don't hand out the map for free, but listen close to the hook. Everything I know is in the hook.",
+            "next": "reset"
+          },
+          {
+            "id": "music_leave",
+            "label": "Compliment the wordplay",
+            "response": "Yuh. The pen is mightier than the lens. Somebody should write that down. Oh wait. I did. Track six.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "atl_garrett",
+    "name": "Mr. Garrett Langley",
+    "role": "Founder & CEO, Flock — Here to Listen",
+    "region": "atlanta",
+    "art": "glangley",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Hey there. Garrett. Welcome to the home office. I don't do titles — I'm just a neighbor who happens to own the cameras. All of them.",
+        "options": [
+          {
+            "id": "ask_mission",
+            "label": "Ask about Flock's mission",
+            "response": "Simple: we make communities safer. Total visibility is total safety. A watched neighborhood is a loved neighborhood.",
+            "next": "mission"
+          },
+          {
+            "id": "ask_concerns",
+            "label": "Raise privacy concerns",
+            "response": "I hear that a lot, and I want you to know: I hear it. Because of the microphones. Which I value.",
+            "next": "privacy"
+          },
+          {
+            "id": "ask_job",
+            "label": "Ask about working for Flock",
+            "response": "We're always hiring eyes. You look like someone with a lot of neighbors. Ever considered being compensated for that?",
+            "next": "job"
+          },
+          {
+            "id": "leave",
+            "label": "End the conversation",
+            "response": "Great talk. This never happened, but it was great. I'll see you around. Technically, I already am.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "mission",
+        "line": "People ask me, 'Garrett, isn't this surveillance?' And I say no. Surveillance is what governments do. We're a company. We call it stewardship.",
+        "options": [
+          {
+            "id": "mission_followup",
+            "label": "Point out that it's a distinction without a difference",
+            "response": "Right, but it's a profitable distinction. And profitable means sustainable. Safety shouldn't have to worry about a runway.",
+            "next": "reset"
+          },
+          {
+            "id": "mission_leave",
+            "label": "Nod and step back",
+            "response": "I can tell you're a person who gets it. The cameras can too. They flagged you as 'gets it.'",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "privacy",
+        "line": "Privacy is important. It's so important we monitor it constantly. If your privacy drops below acceptable levels, we want to be the first to know.",
+        "options": [
+          {
+            "id": "privacy_optout",
+            "label": "Ask how to opt out",
+            "response": "Great question. The opt-out form is Form 88-C. It's not distributed, but the act of looking for it tells us you're engaged. We love engagement.",
+            "next": "reset"
+          },
+          {
+            "id": "privacy_leave",
+            "label": "Withdraw the concern",
+            "response": "No, no, your concern is valid and has been logged. Concerns are data. We treasure your data.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "job",
+        "line": "Here's the pitch: you watch your block, we pay you. You're not an informant — you're a Community Safety Partner. The vest is free.",
+        "options": [
+          {
+            "id": "job_accept",
+            "label": "Express cautious interest",
+            "response": "Love it. Orientation's a formality. We already have your file — consider this the handshake.",
+            "next": "reset"
+          },
+          {
+            "id": "job_decline",
+            "label": "Decline the vest",
+            "response": "The offer stands. It always stands. That's not a threat, it's just good retention design.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

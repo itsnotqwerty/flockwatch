@@ -1,0 +1,19 @@
+[
+  {
+    "id": "atlanta",
+    "name": "Atlanta",
+    "locations": ["flock_hq", "peachtree_strip", "the_yard"],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.35,
+      "prosperity": 0.78,
+      "flockPresence": 0.95,
+      "populationMood": "branded"
+    },
+    "economyProfile": {
+      "consumes": ["luxury_goods", "tools"],
+      "produces": ["currency", "influence"],
+      "wageMultiplier": 1.2
+    }
+  }
+]

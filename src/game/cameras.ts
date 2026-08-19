@@ -17,8 +17,13 @@ export function resetCameraCounter(): void {
 /** Create a new installation contract offered to a player. */
 export function createContract(region: string, baseWage: number): Camera {
   cameraCounter += 1;
+  return makeContract(`cam_${region}_${cameraCounter}`, region, baseWage);
+}
+
+/** Create a contract with an explicit id (stable, idempotent seeding). */
+export function makeContract(id: string, region: string, baseWage: number): Camera {
   return {
-    id: `cam_${region}_${cameraCounter}`,
+    id,
     region,
     status: "contracted",
     installedBy: null,

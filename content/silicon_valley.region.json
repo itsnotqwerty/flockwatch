@@ -1,0 +1,19 @@
+[
+  {
+    "id": "silicon_valley",
+    "name": "Silicon Valley",
+    "locations": ["campus_loop", "server_farms", "cul_de_sac_heights"],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.15,
+      "prosperity": 0.92,
+      "flockPresence": 0.99,
+      "populationMood": "disrupted"
+    },
+    "economyProfile": {
+      "consumes": ["raw_materials", "scrap"],
+      "produces": ["luxury_goods", "tools"],
+      "wageMultiplier": 1.4
+    }
+  }
+]
