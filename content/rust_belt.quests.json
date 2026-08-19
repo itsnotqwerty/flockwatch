@@ -1,0 +1,50 @@
+[
+  {
+    "id": "q_pigeon_audit",
+    "title": "The Pigeon Audit",
+    "hidden": true,
+    "trigger": { "npc": "groundskeeper", "dialogueOption": "ask_about_birds" },
+    "stages": [
+      { "id": "s1", "objective": "Count the pigeons. All of them." },
+      { "id": "s2", "objective": "Note which pigeons do not eat." },
+      { "id": "s3", "objective": "Report the count to Old Man Martinez." }
+    ],
+    "rewards": { "currency": 50, "items": ["binoculars"] }
+  },
+  {
+    "id": "q_form_27b",
+    "title": "A Matter of Form",
+    "hidden": true,
+    "trigger": { "npc": "clerk", "dialogueOption": "ask_form_27b" },
+    "stages": [
+      { "id": "s1", "objective": "Locate a blank Form 27-B." },
+      { "id": "s2", "objective": "Do not fill it in. Under any circumstances." },
+      { "id": "s3", "objective": "Return it to Counter 3 for collection." }
+    ],
+    "rewards": { "currency": 35, "items": ["form_27b_blank"] }
+  },
+  {
+    "id": "q_flock_orientation",
+    "title": "Orientation (Voluntary)",
+    "hidden": true,
+    "trigger": { "npc": "informant", "dialogueOption": "ask_flock_contracts" },
+    "stages": [
+      { "id": "s1", "objective": "Attend Flock orientation. Bring your own ladder." },
+      { "id": "s2", "objective": "Accept a camera installation contract." }
+    ],
+    "rewards": { "currency": 75, "items": ["ladder_permit"] }
+  },
+  {
+    "id": "q_cyberhorse",
+    "title": "Serve the Cyberhorse",
+    "hidden": true,
+    "trigger": { "npc": "cyberhorse", "dialogueOption": "ask_quest" },
+    "stages": [
+      { "id": "s1", "objective": "Recover the INFINITE CARBURETOR from the geese." },
+      { "id": "s2", "objective": "Reset the HOOF-MODEM by counting the pigeons. Loudly." },
+      { "id": "s3", "objective": "Fetch a wet pebble from the center of the duck pond." },
+      { "id": "s4", "objective": "Gaze upon the truth of the Cyberhorse." }
+    ],
+    "rewards": { "currency": 5, "items": ["sci_fi_sunglasses"] }
+  }
+]

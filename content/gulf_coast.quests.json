@@ -1,0 +1,13 @@
+[
+  {
+    "id": "q_gulf_salvage",
+    "title": "Salvage Rights",
+    "hidden": true,
+    "trigger": { "npc": "gulf_saltine", "dialogueOption": "ask_salvage" },
+    "stages": [
+      { "id": "s1", "objective": "Agree to Saltine's terms for the delta wreck." },
+      { "id": "s2", "objective": "Bring up the cargo. Sell it quiet. Learn nothing." }
+    ],
+    "rewards": { "currency": 120, "items": ["survey_tripod"] }
+  }
+]

@@ -1,0 +1,191 @@
+/* FlockWatch — institutional palette (design §2.2), white on gray */
+
+:root {
+  --bg: #3a3a38;
+  --panel: #464644;
+  --panel-2: #525250;
+  --ink: #f2f2ee;
+  --muted: #b9b9b0;
+  --stamp: #d97a6f;
+  --surveillance: #6fae7e;
+  --line: #5c5c58;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+header {
+  background: #2c2c2a;
+  color: var(--ink);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  border-bottom: 3px double var(--line);
+}
+
+header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+header nav a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+}
+
+main {
+  max-width: 44rem;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+footer {
+  max-width: 44rem;
+  margin: 3rem auto 2rem;
+  padding: 1rem 1.5rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+footer a {
+  color: var(--surveillance);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+}
+
+footer a:hover {
+  color: var(--stamp);
+  border-bottom-color: var(--stamp);
+}
+
+h2 {
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.25rem;
+}
+
+a { color: var(--surveillance); }
+
+/* grillsay dialogue blocks */
+figure.dialogue {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--surveillance);
+  padding: 1rem;
+  margin: 1.25rem 0;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+figure.dialogue figcaption {
+  font-variant: small-caps;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+figure.dialogue pre {
+  font-family: "Courier New", monospace;
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin: 0;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* hidden quest reveal (spec §3.1) */
+aside.quest-reveal {
+  background: var(--panel-2);
+  border: 1px dashed var(--stamp);
+  padding: 0.75rem 1rem;
+  margin: 1.25rem 0;
+}
+
+.quest-reveal-title {
+  color: var(--stamp);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.25rem;
+}
+
+.quest-reveal-note {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+}
+
+/* option + action buttons: styled as stamped choices */
+ul.dialogue-options,
+ul.npc-list,
+ul.quest-log {
+  list-style: none;
+  padding: 0;
+}
+
+ul.dialogue-options li,
+ul.npc-list li {
+  margin: 0.5rem 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button.dialogue-option,
+button.npc-link,
+button.link-button {
+  background: var(--panel-2);
+  border: 1px solid var(--muted);
+  color: var(--ink);
+  padding: 0.45rem 0.9rem;
+  text-align: left;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  transition: transform 0.02s ease;
+}
+
+button.dialogue-option:hover,
+button.npc-link:hover,
+button.link-button:hover {
+  background: var(--stamp);
+  color: var(--ink);
+  border-color: var(--stamp);
+}
+
+button.dialogue-option:active,
+button.npc-link:active,
+button.link-button:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* NPC list rows: button sits inline with the role text */
+ul.npc-list li form {
+  display: inline;
+}
+
+ul.npc-list em {
+  color: var(--muted);
+}
+
+ul.quest-log li {
+  padding: 0.4rem 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+/* generic forms stack with breathing room */
+main form { margin: 0.5rem 0; }

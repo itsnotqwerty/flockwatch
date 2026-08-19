@@ -1,11 +1,14 @@
 {
   "lock": false,
   "tasks": {
-    "start": "deno run --allow-all --env-file=.env.list main.ts"
+    "start": "deno run --allow-read=./static,./tools,./src,./content --allow-net --allow-env --unstable-kv main.ts",
+    "dev": "deno run --allow-all --env-file=.env.list main.ts",
+    "test": "deno test --allow-read=./tools,./src,./content --allow-env",
+    "check-content": "deno run --allow-read=./content tools/check_content.ts"
   },
   "imports": {
     "oak": "jsr:@oak/oak",
-    "twilio": "npm:twilio"
+		"$assert": "jsr:@std/assert"
   },
   "exclude": [
     "**/*.js"

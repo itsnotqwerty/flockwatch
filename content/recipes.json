@@ -1,0 +1,20 @@
+[
+  {
+    "id": "recipe_cutters",
+    "result": "cutters",
+    "components": { "housing": 2, "wiring": 1 },
+    "workbench": true
+  },
+  {
+    "id": "recipe_signal_jammer",
+    "result": "signal_jammer",
+    "components": { "circuit_board": 2, "wiring": 3 },
+    "workbench": true
+  },
+  {
+    "id": "recipe_survey_tripod",
+    "result": "survey_tripod",
+    "components": { "housing": 1, "wiring": 2 },
+    "workbench": false
+  }
+]

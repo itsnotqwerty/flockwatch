@@ -7,52 +7,61 @@ Phases are sequential but overlapping; items within a phase are roughly ordered.
 - [x] oak server serving static views (spec §2.2–2.3)
 - [x] grillsay dialogue engine integrated as submodule (spec §3.2)
 - [x] Core documentation: README, spec, design guide, roadmap
-- [ ] Split [main.ts](../main.ts) into the module structure from [docs/design.md](design.md) §3.2
-- [ ] `types.ts` implementing the spec §4 data formats (quest, item, listing, camera, recipe, region)
-- [ ] Deno KV state layer (`state/`) with in-memory fallback for tests
-- [ ] Narrow permissions: split `start` into `dev` (`--allow-all`) and `start` (scoped)
+- [x] Split [main.ts](../main.ts) into the module structure from [docs/design.md](design.md) §3.2
+- [x] `types.ts` implementing the spec §4 data formats (quest, item, listing, camera, recipe, region)
+- [x] Deno KV state layer (`state/`) with in-memory fallback for tests
+- [x] Narrow permissions: split `start` into `dev` (`--allow-all`) and `start` (scoped)
 
 ## Phase 1 — Dialogue & Quests
 
-Goal: a player can talk to an NPC and unknowingly accept a quest.
+Goal: a player can talk to an NPC and unknowingly accept a quest. ✅ *(achieved)*
 
-- [ ] grillsay rendering pipeline in `render/` with 40-column wrap validation (spec §3.2)
-- [ ] Dialogue trees: JSON-authored NPC conversations with option triggers
-- [ ] Hidden quest system: dialogue-option `questId` triggers, quest log with accepted/completed/failed states (spec §3.1)
-- [ ] First NPC roster with custom grillsay art files (design §2.2)
-- [ ] 3 starter quests, including "The Pigeon Audit"
+- [x] grillsay rendering pipeline in `render/` with 40-column wrap validation (spec §3.2)
+- [x] Dialogue trees: JSON-authored NPC conversations with option triggers
+- [x] Hidden quest system: dialogue-option `questId` triggers, quest log with accepted/completed/failed states (spec §3.1)
+- [x] First NPC roster with custom grillsay art files (design §2.2) — Old Man Deller, Clerk Marsha, "Dietrich"
+- [x] 3 starter quests, including "The Pigeon Audit"
+- [x] Migrate dialogue/quest authoring from TS modules to JSON content files with schema validation (design §4)
+- [x] Quest stage progression and turn-in interactions
 
 ## Phase 2 — Cameras System (Core Loop)
 
-Goal: the install/takedown loop runs end-to-end in one test region.
+Goal: the install/takedown loop runs end-to-end in one test region. ✅ *(achieved)*
 
-- [ ] Camera entities with `contracted`/`active`/`dismantled` lifecycle (spec §3.6, §4.4)
-- [ ] Flock installation contracts paying wages
-- [ ] Takedown actions yielding scrap components (lens, housing, wiring, circuit board)
-- [ ] Suspicion accrual for takedowns; basic Flock response (spec §3.6.1)
-- [ ] Region coverage stat derived from active cameras (spec §3.6.3)
-- [ ] Scheduled stat tick (design §3.3)
+- [x] Camera entities with `contracted`/`active`/`dismantled` lifecycle (spec §3.6, §4.4)
+- [x] Flock installation contracts paying wages
+- [x] Takedown actions yielding scrap components (lens, housing, wiring, circuit board)
+- [x] Suspicion accrual for takedowns; basic Flock response (spec §3.6.1)
+- [x] Region coverage stat derived from active cameras (spec §3.6.3)
+- [x] Scheduled stat tick (design §3.3)
 
 ## Phase 3 — Crafting & Economy
 
-Goal: scrap becomes items; items become a market.
+Goal: scrap becomes items; items become a market. ✅ *(core achieved)*
 
-- [ ] Workbench crafting from recipes (spec §3.6.2, §4.5)
-- [ ] Starter recipe set: cutters, signal jammer, tradeable goods
-- [ ] Player market: atomic listings, buy/sell, per-item price history (spec §3.3)
+- [x] Workbench crafting from recipes (spec §3.6.2, §4.5)
+- [x] Starter recipe set: cutters, signal jammer, tradeable goods
+- [x] Player market: atomic listings, buy/sell, withdraw (spec §3.3)
+- [ ] Per-item price history
 - [ ] Currency sinks and sources balanced against camera wages
 - [ ] First Ministry of Valuation decree event (live-ops price modifier)
 
 ## Phase 4 — Regions
 
-Goal: the US map exists; regional statistics and economies diverge.
+Goal: the US map exists; regional statistics and economies diverge. ✅ *(core achieved)*
 
-- [ ] Region entities + locations, starting with 3 regions (spec §3.0, §4.6)
-- [ ] Per-region stats: coverage, unrest, prosperity, Flock presence, population mood
-- [ ] Per-region market instances and production/consumption profiles
-- [ ] Travel between regions with time/cost
+- [x] Region entities + locations, starting with 3 regions (spec §3.0, §4.6)
+- [x] Per-region stats: coverage, unrest, prosperity, Flock presence, population mood
+- [x] Travel between regions with cost scaled by destination Flock presence
+- [x] Region-scoped NPC rosters and camera ledgers
+- [ ] Per-region market instances (listings currently global)
 - [ ] Cross-region trade/arbitrage viability pass
 - [ ] Expand to full US region set
+
+### Activity-based refresh timers
+
+- [x] Camera actions (install/dismantle) gated by per-player cooldown timers (spec §3.6)
+- [x] Cooldowns surfaced in the UI ("ready in Ns") and enforced server-side
 
 ## Phase 5 — Combat & Espionage
 

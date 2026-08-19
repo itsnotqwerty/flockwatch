@@ -1,0 +1,51 @@
+[
+  {
+    "id": "binoculars",
+    "name": "Standard-Issue Binoculars",
+    "description": "For watching. Being watched is extra.",
+    "rarity": "common",
+    "tradeable": true
+  },
+  {
+    "id": "form_27b_blank",
+    "name": "Form 27-B (Blank)",
+    "description": "Do not fill it in. Under any circumstances.",
+    "rarity": "uncommon",
+    "tradeable": true
+  },
+  {
+    "id": "ladder_permit",
+    "name": "Ladder Permit",
+    "description": "Authorizes the bearer to hold a ladder near state infrastructure.",
+    "rarity": "common",
+    "tradeable": false
+  },
+  {
+    "id": "cutters",
+    "name": "Heavy-Duty Cutters",
+    "description": "Faster takedowns. Quieter, too.",
+    "rarity": "uncommon",
+    "tradeable": true
+  },
+  {
+    "id": "signal_jammer",
+    "name": "Signal Jammer",
+    "description": "Reduces suspicion while you work. Probably legal.",
+    "rarity": "rare",
+    "tradeable": true
+  },
+  {
+    "id": "survey_tripod",
+    "name": "Survey Tripod",
+    "description": "Legitimate-looking. Legitimacy is a feature.",
+    "rarity": "common",
+    "tradeable": true
+  },
+  {
+    "id": "sci_fi_sunglasses",
+    "name": "Tactical Optics (Gift Shop)",
+    "description": "Cool sci-fi sunglasses. Slightly horse-scented. Not actually tactical.",
+    "rarity": "rare",
+    "tradeable": true
+  }
+]

@@ -1,0 +1,124 @@
+[
+  {
+    "id": "pnw_moss",
+    "name": "\"Moss\"",
+    "role": "Informant, Evergreen Yards",
+    "region": "pacific_northwest",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Keep your voice down. The rain doesn't cover as much as it used to. Neither do the trees.",
+        "options": [
+          {
+            "id": "ask_work",
+            "label": "Ask for work",
+            "response": "There's a courier run. No package, no paperwork, no questions. Standard arrangement.",
+            "next": "courier",
+            "grantsQuest": "q_pnw_courier"
+          },
+          {
+            "id": "ask_scrap",
+            "label": "Ask where the scrap goes",
+            "response": "Up the logging roads, mostly. Cameras up here are half unplugged. The other half are watching the wrong ridge.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Move along",
+            "response": "Smart. Standing still is how you get catalogued.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "courier",
+        "line": "You carry nothing, you know nothing, you were never here. Deliver nothing to no one. Clear?",
+        "options": [
+          {
+            "id": "accept_courier",
+            "label": "Nod slowly",
+            "response": "Good. The less you understand, the safer we both are.",
+            "next": "reset",
+            "advancesQuest": "q_pnw_courier"
+          },
+          {
+            "id": "decline_courier",
+            "label": "Ask what's actually in the package",
+            "response": "There is no package. There was never a package. You're learning.",
+            "next": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pnw_priya",
+    "name": "Harbor Engineer Priya",
+    "role": "Cascade Terminal",
+    "region": "pacific_northwest",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Half the cameras on this ridge aren't wired to anything. The other half are wired wrong. I keep the map.",
+        "options": [
+          {
+            "id": "ask_map",
+            "label": "Ask about the map",
+            "response": "The map is in my head. The head stays on my shoulders. That's the arrangement.",
+            "next": null
+          },
+          {
+            "id": "ask_work",
+            "label": "Ask about the terminal",
+            "response": "Timber terminal, mostly. Flock thinks we ship something else. We ship timber. It's almost disappointing.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave her to it",
+            "response": "Watch the ridge line. The unplugged ones are the ones that matter.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pnw_cole",
+    "name": "Barista-Inspector Cole",
+    "role": "Visitor Center",
+    "region": "pacific_northwest",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Welcome to the Pacific Northwest! Can I interest you in a latte, and also your hiking itinerary?",
+        "options": [
+          {
+            "id": "ask_latte",
+            "label": "Order the latte",
+            "response": "Oat milk? And while I steam this — any plans to visit the old logging roads? Purely for the trail recommendations.",
+            "next": null
+          },
+          {
+            "id": "ask_itinerary",
+            "label": "Decline to share your itinerary",
+            "response": "Of course! Privacy! I respect that. I'll just note down 'unaccompanied, evasive' for the welcome survey.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the visitor center",
+            "response": "Come back anytime! The cameras out front are just for weather. Weather and tourism.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+[Unit]
+Description=FlockWatch (Deno MMORPG server)
+After=network.target
+
+[Service]
+Type=simple
+User=flockwatch
+Group=flockwatch
+WorkingDirectory=__APP_DIR__
+Environment=PORT=8000
+Environment=HOST=127.0.0.1
+# Scoped permissions matching the `start` task.
+ExecStart=__DENO_BIN__ run --allow-read=./static,./tools,./src,./content --allow-net --allow-env --unstable-kv main.ts
+Restart=on-failure
+RestartSec=5
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

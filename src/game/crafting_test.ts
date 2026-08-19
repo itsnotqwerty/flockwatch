@@ -1,0 +1,54 @@
+import { assert, assertEquals } from "$assert";
+import { canCraft, craft, describeCost } from "./crafting.ts";
+import type { CraftingRecipe, Player } from "../types.ts";
+
+const jammer: CraftingRecipe = {
+  id: "recipe_signal_jammer",
+  result: "signal_jammer",
+  components: { circuit_board: 2, wiring: 3 },
+  workbench: true,
+};
+
+function player(scrap: Player["scrap"]): Player {
+  return {
+    id: "p1",
+    name: "Citizen",
+    currency: 0,
+    inventory: [],
+    scrap,
+    suspicion: 0,
+    region: "rust_belt",
+    quests: [],
+  };
+}
+
+Deno.test("canCraft reflects component availability", () => {
+  assert(canCraft(player({ circuit_board: 2, wiring: 3 }), jammer));
+  assert(!canCraft(player({ circuit_board: 2, wiring: 2 }), jammer));
+  assert(!canCraft(player({}), jammer));
+});
+
+Deno.test("craft consumes components and yields the item", () => {
+  const { player: after, crafted, reason } = craft(
+    player({ circuit_board: 3, wiring: 5, lens: 1 }),
+    jammer,
+  );
+  assertEquals(crafted, "signal_jammer");
+  assertEquals(reason, null);
+  assertEquals(after.scrap.circuit_board, 1);
+  assertEquals(after.scrap.wiring, 2);
+  assertEquals(after.scrap.lens, 1); // untouched
+  assert(after.inventory.includes("signal_jammer"));
+});
+
+Deno.test("craft fails cleanly without components", () => {
+  const before = player({ wiring: 1 });
+  const { player: after, crafted, reason } = craft(before, jammer);
+  assertEquals(crafted, null);
+  assertEquals(reason, "Missing components.");
+  assertEquals(after, before); // unchanged
+});
+
+Deno.test("describeCost formats the component list", () => {
+  assertEquals(describeCost(jammer), "2 circuit_board, 3 wiring");
+});

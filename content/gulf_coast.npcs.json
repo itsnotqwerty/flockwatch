@@ -1,0 +1,184 @@
+[
+  {
+    "id": "gulf_saltine",
+    "name": "\"Saltine\"",
+    "role": "Informant, Salthollow Docks",
+    "region": "gulf_coast",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "You didn't see me. I didn't see you. The shrimp saw us both but they're not talking.",
+        "options": [
+          {
+            "id": "ask_salvage",
+            "label": "Ask about salvage",
+            "response": "There's a wreck off the delta with a hold full of Flock equipment. Manifest says 'agricultural.' It is not agricultural.",
+            "next": "salvage",
+            "grantsQuest": "q_gulf_salvage"
+          },
+          {
+            "id": "ask_manifest",
+            "label": "Ask about manifests",
+            "response": "Every crate has a manifest. Every manifest has a lie in it. I collect the lies.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Move along",
+            "response": "Tide's turning. Good time to not be here.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "salvage",
+        "line": "You bring it up quiet, you sell it quieter, and you never learn what it was. That's the whole job.",
+        "options": [
+          {
+            "id": "accept_salvage",
+            "label": "Agree to the terms",
+            "response": "Then we have an understanding. The buoy's marked. The current does the rest.",
+            "next": "reset",
+            "advancesQuest": "q_gulf_salvage"
+          },
+          {
+            "id": "decline_salvage",
+            "label": "Ask what the equipment does",
+            "response": "It watches. That's all Flock equipment ever does. Now stop asking before someone writes it down.",
+            "next": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gulf_beauregard",
+    "name": "Mr. Garrett Langley",
+    "role": "Founder & CEO, Flock — Here to Listen",
+    "region": "gulf_coast",
+    "art": "glangley",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Hey there. Garrett. I don't do titles — I'm just a neighbor who happens to own the cameras. All of them.",
+        "options": [
+          {
+            "id": "ask_mission",
+            "label": "Ask about Flock's mission",
+            "response": "Simple: we make communities safer. Total visibility is total safety. A watched neighborhood is a loved neighborhood.",
+            "next": "mission"
+          },
+          {
+            "id": "ask_concerns",
+            "label": "Raise privacy concerns",
+            "response": "I hear that a lot, and I want you to know: I hear it. Because of the microphones. Which I value.",
+            "next": "privacy"
+          },
+          {
+            "id": "ask_job",
+            "label": "Ask about working for Flock",
+            "response": "We're always hiring eyes. You look like someone with a lot of neighbors. Ever considered being compensated for that?",
+            "next": "job"
+          },
+          {
+            "id": "leave",
+            "label": "End the conversation",
+            "response": "Great talk. This never happened, but it was great. I'll see you around. Technically, I already am.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "mission",
+        "line": "People ask me, 'Garrett, isn't this surveillance?' And I say no. Surveillance is what governments do. We're a company. We call it stewardship.",
+        "options": [
+          {
+            "id": "mission_followup",
+            "label": "Point out that it's a distinction without a difference",
+            "response": "Right, but it's a profitable distinction. And profitable means sustainable. Safety shouldn't have to worry about a runway.",
+            "next": "reset"
+          },
+          {
+            "id": "mission_leave",
+            "label": "Nod and step back",
+            "response": "I can tell you're a person who gets it. The cameras can too. They flagged you as 'gets it.'",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "privacy",
+        "line": "Privacy is important. It's so important we monitor it constantly. If your privacy drops below acceptable levels, we want to be the first to know.",
+        "options": [
+          {
+            "id": "privacy_optout",
+            "label": "Ask how to opt out",
+            "response": "Great question. The opt-out form is Form 88-C. It's not distributed, but the act of looking for it tells us you're engaged. We love engagement.",
+            "next": "reset"
+          },
+          {
+            "id": "privacy_leave",
+            "label": "Withdraw the concern",
+            "response": "No, no, your concern is valid and has been logged. Concerns are data. We treasure your data.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "job",
+        "line": "Here's the pitch: you watch your block, we pay you. You're not an informant — you're a Community Safety Partner. The vest is free.",
+        "options": [
+          {
+            "id": "job_accept",
+            "label": "Express cautious interest",
+            "response": "Love it. Orientation's a formality. We already have your file — consider this the handshake.",
+            "next": "reset"
+          },
+          {
+            "id": "job_decline",
+            "label": "Decline the vest",
+            "response": "The offer stands. It always stands. That's not a threat, it's just good retention design.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gulf_larue",
+    "name": "Shrimpcaster LaRue",
+    "role": "The Docks",
+    "region": "gulf_coast",
+    "art": "shrimpcaster",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The pelicans are wired. I seen one blink in morse. Nobody believes me but the shrimp know. The shrimp always know.",
+        "options": [
+          {
+            "id": "ask_pelicans",
+            "label": "Ask about the pelicans",
+            "response": "Wired. Every one. You can tell by the way they don't blink at the same time. That's the giveaway.",
+            "next": null
+          },
+          {
+            "id": "ask_shrimp",
+            "label": "Ask what the shrimp know",
+            "response": "Everything. They just lack the vocabulary. I'm working on a dictionary.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Back away from the dock",
+            "response": "You mark my words. One day a pelican's gonna file a report on you.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

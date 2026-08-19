@@ -1,0 +1,13 @@
+[
+  {
+    "id": "q_pnw_courier",
+    "title": "The Courier Run",
+    "hidden": true,
+    "trigger": { "npc": "pnw_moss", "dialogueOption": "ask_work" },
+    "stages": [
+      { "id": "s1", "objective": "Accept the courier arrangement from Moss." },
+      { "id": "s2", "objective": "Deliver nothing to no one. You were never here." }
+    ],
+    "rewards": { "currency": 60, "items": ["cutters"] }
+  }
+]

@@ -1,35 +1,48 @@
-import { Application, Router } from "oak";
+import { Application } from "oak";
+import { viewsRouter } from "./src/routes/views.ts";
+import { playRouter } from "./src/routes/play.ts";
+import { seedContent } from "./src/state/content.ts";
+import { seedRegions } from "./src/state/regions.ts";
+import { listCameras, seedCameras } from "./src/state/cameras.ts";
+import { listRegions, saveRegion } from "./src/state/regions.ts";
+import { createContract } from "./src/game/cameras.ts";
+import { tickAllRegions } from "./src/game/tick.ts";
+import { getContent } from "./src/content/index.ts";
 
-const router = new Router();
-const app = new Application();
 const PORT = Deno.env.get("PORT") ? Number(Deno.env.get("PORT")) : 8000;
 
-router.get("/", (context) => {
-    context.response.body = Deno.readTextFileSync("./static/views/index.html");
-});
-router.get("/:view.html", (context) => {
-    const view = context.params.view;
-    if (view) {
-        try {
-            context.response.body = Deno.readTextFileSync(`./static/views/${view}.html`);
-            context.response.headers.set("Content-Type", "text/html");
-        } catch (error) {
-            console.error(`Error reading view file: ${error}`);
-            context.response.status = 404;
-            context.response.body = "View not found";
-        }
-    } else {
-        context.response.status = 404;
-        context.response.body = "View not provided";
-    }
-});
+const { npcs, quests, regions } = await getContent();
+await seedContent(npcs, quests);
+await seedRegions(regions);
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+// Seed a couple of camera contracts for the test region if none exist.
+if ((await listCameras()).length === 0) {
+  await seedCameras([
+    createContract("rust_belt", 85),
+    createContract("rust_belt", 60),
+    createContract("rust_belt", 120),
+  ]);
+}
+
+const app = new Application();
+
+app.use(playRouter.routes());
+app.use(viewsRouter.routes());
+app.use(playRouter.allowedMethods());
+app.use(viewsRouter.allowedMethods());
 app.use(async (context, next) => {
     const root = "./static";
     try { await context.send({ root }); } catch { await next(); }
 });
+
+// Scheduled stat tick (design §3.3): recompute regional stats from cameras.
+async function tick(): Promise<void> {
+  const cams = await listCameras();
+  const updated = tickAllRegions(await listRegions(), cams);
+  for (const region of updated) await saveRegion(region);
+}
+const TICK_MS = Number(Deno.env.get("TICK_MS") ?? 60_000);
+setInterval(() => tick().catch((e) => console.error("tick failed:", e)), TICK_MS);
 
 app.listen({ port: PORT });
 console.log(`Server is running on http://localhost:${PORT}`);

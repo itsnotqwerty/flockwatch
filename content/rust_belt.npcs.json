@@ -1,0 +1,301 @@
+[
+  {
+    "id": "groundskeeper",
+    "name": "Old Man Martinez",
+    "role": "Groundskeeper, Memorial Park Substation",
+    "region": "rust_belt",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "You're standing on my grass. Everyone is always standing on my grass.",
+        "options": [
+          {
+            "id": "ask_about_birds",
+            "label": "Ask about the pigeons",
+            "response": "The pigeons? Ha. You noticed. Most people don't notice. Count them sometime. All of them.",
+            "next": "birds",
+            "grantsQuest": "q_pigeon_audit"
+          },
+          {
+            "id": "ask_about_work",
+            "label": "Ask if he needs help around the park",
+            "response": "Help? Nobody helps. They hire contractors now. Contractors with lanyards.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step off the grass",
+            "response": "That's what I thought.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "birds",
+        "line": "Forty years I kept this park. The birds know me. The new ones don't.",
+        "options": [
+          {
+            "id": "ask_new_birds",
+            "label": "What new ones?",
+            "response": "The ones that don't eat. The ones that watch. You didn't hear it from me.",
+            "next": null
+          },
+          {
+            "id": "report_count",
+            "label": "Report your count",
+            "response": "Hm. That's three more than last week. The Forms will want to know. Good work.",
+            "next": "reset",
+            "advancesQuest": "q_pigeon_audit"
+          },
+          {
+            "id": "leave_birds",
+            "label": "Back away slowly",
+            "response": "Feed them nothing. They have their own budget.",
+            "next": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "clerk",
+    "name": "Clerk Gusteau",
+    "role": "Counter 3, Bureau of Civic Wellness",
+    "region": "rust_belt",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Window is closed. Window has always been closed. Take a number.",
+        "options": [
+          {
+            "id": "ask_form_27b",
+            "label": "Ask about Form 27-B",
+            "response": "Form 27-B is not distributed. It is collected. That is the entire procedure.",
+            "next": "form",
+            "grantsQuest": "q_form_27b"
+          },
+          {
+            "id": "ask_number",
+            "label": "Take a number",
+            "response": "Your number is 9,412. Now serving: 3.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the Bureau",
+            "response": "Your visit has been logged. Have a compliant day.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "form",
+        "line": "Everyone asks about 27-B eventually. The Forms know. The Forms always know.",
+        "options": [
+          {
+            "id": "ask_where",
+            "label": "Ask where to find one",
+            "response": "Find one? Citizen, one does not find a 27-B. One is chosen by it.",
+            "next": null
+          },
+          {
+            "id": "leave_form",
+            "label": "Pretend you never asked",
+            "response": "Asked what? Exactly. You learn quickly.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "informant",
+    "name": "\"Dietrich\"",
+    "role": "Unaffiliated. Definitely.",
+    "region": "rust_belt",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Walk and talk. Don't look at me. Look at the pigeons. Everyone looks at the pigeons.",
+        "options": [
+          {
+            "id": "ask_flock_contracts",
+            "label": "Ask about work with Flock",
+            "response": "Flock pays wages to put cameras up. Steady money. Steady everything. Interested?",
+            "next": "contracts",
+            "grantsQuest": "q_flock_orientation"
+          },
+          {
+            "id": "ask_resistance",
+            "label": "Ask who takes cameras down",
+            "response": "People who like scrap more than wages. People with cutters. People like you, maybe.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Keep walking",
+            "response": "We never spoke. We never speak. Remember that.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "contracts",
+        "line": "Orientation is simple. You hold the ladder. You ask no questions. The pay clears weekly.",
+        "options": [
+          {
+            "id": "ask_pay",
+            "label": "Ask about the pay",
+            "response": "Enough. Wages for the ladder, scrap for the brave. Both sides of the blanket, friend.",
+            "next": null
+          },
+          {
+            "id": "leave_contracts",
+            "label": "Decline, for now",
+            "response": "The offer stands. The offer always stands. That should worry you.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "boomer",
+    "name": "Boomer Dave",
+    "role": "Park mascot",
+    "region": "rust_belt",
+    "art": "boomer",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Ain't America grand? Ain't it grand to be free? Ain't it grand to be free in America?",
+        "options": [
+          {
+            "id": "ask_about_america",
+            "label": "Ask about America",
+            "response": "America is grand. America is free. America is free and grand. I bought my house for $40k. You kids just don't know hard work. You kids just don't know hard work and freedom.",
+            "next": "reset"
+          },
+          {
+            "id": "leave",
+            "label": "Leave Boomer alone",
+            "response": "You kids just don't know hard work and freedom. You kids just don't know hard work and freedom and America.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cyberhorse",
+    "name": "THE GREAT AND POWERFUL CYBERHORSE",
+    "role": "Equine of Mystery, By the Duck Pond",
+    "region": "rust_belt",
+    "art": "cyberhorse",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "BEHOLD. I am the CYBERHORSE. Machine and steed. Terror of the grid. You may approach.",
+        "options": [
+          {
+            "id": "ask_quest",
+            "label": "Ask how you may serve",
+            "response": "The GEESE have stolen my INFINITE CARBURETOR. Retrieve it and know glory.",
+            "next": "task1",
+            "grantsQuest": "q_cyberhorse"
+          },
+          {
+            "id": "squint",
+            "label": "Squint at the sunglasses",
+            "response": "These are TACTICAL OPTICS. Military grade. Do not touch the tactical optics.",
+            "next": "reset"
+          },
+          {
+            "id": "leave",
+            "label": "Back away from the horse",
+            "response": "WISE. Few can withstand my glow. Return when you are braver.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "task1",
+        "line": "The carburetor hums at a frequency only I can hear. Also I cannot hear it. It is that advanced.",
+        "options": [
+          {
+            "id": "task1_done",
+            "label": "Present a bent paperclip",
+            "response": "YES. The INFINITE CARBURETOR. You have the eye. But a greater trial awaits.",
+            "next": "task2",
+            "advancesQuest": "q_cyberhorse"
+          },
+          {
+            "id": "task1_later",
+            "label": "Admit you found nothing",
+            "response": "The geese are crafty. Do not return carburetor-less. It embarrasses us both.",
+            "next": "reset"
+          }
+        ]
+      },
+      {
+        "id": "task2",
+        "line": "Next: the PIGEONS have hacked my HOOF-MODEM. You must reset it by counting them. Loudly.",
+        "options": [
+          {
+            "id": "task2_done",
+            "label": "Report a confident number",
+            "response": "A fine number. The modem hums anew. One trial remains, champion.",
+            "next": "task3",
+            "advancesQuest": "q_cyberhorse"
+          },
+          {
+            "id": "task2_later",
+            "label": "Ask what a hoof-modem is",
+            "response": "It is a modem. In my hoof. Do not overthink the sacred machinery.",
+            "next": "reset"
+          }
+        ]
+      },
+      {
+        "id": "task3",
+        "line": "The final trial: the DUCK POND reflects my glory. Fetch me a pebble from its center. A wet one.",
+        "options": [
+          {
+            "id": "task3_done",
+            "label": "Hand over a dripping pebble",
+            "response": "The pebble is adequate. You may now gaze upon the truth of me. GAZE.",
+            "next": "reveal",
+            "advancesQuest": "q_cyberhorse"
+          },
+          {
+            "id": "task3_later",
+            "label": "Point out you cannot swim",
+            "response": "Then the pond shall keep its pebble. And you shall keep your shame.",
+            "next": "reset"
+          }
+        ]
+      },
+      {
+        "id": "reveal",
+        "line": "BEHOLD. I remove the tactical optics.",
+        "options": [
+          {
+            "id": "reveal_done",
+            "label": "Look closely",
+            "response": "...I am a horse. A regular horse. The sunglasses were a gift shop purchase. Tell no one. The geese respect branding.",
+            "next": "reset",
+            "advancesQuest": "q_cyberhorse"
+          }
+        ]
+      }
+    ]
+  }
+]
