@@ -96,10 +96,11 @@ log "deno: $DENO_BIN ($("$DENO_BIN" --version | head -1))"
 if [[ "$USE_SERVICE" -eq 1 ]]; then
   log "deploying app to $APP_DIR"
   mkdir -p "$APP_DIR"
-  mkdir -p "$DATA_DIR"
   rsync -a --delete \
     --exclude node_modules --exclude .git --exclude '.env*' \
     "$SRC_DIR/" "$APP_DIR/"
+
+  mkdir -p "$DATA_DIR"
 
   id -u flockwatch >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin flockwatch
   chown -R flockwatch:flockwatch "$APP_DIR" "$DATA_DIR"
