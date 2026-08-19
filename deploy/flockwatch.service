@@ -10,9 +10,13 @@ WorkingDirectory=__APP_DIR__
 Environment=PORT=8000
 Environment=HOST=127.0.0.1
 # Use the dependency cache pre-warmed by install.sh (no JSR access at runtime).
-Environment=DENO_DIR=__APP_DIR__/.deno_cache,DENO_KV_PATH=/opt/flockwatch/data/flockwatch.kv
-# Scoped permissions matching the `start` task.
-ExecStart=__DENO_BIN__ run --allow-read=./static,./tools,./src,./content --allow-net --allow-env --unstable-kv main.ts
+# One Environment= line per variable — systemd does not split on commas.
+Environment=DENO_DIR=__APP_DIR__/.deno_cache
+# Persist Deno KV (SQLite) to disk inside the app dir so ReadWritePaths covers it.
+Environment=DENO_KV_PATH=__APP_DIR__/data/flockwatch.kv
+# Scoped permissions matching the `start` task, plus read+write on the KV data dir
+# (KV reads its own SQLite file, so ./data must be in both lists).
+ExecStart=__DENO_BIN__ run --allow-read=./static,./tools,./src,./content,./data --allow-write=./data --allow-net --allow-env --unstable-kv main.ts
 Restart=on-failure
 RestartSec=5
 # Hardening
