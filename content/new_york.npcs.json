@@ -204,18 +204,18 @@
     "nodes": [
       {
         "id": "start",
-        "line": "The trains aren't trains. They're scanners. Every ride is an MRI for your intentions. I walk everywhere now. Forty blocks. Sixty. They can't scan calves.",
+        "line": "THE TRAINS AREN'T TRAINS! They're SCANNER ARRAYS on rails! Every ride is a FULL-BODY MAGNETO-RESONANCE AUDIT of your INTENTIONS! I WALK now! Forty blocks! SIXTY! They can't scan CALVES! No calf-band transceiver on the MARKET fits a HUMAN!",
         "options": [
           {
             "id": "ask_trains",
             "label": "Ask about the trains",
-            "response": "The turnstiles count your teeth. I counted back. The number was different every time. Every time!",
+            "response": "THE TURNSTILES COUNT YOUR TEETH! I counted BACK! The number was DIFFERENT EVERY TIME! EVERY! TIME! They're recalibrating the dental index NIGHTLY!",
             "next": "trains"
           },
           {
             "id": "ask_dampener",
             "label": "Ask about a HONK DAMPENER",
-            "response": "HAD one. Kept the announcements out of my molars. Traded it to a shrimpcaster for fourteen batteries and a sandwich. The sandwich was ALSO a battery. Check the Gulf.",
+            "response": "HAD ONE! Kept the announcements out of my MOLARS! Full subsonic baffle, 40 decibels of PURE SILENCE! Traded it to a shrimpcaster for FOURTEEN BATTERIES and a sandwich! THE SANDWICH WAS ALSO A BATTERY! CHECK THE GULF!",
             "next": null,
             "advancesQuest": "q_cyberhorse2",
             "atStages": [0]
@@ -223,31 +223,31 @@
           {
             "id": "ask_foil",
             "label": "Ask about the hat",
-            "response": "It's not foil. It's mesh. Foil is amateurs. Mesh breathes. The thoughts stay in, the signals stay out, and my scalp stays cool.",
+            "response": "IT'S NOT FOIL! It's MESH! FOIL IS FOR AMATEURS! Mesh BREATHES! The thoughts stay IN, the signals stay OUT! Faraday-grade weave! My scalp stays COOL! THERMALLY AND PSYCHICALLY!",
             "next": null
           },
           {
             "id": "leave",
             "label": "Back toward the stairs",
-            "response": "Take the stairs! The escalators report your weight to a wellness bureau! It's in the terms of service!",
+            "response": "TAKE THE STAIRS! The escalators report your WEIGHT to a wellness bureau! Load cells in EVERY STEP! It's in the TERMS OF SERVICE!",
             "next": null
           }
         ]
       },
       {
         "id": "trains",
-        "line": "The announcements. 'Stand clear of the closing doors.' Why do the doors need to know where I'm standing? Think about it. THINK.",
+        "line": "THE ANNOUNCEMENTS! 'Stand clear of the closing doors!' WHY DO THE DOORS NEED TO KNOW WHERE I'M STANDING?! Triangulated! PINGED by the doorframe LIDAR! THINK ABOUT IT! THINK!",
         "options": [
           {
             "id": "ask_doors",
             "label": "Ask about the doors",
-            "response": "They close when you approach. They close WHEN YOU APPROACH. That's not a sensor, that's a JUDGMENT.",
+            "response": "They close WHEN YOU APPROACH! WHEN! YOU! APPROACH! That's not a sensor, that's a JUDGMENT! An algorithmic VERDICT rendered at 60 hertz!",
             "next": "reset"
           },
           {
             "id": "trains_leave",
             "label": "Nod very slowly",
-            "response": "You get it. Walk. Keep walking. The pigeons down here are clean. I checked. I checked every one.",
+            "response": "YOU GET IT! WALK! KEEP WALKING! The pigeons down here are CLEAN! No microchips! No antenna feathers! I CHECKED! I CHECKED EVERY ONE!",
             "next": null
           }
         ]
