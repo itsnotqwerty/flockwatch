@@ -2,7 +2,11 @@
   {
     "id": "atlanta",
     "name": "Atlanta",
-    "locations": ["flock_hq", "peachtree_strip", "the_yard"],
+    "locations": [
+      "sector_4_motor_pool",
+      "cul_de_sac_heights_south",
+      "peachtree_broadcast_roof"
+    ],
     "stats": {
       "coverage": 0.0,
       "unrest": 0.35,

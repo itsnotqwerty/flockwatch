@@ -5,15 +5,45 @@
     "art": "clerk",
     "kind": "patrol",
     "regions": [
-      "rust_belt", "gulf_coast", "pacific_northwest", "atlanta", "silicon_valley"
+      "cleveland",
+      "new_orleans",
+      "seattle",
+      "atlanta",
+      "silicon_valley"
     ],
     "minFlockPresence": 0.3,
     "maxHp": 24,
     "moves": [
-      { "id": "show_papers", "label": "Present your papers", "damage": 6, "selfDamage": 0, "suspicion": 2 },
-      { "id": "cite_form", "label": "Cite Regulation 12(b) at length", "damage": 9, "selfDamage": 4, "suspicion": 4 },
-      { "id": "bribe", "label": "Offer a procedural gratuity", "damage": 14, "selfDamage": 0, "suspicion": -5, "cost": 15 },
-      { "id": "flee", "label": "Pretend to be a lamppost", "damage": 0, "selfDamage": 0, "suspicion": 8, "flees": true }
+      {
+        "id": "show_papers",
+        "label": "Present your papers",
+        "damage": 6,
+        "selfDamage": 0,
+        "suspicion": 2
+      },
+      {
+        "id": "cite_form",
+        "label": "Cite Regulation 12(b) at length",
+        "damage": 9,
+        "selfDamage": 4,
+        "suspicion": 4
+      },
+      {
+        "id": "bribe",
+        "label": "Offer a procedural gratuity",
+        "damage": 14,
+        "selfDamage": 0,
+        "suspicion": -5,
+        "cost": 15
+      },
+      {
+        "id": "flee",
+        "label": "Pretend to be a lamppost",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 8,
+        "flees": true
+      }
     ],
     "victoryLine": "The auditor stamps your file SATISFACTORY and forgets you exist.",
     "defeatLine": "The audit concludes. You are carried away by the paperwork.",
@@ -26,13 +56,33 @@
     "name": "Signal Interceptor Van",
     "art": "foreman",
     "kind": "patrol",
-    "regions": ["silicon_valley", "new_york", "atlanta"],
+    "regions": ["silicon_valley", "new_york_city", "atlanta"],
     "minFlockPresence": 0.55,
     "maxHp": 36,
     "moves": [
-      { "id": "jam", "label": "Spoof its uplink", "damage": 8, "selfDamage": 3, "suspicion": 6, "intel": 1 },
-      { "id": "panel", "label": "Pry the access panel", "damage": 12, "selfDamage": 6, "suspicion": 8 },
-      { "id": "flee", "label": "Duck into a dead zone", "damage": 0, "selfDamage": 0, "suspicion": 10, "flees": true }
+      {
+        "id": "jam",
+        "label": "Spoof its uplink",
+        "damage": 8,
+        "selfDamage": 3,
+        "suspicion": 6,
+        "intel": 1
+      },
+      {
+        "id": "panel",
+        "label": "Pry the access panel",
+        "damage": 12,
+        "selfDamage": 6,
+        "suspicion": 8
+      },
+      {
+        "id": "flee",
+        "label": "Duck into a dead zone",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 10,
+        "flees": true
+      }
     ],
     "victoryLine": "The van's array goes dark. Somewhere, a dashboard fills with red.",
     "defeatLine": "Your signal is triangulated, catalogued, and monetized.",
@@ -45,14 +95,39 @@
     "name": "Regional Director Hale",
     "art": "glangley",
     "kind": "boss",
-    "regions": ["new_york"],
+    "regions": ["new_york_city"],
     "minFlockPresence": 0,
     "maxHp": 120,
     "moves": [
-      { "id": "evidence", "label": "Present compiled evidence", "damage": 15, "selfDamage": 5, "suspicion": 3 },
-      { "id": "leak", "label": "Leak a memo mid-hearing", "damage": 22, "selfDamage": 10, "suspicion": 8 },
-      { "id": "stall", "label": "Invoke procedural delay", "damage": 5, "selfDamage": 0, "suspicion": -4 },
-      { "id": "flee", "label": "Request a continuance (flee)", "damage": 0, "selfDamage": 0, "suspicion": 12, "flees": true }
+      {
+        "id": "evidence",
+        "label": "Present compiled evidence",
+        "damage": 15,
+        "selfDamage": 5,
+        "suspicion": 3
+      },
+      {
+        "id": "leak",
+        "label": "Leak a memo mid-hearing",
+        "damage": 22,
+        "selfDamage": 10,
+        "suspicion": 8
+      },
+      {
+        "id": "stall",
+        "label": "Invoke procedural delay",
+        "damage": 5,
+        "selfDamage": 0,
+        "suspicion": -4
+      },
+      {
+        "id": "flee",
+        "label": "Request a continuance (flee)",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 12,
+        "flees": true
+      }
     ],
     "victoryLine": "Hale's career is formally concluded. The region breathes.",
     "defeatLine": "Hale thanks you for your cooperation. You will be hearing from the Bureau.",
@@ -60,8 +135,14 @@
     "drops": ["golden_horseshoe"],
     "clearsSuspicion": 40,
     "phases": [
-      { "at": 0.66, "line": "Hale loosens his tie. 'I did not want to do this officially.'" },
-      { "at": 0.33, "line": "Hale activates the redundancy protocols. The room gets colder." }
+      {
+        "at": 0.66,
+        "line": "Hale loosens his tie. 'I did not want to do this officially.'"
+      },
+      {
+        "at": 0.33,
+        "line": "Hale activates the redundancy protocols. The room gets colder."
+      }
     ]
   }
 ]

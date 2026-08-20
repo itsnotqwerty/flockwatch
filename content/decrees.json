@@ -10,12 +10,12 @@
     "expiresAt": "2026-09-19T00:00:00Z"
   },
   {
-    "id": "decree_rust_belt_scrap_levy",
-    "title": "Scrap Reclamation Surcharge (Rust Belt)",
-    "proclamation": "Unlicensed metallurgical abundance in the Rust Belt has been reclassified as hoarding. Prices adjusted accordingly.",
+    "id": "decree_cleveland_scrap_levy",
+    "title": "Scrap Reclamation Surcharge (Cleveland)",
+    "proclamation": "Unlicensed metallurgical abundance in Cleveland has been reclassified as hoarding. Prices adjusted accordingly.",
     "priceMultiplier": 1.1,
     "scope": "regional",
-    "region": "rust_belt",
+    "region": "cleveland",
     "issuedAt": "2026-08-19T00:00:00Z",
     "expiresAt": "2026-09-02T00:00:00Z"
   }

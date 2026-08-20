@@ -1,0 +1,277 @@
+[
+  {
+    "id": "gulf_saltine",
+    "name": "\"Saltine\"",
+    "role": "Informant, Storm Drain Outfall 9",
+    "region": "new_orleans",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "You didn't see me. I didn't see you. The shrimp saw us both but they're not talking.",
+        "options": [
+          {
+            "id": "ask_salvage",
+            "label": "Ask about salvage",
+            "response": "There's a wreck off the delta with a hold full of Flock equipment. Manifest says 'agricultural.' It is not agricultural.",
+            "next": "salvage",
+            "grantsQuest": "q_gulf_salvage"
+          },
+          {
+            "id": "cover_sheet_12f",
+            "label": "Ask about a routing cover sheet",
+            "response": "Things wash up on this dock. Paper washes up too. One cover sheet, salt-stained but valid. The tide provides.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [1]
+          },
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Forms drift in with the tide. I make sure they drift back out. Consider it filed. Or not filed. Whichever is safer.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "The delta hears things. You're cleared for ladder work. The mosquitoes are also cleared. For you.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
+            "id": "ask_manifest",
+            "label": "Ask about manifests",
+            "response": "Every crate has a manifest. Every manifest has a lie in it. I collect the lies.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Move along",
+            "response": "Tide's turning. Good time to not be here.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "salvage",
+        "line": "You bring it up quiet, you sell it quieter, and you never learn what it was. That's the whole job.",
+        "options": [
+          {
+            "id": "accept_salvage",
+            "label": "Agree to the terms",
+            "response": "Then we have an understanding. The buoy's marked. The current does the rest.",
+            "next": "reset",
+            "advancesQuest": "q_gulf_salvage"
+          },
+          {
+            "id": "decline_salvage",
+            "label": "Ask what the equipment does",
+            "response": "It watches. That's all Flock equipment ever does. Now stop asking before someone writes it down.",
+            "next": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gulf_larue",
+    "name": "Shrimpcaster LaRue",
+    "role": "Shrimpcaster, Catfish Acres",
+    "region": "new_orleans",
+    "art": "shrimpcaster",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The pelicans are wired. I seen one blink in morse. Nobody believes me but the shrimp know. The shrimp always know.",
+        "options": [
+          {
+            "id": "ask_pelicans",
+            "label": "Ask about the pelicans",
+            "response": "Wired. Every one. You can tell by the way they don't blink at the same time. That's the giveaway.",
+            "next": null
+          },
+          {
+            "id": "ask_shrimp",
+            "label": "Ask what the shrimp know",
+            "response": "Everything. They just lack the vocabulary. I'm working on a dictionary.",
+            "next": null
+          },
+          {
+            "id": "ask_dampener",
+            "label": "Ask about a HONK DAMPENER",
+            "response": "The platform man traded it to me, yeah. Silences honks. I tried it on a goose. Goose honked anyway, quieter, like it was embarrassed. Take it. The shrimp don't want it.",
+            "next": null,
+            "advancesQuest": "q_cyberhorse2",
+            "atStages": [1]
+          },
+          {
+            "id": "leave",
+            "label": "Back away from the dock",
+            "response": "You mark my words. One day a pelican's gonna file a report on you.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gulf_vern",
+    "name": "Vern",
+    "role": "Unaffiliated, Storm Drain Outfall 9",
+    "region": "new_orleans",
+    "art": "schizo",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "THE HURRICANES AREN'T WEATHER! They're ATMOSPHERIC SWEEP PROTOCOLS! Every storm is a REGIONAL MEMORY WIPE with wind branding! I live in a DRAIN! Concrete attenuates the sweep frequency! YOU CAN'T CALIBRATE A CULVERT!",
+        "options": [
+          {
+            "id": "ask_sweeps",
+            "label": "Ask about the sweeps",
+            "response": "Category 1 is a SOFT PURGE! Category 5 is a FULL FACTORY RESET! They name them after PEOPLE so you'll feel BAD about the telemetry! HURRICANE LAURA READ MY DREAMS!",
+            "next": "sweeps"
+          },
+          {
+            "id": "ask_shrimpcaster",
+            "label": "Mention the shrimpcaster's pelicans",
+            "response": "LaRue is CLOSE! The pelicans aren't wired, they're ANTENNAS FOR THE TIDE GAUGES! Every gauge is a LISTENING POST with a float! I DISCONNECTED THREE! The tide KEPT REPORTING!",
+            "next": null
+          },
+          {
+            "id": "ask_hat",
+            "label": "Ask about the bucket",
+            "response": "IT'S A BAIT BUCKET WITH A COPPER LINING! Saltwater conducts, copper SHIELDS! The bucket stays ON during sweeps! My minnows are UNSCANNED! THEY'RE THE LAST FREE MINNOWS IN THE GULF!",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Climb out of the outfall",
+            "response": "STAY BELOW THE STORM SURGE LINE! The barometers SHARE NOTES! It's in the WEATHER SERVICE CHARTER!",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "sweeps",
+        "line": "THE EVACUATION ROUTES! 'Follow the blue signs!' WHY DO THE SIGNS NEED MY LICENSE PLATE?! Every contraflow lane is a CONVEYOR! THINK ABOUT IT! THINK!",
+        "options": [
+          {
+            "id": "ask_signs",
+            "label": "Ask about the signs",
+            "response": "The signs FLASH when you pass! FLASH! WHEN! YOU! PASS! That's not a reflector, that's a RECEIPT!",
+            "next": "reset"
+          },
+          {
+            "id": "sweeps_leave",
+            "label": "Nod, waterlogged",
+            "response": "YOU GET IT! STAY LOW! The herons down here are CLEAN! I checked their LEG BANDS! ALL BLANK! I CHECKED EVERY ONE!",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gulf_odette",
+    "name": "Odette Marchand",
+    "role": "Artist, The Shrimp Net Chapel",
+    "region": "new_orleans",
+    "art": "artho",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "I weave surveillance footage into shrimp nets and hang them in the chapel. The congregation calls it 'haunting.' The diocese calls it 'actionable.'",
+        "options": [
+          {
+            "id": "ask_nets",
+            "label": "Ask about the nets",
+            "response": "Every knot is a frame of footage. When the net moves in the wind, the images play. The sea is the only screen they can't subpoena.",
+            "next": "nets"
+          },
+          {
+            "id": "ask_funding",
+            "label": "Ask who funds it",
+            "response": "A Flock coastal beautification grant. They pay for art that 'engages with safety themes.' I engage. Oh, how I engage.",
+            "next": null
+          },
+          {
+            "id": "ask_chapel",
+            "label": "Ask about the chapel",
+            "response": "Deconsecrated in '09. The cameras re-consecrated it in their way. Every steeple needs an eye.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the chapel",
+            "response": "The installation runs until the tide takes it. That is the review I care about.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "nets",
+        "line": "I dipped the last net in phosphorescent algae. At night the cameras can watch themselves glow. Three were 'decommissioned.' That was the vernissage.",
+        "options": [
+          {
+            "id": "ask_next_piece",
+            "label": "Ask about the next piece",
+            "response": "Buoys. A choir of buoys, singing the license plates of every boat in the marina. The water remembers what the forms forget.",
+            "next": "reset"
+          },
+          {
+            "id": "nets_leave",
+            "label": "Nod, respectfully damp",
+            "response": "Exactly. Rust is the only honest critic left. You understand the work.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gulf_boomer_earl",
+    "name": "Boomer Earl",
+    "role": "Retiree, Catfish Acres Lot 12",
+    "region": "new_orleans",
+    "art": "boomer",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Back in my day we didn't have weather apps. We had knees. My knee could call a storm three days out and never once asked for my location.",
+        "options": [
+          {
+            "id": "ask_boat",
+            "label": "Ask about his boat",
+            "response": "Bought her in '81 for the price of a good rifle. Best decision I ever made. You people lease kayaks. Lease! A kayak!",
+            "next": "reset"
+          },
+          {
+            "id": "ask_cameras",
+            "label": "Ask about the pier cameras",
+            "response": "Love 'em. Caught a manatee on mine Thursday. Emailed the footage to the whole marina. The manatee did not respond.",
+            "next": "reset"
+          },
+          {
+            "id": "ask_storm",
+            "label": "Ask about the last hurricane",
+            "response": "Sat on my porch through the whole thing with a flashlight and a cooler. You kids evacuate for a strong breeze. My porch is older than your car and it's still standing.",
+            "next": "reset"
+          },
+          {
+            "id": "leave",
+            "label": "Leave Earl to his dock",
+            "response": "You kids just don't know honest bait. My tackle box is older than you and every lure in it still works.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

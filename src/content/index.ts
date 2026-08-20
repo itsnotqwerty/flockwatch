@@ -1,13 +1,23 @@
 /**
  * Shared, cached access to validated JSON content (design §4).
  */
-import type { CraftingRecipe, Decree, Encounter, Item, Npc, Quest, Region } from "../types.ts";
+import type {
+  CraftingRecipe,
+  Decree,
+  Encounter,
+  Item,
+  Npc,
+  Quest,
+  Region,
+  Sublocation,
+} from "../types.ts";
 import { loadContentOrThrow } from "./load.ts";
 
 type Content = {
   npcs: Npc[];
   quests: Quest[];
   regions: Region[];
+  locations: Sublocation[];
   items: Item[];
   recipes: CraftingRecipe[];
   decrees: Decree[];
@@ -31,6 +41,14 @@ export async function getNpcs(): Promise<Npc[]> {
 
 export async function getRegionContent(): Promise<Region[]> {
   return (await getContent()).regions;
+}
+
+export async function getLocations(): Promise<Sublocation[]> {
+  return (await getContent()).locations;
+}
+
+export async function getLocation(id: string): Promise<Sublocation | null> {
+  return (await getLocations()).find((location) => location.id === id) ?? null;
 }
 
 export async function getItems(): Promise<Item[]> {

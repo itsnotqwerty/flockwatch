@@ -1,7 +1,7 @@
 import { assert, assertEquals } from "$assert";
 import {
-  availableOptions,
   acceptQuest,
+  availableOptions,
   completeQuest,
   getNode,
   resolveSelection,
@@ -19,8 +19,15 @@ function freshPlayer(): Player {
     inventory: [],
     scrap: {},
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [],
+    flags: [],
+    intel: {},
+    restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
   };
 }
 
@@ -36,7 +43,12 @@ Deno.test("reset sentinel is preserved through resolveSelection", () => {
     nodes: [{
       id: "start",
       line: "Try again?",
-      options: [{ id: "again", label: "Again", response: "Fine.", next: "reset" }],
+      options: [{
+        id: "again",
+        label: "Again",
+        response: "Fine.",
+        next: "reset",
+      }],
     }],
   };
   const result = resolveSelection(npc, "start", "again", freshPlayer(), quests);
@@ -105,7 +117,13 @@ Deno.test("advance node stays reachable after leaving the branch early", () => {
   const startOptions = availableOptions(groundskeeper, "start", player);
   const reentry = startOptions.find((o) => o.id === "ask_about_birds");
   assert(reentry, "grant option should re-open the quest branch");
-  const result = resolveSelection(groundskeeper, "start", reentry.id, player, quests);
+  const result = resolveSelection(
+    groundskeeper,
+    "start",
+    reentry.id,
+    player,
+    quests,
+  );
   assertEquals(result?.grantedQuest, null);
   assertEquals(result?.alreadyHad, true);
   assertEquals(result?.option.next, "birds");
@@ -142,11 +160,17 @@ Deno.test("all content dialogue lines wrap within 40 columns", () => {
   for (const npc of npcs) {
     for (const node of npc.nodes) {
       for (const word of node.line.split(/\s+/)) {
-        assert(word.length <= 40, `${npc.id}/${node.id}: word too long: ${word}`);
+        assert(
+          word.length <= 40,
+          `${npc.id}/${node.id}: word too long: ${word}`,
+        );
       }
       for (const opt of node.options) {
         for (const word of opt.response.split(/\s+/)) {
-          assert(word.length <= 40, `${npc.id}/${opt.id}: word too long: ${word}`);
+          assert(
+            word.length <= 40,
+            `${npc.id}/${opt.id}: word too long: ${word}`,
+          );
         }
       }
     }
@@ -203,14 +227,22 @@ Deno.test("atStages gates advance options to specific quest stages", () => {
   let clerkOptions = availableOptions(clerk, "start", player);
   assert(clerkOptions.some((o) => o.id === "process_form_27b"));
   assert(clerkOptions.every((o) => o.id !== "turn_in_form_27b"));
-  assert(availableOptions(langley, "start", player).every((o) => o.id !== "get_signature"));
+  assert(
+    availableOptions(langley, "start", player).every((o) =>
+      o.id !== "get_signature"
+    ),
+  );
 
   // Stage 2: the agent's signature becomes available; processing is done.
   player = {
     ...player,
     quests: [{ questId: quest.id, status: "accepted", stageIndex: 2 }],
   };
-  assert(availableOptions(langley, "start", player).some((o) => o.id === "get_signature"));
+  assert(
+    availableOptions(langley, "start", player).some((o) =>
+      o.id === "get_signature"
+    ),
+  );
   clerkOptions = availableOptions(clerk, "start", player);
   assert(clerkOptions.every((o) => o.id !== "process_form_27b"));
   assert(clerkOptions.every((o) => o.id !== "turn_in_form_27b"));

@@ -2,7 +2,7 @@
   {
     "id": "sv_ping",
     "name": "\"Ping\"",
-    "role": "Informant, Server Farm Perimeter",
+    "role": "Informant, E-Waste Reclamation Campus",
     "region": "silicon_valley",
     "art": "informant",
     "start": "start",
@@ -142,7 +142,7 @@
   {
     "id": "sv_boomer_greg",
     "name": "Boomer Greg",
-    "role": "Angel Investor (Retired), Cul-de-Sac Heights",
+    "role": "Angel Investor (Retired), Perpetual Motion Capital Lobby",
     "region": "silicon_valley",
     "art": "boomer",
     "start": "start",
@@ -176,7 +176,7 @@
   {
     "id": "sv_groundskeeper_walt",
     "name": "Groundskeeper Walt",
-    "role": "Campus Loop Landscaping",
+    "role": "Groundskeeper, E-Waste Reclamation Campus",
     "region": "silicon_valley",
     "art": "groundskeeper",
     "start": "start",
@@ -218,7 +218,7 @@
   {
     "id": "sv_brad",
     "name": "Brad Kellerman",
-    "role": "Quant, Perpetual Motion Capital (Series C)",
+    "role": "Quant, Perpetual Motion Capital Lobby",
     "region": "silicon_valley",
     "art": "financebro",
     "start": "start",

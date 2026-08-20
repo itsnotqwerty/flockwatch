@@ -4,10 +4,15 @@
  * no game state is ever visible in the address bar (spec §3.1: quests stay
  * hidden, routes stay unremarkable).
  *
- * Phase 1 uses a single demo player until accounts land in Phase 6.
+ * Phase 6 resolves every action through a persistent character session.
  */
 import { Router } from "oak";
-import { acceptQuest, availableOptions, getNode, resolveSelection } from "../game/dialogue.ts";
+import {
+  acceptQuest,
+  availableOptions,
+  getNode,
+  resolveSelection,
+} from "../game/dialogue.ts";
 import { advanceStage, objectiveText, visibleQuests } from "../game/quests.ts";
 import { renderDialogue } from "../render/grillsay.ts";
 import {
@@ -18,13 +23,35 @@ import {
   renderQuestTurnIn,
   renderReset,
 } from "../render/views.ts";
-import { getNpc, listNpcs } from "../state/content.ts";
-import { ensurePlayer, getPlayer, savePlayer } from "../state/players.ts";
-import { camerasInRegion, getCamera, listCameras, saveCamera } from "../state/cameras.ts";
+import { getNpc } from "../state/content.ts";
+import {
+  ensurePlayer,
+  getPlayer,
+  listPlayersAtLocation,
+  savePlayer,
+  touchPlayer,
+} from "../state/players.ts";
+import {
+  camerasInRegion,
+  getCamera,
+  listCameras,
+  saveCamera,
+} from "../state/cameras.ts";
 import { getRegion, saveRegion } from "../state/regions.ts";
-import { deleteListing, getListing, getPriceHistory, listListings, recordSale, saveListing } from "../state/market.ts";
+import {
+  deleteListing,
+  getListing,
+  getPriceHistory,
+  listListings,
+  recordSale,
+  saveListing,
+} from "../state/market.ts";
 import { activeDecrees } from "../state/decrees.ts";
-import { clearEncounter, getEncounter, saveEncounter } from "../state/encounters.ts";
+import {
+  clearEncounter,
+  getEncounter,
+  saveEncounter,
+} from "../state/encounters.ts";
 import {
   cooldownRemaining,
   coverageLevel,
@@ -32,22 +59,125 @@ import {
   installCamera,
   totalScrap,
 } from "../game/cameras.ts";
-import { canAffordCraft, CRAFT_FEE, craft, describeCost } from "../game/crafting.ts";
-import { buyListing, cancelListing, createListing, purchasePrice, summarizePrices } from "../game/market.ts";
-import { performEspionage, isRestricted } from "../game/espionage.ts";
-import { applyMove, rollEncounter, startEncounter } from "../game/encounters.ts";
-import { travel, travelCost, hasBureaucratsStamp } from "../game/travel.ts";
-import { getEncounters, getItems, getQuests, getRecipes, getRegionContent } from "../content/index.ts";
-import type { EspionageActionType, Item, Player } from "../types.ts";
+import {
+  canAffordCraft,
+  craft,
+  CRAFT_FEE,
+  describeCost,
+} from "../game/crafting.ts";
+import {
+  buyListing,
+  cancelListing,
+  createListing,
+  purchasePrice,
+  summarizePrices,
+} from "../game/market.ts";
+import { isRestricted, performEspionage } from "../game/espionage.ts";
+import {
+  applyMove,
+  rollEncounter,
+  startEncounter,
+} from "../game/encounters.ts";
+import { hasBureaucratsStamp, travel, travelCost } from "../game/travel.ts";
+import {
+  performLocationAction,
+  travelWithinRegion,
+} from "../game/locations.ts";
+import {
+  getEncounters,
+  getItems,
+  getLocation,
+  getLocations,
+  getQuests,
+  getRecipes,
+  getRegionContent,
+} from "../content/index.ts";
+import {
+  listMessagePosts,
+  MAX_MESSAGE_LENGTH,
+  normalizeMessageBody,
+  saveMessagePost,
+} from "../state/message-board.ts";
+import {
+  createCharacterAccount,
+  deleteSession,
+  expiredSessionCookie,
+  getPlayerForSession,
+  MAX_CHARACTER_NAME_LENGTH,
+  sessionCookie,
+  sessionTokenFromCookie,
+} from "../state/accounts.ts";
+import {
+  acceptCellInvite,
+  createCell,
+  declineCellInvite,
+  getCell,
+  getCellForPlayer,
+  inviteToCell,
+  leaveCell,
+  listCellInvites,
+} from "../state/cells.ts";
+import {
+  setTrust,
+  shareIntel,
+  shareItem,
+  shareQuest,
+} from "../game/multiplayer.ts";
+import {
+  applyCellMove,
+  rewardCellParticipant,
+  startCellEncounter,
+} from "../game/cell-encounters.ts";
+import {
+  clearCellEncounter,
+  getCellEncounter,
+  saveCellEncounter,
+} from "../state/cell-encounters.ts";
+import {
+  advanceCellOperation,
+  CELL_OPERATION_STAGES,
+  rewardCellOperation,
+  startCellOperation,
+} from "../game/cell-operations.ts";
+import {
+  clearCellOperation,
+  getCellOperation,
+  saveCellOperation,
+} from "../state/cell-operations.ts";
+import {
+  regionEvents,
+  type RegionEventType,
+} from "../realtime/region-events.ts";
+import type {
+  EspionageActionType,
+  Item,
+  LocationInteraction,
+  MessagePost,
+  Player,
+  Sublocation,
+} from "../types.ts";
 
 export const playRouter = new Router();
 
-// Single demo player until Phase 6 accounts.
-const PLAYER_ID = "demo";
-const PLAYER_NAME = "Citizen";
-
 function escapeHtml(text: string): string {
-  return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+  return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(
+    ">",
+    "&gt;",
+  ).replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+}
+
+function publishRegion(
+  type: RegionEventType,
+  player: Player,
+  data?: Record<string, string | number | boolean | null>,
+): void {
+  regionEvents.publish({
+    type,
+    region: player.region,
+    actorId: player.id,
+    location: player.location,
+    data,
+  });
 }
 
 /** Small helper: a POST button back to the root URL. */
@@ -59,48 +189,94 @@ ${extra}
 </form>`;
 }
 
+function authenticatedPlayer(headers: Headers): Promise<Player | null> {
+  const token = sessionTokenFromCookie(headers.get("cookie"));
+  return token ? getPlayerForSession(token) : Promise.resolve(null);
+}
+
+function renderAccountGate(error: string | null = null): string {
+  return renderPage({
+    title: "Citizen Intake",
+    body: `<section class="account-gate">
+<h2>Citizen Intake</h2>
+<p>The Agencies require a persistent character before permitting access to the park.</p>
+${error ? `<p class="flag-note">${escapeHtml(error)}</p>` : ""}
+<form method="post" action="/">
+  <input type="hidden" name="a" value="create_account">
+  <label for="character-name">Character name</label>
+  <input id="character-name" name="name" minlength="2" maxlength="${MAX_CHARACTER_NAME_LENGTH}" required autocomplete="nickname">
+  <button type="submit" class="dialogue-option">File Character</button>
+</form>
+</section>`,
+  });
+}
+
+function respondWithNotice(
+  response: { type?: string; body: unknown; status?: number },
+  title: string,
+  message: string,
+  ok: boolean,
+): void {
+  response.type = "text/html";
+  if (!ok) response.status = 400;
+  response.body = renderPage({
+    title,
+    body: `<section class="action-notice">
+<h2>${escapeHtml(title)}</h2>
+<p${ok ? "" : ` class="flag-note"`}>${escapeHtml(message)}</p>
+${postButton("home", "Return")}
+</section>`,
+  });
+}
+
 // ── GET / — the park. The only address the player ever sees. ────────────────
 playRouter.get("/", async (context) => {
-  const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+  const authenticated = await authenticatedPlayer(context.request.headers);
+  if (!authenticated) {
+    context.response.type = "text/html";
+    context.response.body = renderAccountGate();
+    return;
+  }
+  let player = await touchPlayer(authenticated);
   const region = await getRegion(player.region);
+  if (!region) {
+    context.response.status = 500;
+    context.response.body = "Your city has been administratively misplaced.";
+    return;
+  }
+  const locationResult = await resolveCurrentLocation(player, region.locations);
+  player = locationResult.player;
+  const location = locationResult.location;
+  if (!location) {
+    context.response.status = 500;
+    context.response.body = "This city contains no approved places.";
+    return;
+  }
 
-  // NPCs local to the player's current region (spec §3.0).
-  const npcList = (await listNpcs()).filter((n) => n.region === player.region);
-  const items = npcList.length
-    ? npcList
-      .map(
-        (n) => `<li>
-<form method="post" action="/">
-  <input type="hidden" name="a" value="talk">
-  <input type="hidden" name="npc" value="${n.id}">
-  <button type="submit" class="npc-link">${n.name}</button> — <em>${n.role}</em>
-</form>
-</li>`,
-      )
-      .join("\n")
-    : `<li>No one here wants to talk. Wise of them.</li>`;
-
-  const cameraBoard = await renderCameraBoard(player);
-  const workbench = await renderWorkbench(player);
-  const market = await renderMarket(player);
+  const localTravel = await renderLocalTravel(player, location);
+  const interactions = renderLocationInteractions(location);
   const travelBoard = await renderTravel(player);
   const decrees = await renderDecrees(player);
-  const espionage = await renderEspionage(player);
   const encounter = await renderEncounterBoard(player);
+  const multiplayer = await renderMultiplayer(player);
 
   context.response.type = "text/html";
   context.response.body = renderPage({
     title: "FlockWatch",
-    body: `<h2>${region?.name ?? player.region}</h2>
-<p>The pigeons are watching. Choose someone to talk to.</p>
-<ul class="npc-list">
-${items}
-</ul>
+    body: `<div class="character-bar" data-player-id="${
+      escapeHtml(player.id)
+    }" data-region="${escapeHtml(player.region)}"><strong>${
+      escapeHtml(player.name)
+    }</strong> · ${player.currency}cr · suspicion ${player.suspicion}${
+      postButton("logout", "End Session")
+    }</div>
+<p class="eyebrow">${escapeHtml(region.name)}</p>
+<h2>${escapeHtml(location.name)}</h2>
+<p>${escapeHtml(location.description)}</p>
 ${encounter}
-${cameraBoard}
-${workbench}
-${market}
-${espionage}
+${multiplayer}
+${interactions}
+${localTravel}
 ${decrees}
 ${travelBoard}
 ${postButton("log", "Review your assignments")}`,
@@ -118,18 +294,588 @@ playRouter.post("/", async (context) => {
 
   const action = fields.a ?? "home";
 
+  if (action === "create_account") {
+    const result = await createCharacterAccount(fields.name ?? "");
+    context.response.type = "text/html";
+    if (!result.ok || !result.session) {
+      context.response.status = 400;
+      context.response.body = renderAccountGate(result.reason);
+      return;
+    }
+    context.response.headers.append(
+      "set-cookie",
+      sessionCookie(result.session.token),
+    );
+    if (result.player) {
+      publishRegion("presence.changed", result.player, {
+        name: result.player.name,
+        status: "joined",
+      });
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  const sessionToken = sessionTokenFromCookie(
+    context.request.headers.get("cookie"),
+  );
+  if (action === "logout") {
+    await deleteSession(sessionToken ?? "");
+    context.response.headers.append("set-cookie", expiredSessionCookie());
+    context.response.redirect("/");
+    return;
+  }
+
+  const sessionPlayer = sessionToken
+    ? await getPlayerForSession(sessionToken)
+    : null;
+  if (!sessionPlayer) {
+    context.response.status = 401;
+    context.response.type = "text/html";
+    context.response.body = renderAccountGate(
+      "Your session is absent or expired.",
+    );
+    return;
+  }
+  const authenticated = await touchPlayer(sessionPlayer);
+
   if (action === "home") {
     context.response.redirect("/");
     return;
   }
 
+  // ── Multiplayer identity, cells, and trust (spec §3.5) ──────────────
+  if (action === "create_cell") {
+    const result = await createCell(authenticated.id, fields.name ?? "");
+    if (result.ok) publishRegion("social.changed", authenticated, { action });
+    respondWithNotice(
+      context.response,
+      result.ok ? "Cell Filed" : "Cell Rejected",
+      result.reason ??
+        `${result.cell?.name ?? "The cell"} now exists in the record.`,
+      result.ok,
+    );
+    return;
+  }
+
+  if (action === "invite_to_cell") {
+    const nearby = await listPlayersAtLocation(
+      authenticated.region,
+      authenticated.location,
+    );
+    const target = nearby.find((player) =>
+      player.id === fields.player && player.id !== authenticated.id
+    );
+    const result = target ? await inviteToCell(authenticated.id, target.id) : {
+      ok: false,
+      reason: "That citizen is not currently here.",
+      cell: null,
+      invite: null,
+    };
+    if (result.ok) publishRegion("social.changed", authenticated, { action });
+    respondWithNotice(
+      context.response,
+      result.ok ? "Invitation Filed" : "Invitation Rejected",
+      result.reason ??
+        `${target?.name ?? "The citizen"} may now accept your cell invitation.`,
+      result.ok,
+    );
+    return;
+  }
+
+  if (action === "accept_cell_invite") {
+    const result = await acceptCellInvite(
+      authenticated.id,
+      fields.invite ?? "",
+    );
+    if (result.ok) publishRegion("social.changed", authenticated, { action });
+    respondWithNotice(
+      context.response,
+      result.ok ? "Cell Joined" : "Invitation Rejected",
+      result.reason ??
+        `You are now a member of ${result.cell?.name ?? "the cell"}.`,
+      result.ok,
+    );
+    return;
+  }
+
+  if (action === "decline_cell_invite") {
+    const declined = await declineCellInvite(
+      authenticated.id,
+      fields.invite ?? "",
+    );
+    if (declined) publishRegion("social.changed", authenticated, { action });
+    respondWithNotice(
+      context.response,
+      declined ? "Invitation Declined" : "Invitation Missing",
+      declined
+        ? "The invitation has been removed from your file."
+        : "That invitation is no longer on file.",
+      declined,
+    );
+    return;
+  }
+
+  if (action === "leave_cell") {
+    const currentCell = await getCellForPlayer(authenticated.id);
+    const encounter = currentCell
+      ? await getCellEncounter(currentCell.id)
+      : null;
+    const fieldOperation = currentCell
+      ? await getCellOperation(currentCell.id)
+      : null;
+    const committed = (encounter?.status === "ongoing" &&
+      encounter.participantIds.includes(authenticated.id)) ||
+      (fieldOperation?.status === "ongoing" &&
+        fieldOperation.participantIds.includes(authenticated.id));
+    const result = committed
+      ? {
+        ok: false,
+        reason: "You cannot leave a cell during an active operation.",
+        cell: currentCell,
+      }
+      : await leaveCell(authenticated.id);
+    if (result.ok) publishRegion("social.changed", authenticated, { action });
+    respondWithNotice(
+      context.response,
+      result.ok ? "Cell Departed" : "Departure Rejected",
+      result.reason ??
+        "Your membership has been removed from the active roster.",
+      result.ok,
+    );
+    return;
+  }
+
+  if (action === "trust_player" || action === "revoke_trust") {
+    const nearby = await listPlayersAtLocation(
+      authenticated.region,
+      authenticated.location,
+    );
+    const target = nearby.find((player) =>
+      player.id === fields.player && player.id !== authenticated.id
+    );
+    if (!target) {
+      respondWithNotice(
+        context.response,
+        "Trust Rejected",
+        "That citizen is not currently here.",
+        false,
+      );
+      return;
+    }
+    const updated = setTrust(
+      authenticated,
+      target.id,
+      action === "trust_player",
+    );
+    await savePlayer(updated);
+    publishRegion("social.changed", updated, { action });
+    respondWithNotice(
+      context.response,
+      "Trust Updated",
+      action === "trust_player"
+        ? `${target.name} may now receive items and local intelligence from you.`
+        : `${target.name} has been removed from your sharing list.`,
+      true,
+    );
+    return;
+  }
+
+  if (action === "share_item" || action === "share_intel") {
+    const sender = await ensurePlayer(authenticated.id, authenticated.name);
+    const activeHere = await listPlayersAtLocation(
+      sender.region,
+      sender.location,
+    );
+    const recipient = activeHere.find((candidate) =>
+      candidate.id === fields.player
+    ) ?? null;
+    if (!recipient) {
+      respondWithNotice(
+        context.response,
+        "Transfer Rejected",
+        "That citizen is not on file.",
+        false,
+      );
+      return;
+    }
+    const result = action === "share_item"
+      ? shareItem(sender, recipient, fields.item ?? "")
+      : shareIntel(sender, recipient);
+    if (result.ok) {
+      await savePlayer(result.sender);
+      await savePlayer(result.recipient);
+      publishRegion("social.changed", result.sender, {
+        action,
+        recipientId: result.recipient.id,
+      });
+    }
+    respondWithNotice(
+      context.response,
+      result.ok ? "Transfer Filed" : "Transfer Rejected",
+      result.reason ??
+        (action === "share_item"
+          ? `${recipient.name} received the item.`
+          : `${recipient.name} received your local dossier.`),
+      result.ok,
+    );
+    return;
+  }
+
+  if (action === "share_quest") {
+    const sender = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(sender.id);
+    const nearby = await listPlayersAtLocation(sender.region, sender.location);
+    const recipients = cell
+      ? nearby.filter((candidate) =>
+        candidate.id !== sender.id && cell.memberIds.includes(candidate.id)
+      )
+      : [];
+    let shared = 0;
+    for (const recipient of recipients) {
+      const result = shareQuest(sender, recipient, fields.quest ?? "");
+      if (result.ok) {
+        await savePlayer(result.recipient);
+        shared += 1;
+      }
+    }
+    respondWithNotice(
+      context.response,
+      shared > 0 ? "Assignment Shared" : "Sharing Rejected",
+      shared > 0
+        ? `The assignment was added to ${shared} nearby cell member${
+          shared === 1 ? "" : "s"
+        }.`
+        : "No nearby cell member is eligible to receive that active assignment.",
+      shared > 0,
+    );
+    if (shared > 0) {
+      publishRegion("social.changed", sender, { action, recipients: shared });
+    }
+    return;
+  }
+
+  if (action === "cell_operation_start") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const location = await getLocation(player.location);
+    const exposesEspionage = location?.interactions.some((interaction) =>
+      interaction.kind === "espionage"
+    );
+    const nearby = await listPlayersAtLocation(player.region, player.location);
+    const participants = cell
+      ? nearby.filter((candidate) =>
+        cell.memberIds.includes(candidate.id) &&
+        !isRestricted(candidate, player.region)
+      )
+      : [];
+    const existing = cell ? await getCellOperation(cell.id) : null;
+    const boss = cell ? await getCellEncounter(cell.id) : null;
+    const state = cell && exposesEspionage &&
+        existing?.status !== "ongoing" && boss?.status !== "ongoing"
+      ? startCellOperation(cell, participants)
+      : null;
+    if (state) {
+      await saveCellOperation(state);
+      publishRegion("cell.operation", player, {
+        action: "started",
+        cellId: cell!.id,
+      });
+    }
+    respondWithNotice(
+      context.response,
+      state ? "Operation Opened" : "Operation Rejected",
+      state
+        ? `${participants.length} cell members begin coordinated fieldwork.`
+        : "A field operation requires at least two unrestricted, active cell members at this location.",
+      !!state,
+    );
+    return;
+  }
+
+  if (action === "cell_operation_advance") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const state = cell ? await getCellOperation(cell.id) : null;
+    const op = fields.op as EspionageActionType;
+    const turn = state && ["tail", "intercept", "gather_intel"].includes(op)
+      ? advanceCellOperation(state, player, op)
+      : null;
+    if (!turn || !cell) {
+      respondWithNotice(
+        context.response,
+        "Operation Rejected",
+        "No active cell operation accepts that contribution.",
+        false,
+      );
+      return;
+    }
+    if (turn.reason) {
+      respondWithNotice(
+        context.response,
+        "Operation Paused",
+        turn.reason,
+        false,
+      );
+      return;
+    }
+    await saveCellOperation(turn.state);
+    await savePlayer(turn.actor);
+    if (turn.completed) {
+      for (const participantId of turn.state.participantIds) {
+        const participant = participantId === turn.actor.id
+          ? turn.actor
+          : await getPlayer(participantId);
+        if (participant) {
+          await savePlayer(rewardCellOperation(participant, turn.state.region));
+        }
+      }
+    }
+    publishRegion("cell.operation", turn.actor, {
+      action: turn.completed ? "completed" : "advanced",
+      stage: turn.state.stageIndex,
+    });
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "clear_cell_operation") {
+    const cell = await getCellForPlayer(authenticated.id);
+    const state = cell ? await getCellOperation(cell.id) : null;
+    if (cell && state?.status === "completed") {
+      await clearCellOperation(cell.id);
+      publishRegion("cell.operation", authenticated, { action: "cleared" });
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "cell_boss_start") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const location = await getLocation(player.location);
+    const exposesEncounter = location?.interactions.some((interaction) =>
+      interaction.kind === "encounter"
+    );
+    const boss = (await getEncounters()).find((encounter) =>
+      encounter.id === fields.enc && encounter.kind === "boss" &&
+      encounter.regions.includes(player.region)
+    );
+    const nearby = await listPlayersAtLocation(player.region, player.location);
+    const participants = cell
+      ? nearby.filter((candidate) => cell.memberIds.includes(candidate.id))
+      : [];
+    const existing = cell ? await getCellEncounter(cell.id) : null;
+    const fieldOperation = cell ? await getCellOperation(cell.id) : null;
+    const state =
+      cell && boss && exposesEncounter && existing?.status !== "ongoing" &&
+        fieldOperation?.status !== "ongoing"
+        ? startCellEncounter(boss, cell, participants)
+        : null;
+    if (state) {
+      await saveCellEncounter(state);
+      publishRegion("cell.encounter", player, {
+        action: "started",
+        encounterId: state.encounterId,
+      });
+    }
+    respondWithNotice(
+      context.response,
+      state ? "Cell Mobilized" : "Mobilization Rejected",
+      state
+        ? `${participants.length} cell members confront ${boss?.name}.`
+        : "A cell boss operation requires at least two active cell members at this encounter location.",
+      !!state,
+    );
+    return;
+  }
+
+  if (action === "cell_move") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const state = cell ? await getCellEncounter(cell.id) : null;
+    const encounter = (await getEncounters()).find((candidate) =>
+      candidate.id === state?.encounterId
+    );
+    const turn = state && encounter
+      ? applyCellMove(encounter, state, player, fields.move ?? "")
+      : null;
+    if (!turn || !cell || !encounter) {
+      respondWithNotice(
+        context.response,
+        "Move Rejected",
+        "No active cell encounter accepts that move.",
+        false,
+      );
+      return;
+    }
+    await saveCellEncounter(turn.state);
+    if (turn.victory) {
+      for (const participantId of turn.state.participantIds) {
+        const participant = participantId === turn.actor.id
+          ? turn.actor
+          : await getPlayer(participantId);
+        if (participant) {
+          await savePlayer(rewardCellParticipant(participant, encounter));
+        }
+      }
+    } else {
+      await savePlayer(turn.actor);
+    }
+    publishRegion("cell.encounter", turn.actor, {
+      action: turn.state.status,
+      enemyHp: turn.state.enemyHp,
+    });
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "clear_cell_encounter") {
+    const cell = await getCellForPlayer(authenticated.id);
+    const state = cell ? await getCellEncounter(cell.id) : null;
+    if (cell && state && state.status !== "ongoing") {
+      await clearCellEncounter(cell.id);
+      publishRegion("cell.encounter", authenticated, { action: "cleared" });
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  // ── Sublocations (city-scale travel and interactions) ────────────────
+  if (action === "local_travel") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const operation = cell ? await getCellEncounter(cell.id) : null;
+    const fieldOperation = cell ? await getCellOperation(cell.id) : null;
+    if (
+      (operation?.status === "ongoing" &&
+        operation.participantIds.includes(player.id)) ||
+      (fieldOperation?.status === "ongoing" &&
+        fieldOperation.participantIds.includes(player.id))
+    ) {
+      respondWithNotice(
+        context.response,
+        "Travel Rejected",
+        "You are committed to an active cell operation.",
+        false,
+      );
+      return;
+    }
+    const destination = await getLocation(fields.location ?? "");
+    if (destination) {
+      const result = travelWithinRegion(player, destination);
+      if (result.ok) {
+        await savePlayer(result.player);
+        publishRegion("presence.changed", player, {
+          action: "departed_location",
+          destination: result.player.location,
+        });
+        publishRegion("presence.changed", result.player, {
+          action: "arrived_location",
+          origin: player.location,
+        });
+      }
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "location_interaction") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const location = await getLocation(player.location);
+    const interaction = location?.interactions.find((candidate) =>
+      candidate.id === fields.interaction
+    );
+    if (!location || location.regionId !== player.region || !interaction) {
+      context.response.status = 404;
+      context.response.body = "That opportunity is not available here.";
+      return;
+    }
+    await respondWithLocationInteraction(
+      context.response,
+      player,
+      location,
+      interaction,
+    );
+    return;
+  }
+
+  if (action === "message_post") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const location = await getLocation(player.location);
+    const board = location?.interactions.find((interaction) =>
+      interaction.kind === "message_board"
+    );
+    if (!location || location.regionId !== player.region || !board) {
+      context.response.status = 403;
+      context.response.body = "There is no public message board here.";
+      return;
+    }
+    const message = normalizeMessageBody(fields.message ?? "");
+    let error: string | null = null;
+    if (!message) {
+      error = `Posts must contain 1–${MAX_MESSAGE_LENGTH} characters.`;
+    } else {
+      const post: MessagePost = {
+        id: `${Date.now()}_${crypto.randomUUID()}`,
+        regionId: player.region,
+        playerId: player.id,
+        author: player.name,
+        body: message,
+        postedAt: new Date().toISOString(),
+      };
+      await saveMessagePost(post);
+      publishRegion("message.posted", player, {
+        postId: post.id,
+        author: post.author,
+        body: post.body,
+        postedAt: post.postedAt,
+      });
+    }
+    context.response.type = "text/html";
+    context.response.body = renderPage({
+      title: `${location.name} Message Board`,
+      body: await renderMessageBoard(player, location, error),
+    });
+    return;
+  }
+
   // ── Travel (spec §3.0) ────────────────────────────────────────────────
   if (action === "travel") {
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
-    const destination = (await getRegionContent()).find((r) => r.id === fields.region);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const operation = cell ? await getCellEncounter(cell.id) : null;
+    const fieldOperation = cell ? await getCellOperation(cell.id) : null;
+    if (
+      (operation?.status === "ongoing" &&
+        operation.participantIds.includes(player.id)) ||
+      (fieldOperation?.status === "ongoing" &&
+        fieldOperation.participantIds.includes(player.id))
+    ) {
+      respondWithNotice(
+        context.response,
+        "Travel Rejected",
+        "You are committed to an active cell operation.",
+        false,
+      );
+      return;
+    }
+    const destination = (await getRegionContent()).find((r) =>
+      r.id === fields.region
+    );
     if (destination) {
       const result = travel(player, destination);
-      if (result.ok) await savePlayer(result.player);
+      if (result.ok) {
+        await savePlayer(result.player);
+        publishRegion("presence.changed", player, {
+          action: "departed_region",
+          destination: result.player.region,
+        });
+        publishRegion("presence.changed", result.player, {
+          action: "arrived_region",
+          origin: player.region,
+        });
+      }
     }
     context.response.redirect("/");
     return;
@@ -138,7 +884,7 @@ playRouter.post("/", async (context) => {
   // ── Cameras (spec §3.6) ───────────────────────────────────────────────
   if (action === "install" || action === "dismantle") {
     const camera = await getCameraById(fields.cam ?? "");
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
     if (!camera) {
       context.response.status = 404;
       context.response.body = "No such camera. It was never there.";
@@ -149,15 +895,41 @@ playRouter.post("/", async (context) => {
 
     if (action === "install") {
       const wageMultiplier = region?.economyProfile.wageMultiplier ?? 1;
-      const result = installCamera(camera, player, region?.cameraCooldowns, wageMultiplier);
+      const result = installCamera(
+        camera,
+        player,
+        region?.cameraCooldowns,
+        wageMultiplier,
+      );
       await saveCamera(result.camera);
       await savePlayer(result.player);
-      if (region) await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
+      if (region) {
+        await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
+      }
+      if (result.camera.status !== camera.status) {
+        publishRegion("camera.changed", result.player, {
+          cameraId: result.camera.id,
+          status: result.camera.status,
+        });
+      }
     } else {
-      const result = dismantleCamera(camera, player, region?.cameraCooldowns, coverage);
+      const result = dismantleCamera(
+        camera,
+        player,
+        region?.cameraCooldowns,
+        coverage,
+      );
       await saveCamera(result.camera);
       await savePlayer(result.player);
-      if (region) await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
+      if (region) {
+        await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
+      }
+      if (result.camera.status !== camera.status) {
+        publishRegion("camera.changed", result.player, {
+          cameraId: result.camera.id,
+          status: result.camera.status,
+        });
+      }
     }
     context.response.redirect("/");
     return;
@@ -165,7 +937,7 @@ playRouter.post("/", async (context) => {
 
   // ── Crafting (spec §3.6.2) ────────────────────────────────────────────
   if (action === "craft") {
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
     const recipe = (await getRecipes()).find((r) => r.id === fields.recipe);
     if (recipe) {
       const result = craft(player, recipe);
@@ -177,7 +949,7 @@ playRouter.post("/", async (context) => {
 
   // ── Market (spec §3.3) ────────────────────────────────────────────────
   if (action === "sell" || action === "buy" || action === "cancel") {
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
     const decrees = await activeDecrees(player.region);
     if (action === "sell") {
       const item = (await getItems()).find((i) => i.id === fields.item);
@@ -187,6 +959,10 @@ playRouter.post("/", async (context) => {
         if (result.ok) {
           await savePlayer(result.value.seller);
           await saveListing(result.value.listing);
+          publishRegion("market.changed", result.value.seller, {
+            action: "listed",
+            listingId: result.value.listing.id,
+          });
         }
       }
     } else if (action === "buy") {
@@ -199,6 +975,10 @@ playRouter.post("/", async (context) => {
           await savePlayer(result.value.seller);
           await deleteListing(listing.regionId, listing.id);
           await recordSale({ ...listing, price: result.value.paid });
+          publishRegion("market.changed", result.value.buyer, {
+            action: "sold",
+            listingId: listing.id,
+          });
         }
       }
     } else {
@@ -208,6 +988,10 @@ playRouter.post("/", async (context) => {
         if (result.ok) {
           await savePlayer(result.value.seller);
           await deleteListing(listing.regionId, listing.id);
+          publishRegion("market.changed", result.value.seller, {
+            action: "withdrawn",
+            listingId: listing.id,
+          });
         }
       }
     }
@@ -217,11 +1001,30 @@ playRouter.post("/", async (context) => {
 
   // ── Espionage (spec §3.5) ─────────────────────────────────────────────
   if (action === "espionage") {
-    let player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    let player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
+    const cellOperation = cell ? await getCellOperation(cell.id) : null;
+    if (
+      cellOperation?.status === "ongoing" &&
+      cellOperation.participantIds.includes(player.id)
+    ) {
+      respondWithNotice(
+        context.response,
+        "Fieldwork Rejected",
+        "Complete your active cell operation before taking solo fieldwork.",
+        false,
+      );
+      return;
+    }
     const region = await getRegion(player.region);
     const espAction = fields.op as EspionageActionType;
     if (region && ["tail", "intercept", "gather_intel"].includes(espAction)) {
-      const outcome = performEspionage(espAction, player, region, Math.random());
+      const outcome = performEspionage(
+        espAction,
+        player,
+        region,
+        Math.random(),
+      );
       if (outcome.ok) {
         player = outcome.player;
         await savePlayer(player);
@@ -230,8 +1033,22 @@ playRouter.post("/", async (context) => {
           title: "Fieldwork",
           body: `<h2>Fieldwork</h2>
 <p>${escapeHtml(outcome.narrative)}</p>
-${outcome.success ? `<p>Intel in ${escapeHtml(region.name)}: ${player.intel[region.id] ?? 0}${outcome.payout > 0 ? ` · Skimmed ${outcome.payout}cr` : ""}</p>` : ""}
-${outcome.flag ? `<p class="flag-note">You have been flagged: ${escapeHtml(outcome.flag.reason)}. Market fees apply.</p>` : ""}
+${
+            outcome.success
+              ? `<p>Intel in ${escapeHtml(region.name)}: ${
+                player.intel[region.id] ?? 0
+              }${
+                outcome.payout > 0 ? ` · Skimmed ${outcome.payout}cr` : ""
+              }</p>`
+              : ""
+          }
+${
+            outcome.flag
+              ? `<p class="flag-note">You have been flagged: ${
+                escapeHtml(outcome.flag.reason)
+              }. Market fees apply.</p>`
+              : ""
+          }
 ${postButton("home", "Melt into the crowd")}`,
         });
         return;
@@ -243,10 +1060,15 @@ ${postButton("home", "Melt into the crowd")}`,
 
   // ── Encounters (spec §3.4) ────────────────────────────────────────────
   if (action === "encounter_start") {
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
     const region = await getRegion(player.region);
     if (region && !(await getEncounter(player.id))) {
-      const rolled = rollEncounter(await getEncounters(), region, player, Math.random());
+      const rolled = rollEncounter(
+        await getEncounters(),
+        region,
+        player,
+        Math.random(),
+      );
       if (rolled) await saveEncounter(startEncounter(rolled, player));
     }
     context.response.redirect("/");
@@ -254,9 +1076,11 @@ ${postButton("home", "Melt into the crowd")}`,
   }
 
   if (action === "boss_start") {
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
     if (!(await getEncounter(player.id))) {
-      const boss = (await getEncounters()).find((e) => e.id === fields.enc && e.kind === "boss");
+      const boss = (await getEncounters()).find((e) =>
+        e.id === fields.enc && e.kind === "boss"
+      );
       if (boss) await saveEncounter(startEncounter(boss, player));
     }
     context.response.redirect("/");
@@ -264,9 +1088,11 @@ ${postButton("home", "Melt into the crowd")}`,
   }
 
   if (action === "move") {
-    let player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    let player = await ensurePlayer(authenticated.id, authenticated.name);
     const state = await getEncounter(player.id);
-    const encounter = (await getEncounters()).find((e) => e.id === state?.encounterId);
+    const encounter = (await getEncounters()).find((e) =>
+      e.id === state?.encounterId
+    );
     if (state && encounter) {
       const turn = applyMove(encounter, state, player, fields.move ?? "");
       if (turn) {
@@ -284,7 +1110,11 @@ ${postButton("home", "Melt into the crowd")}`,
 <ul class="encounter-log">
 ${turn.state.log.map((l) => `<li>${escapeHtml(l)}</li>`).join("\n")}
 </ul>
-${turn.state.status === "ongoing" ? `<p>Composure holds. The exchange continues.</p>` : ""}
+${
+            turn.state.status === "ongoing"
+              ? `<p>Composure holds. The exchange continues.</p>`
+              : ""
+          }
 ${postButton("home", "Continue")}`,
         });
         return;
@@ -295,7 +1125,8 @@ ${postButton("home", "Continue")}`,
   }
 
   if (action === "log") {
-    const player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const cell = await getCellForPlayer(player.id);
     const entries = visibleQuests(player, await getQuests());
     const items = entries.length
       ? entries
@@ -303,6 +1134,14 @@ ${postButton("home", "Continue")}`,
           (e) =>
             `<li><strong>${e.quest.title}</strong> [${e.state.status}] — ${
               escapeHtml(objectiveText(e))
+            }${
+              cell && e.state.status === "accepted"
+                ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="share_quest">
+  <input type="hidden" name="quest" value="${escapeHtml(e.quest.id)}">
+  <button type="submit" class="link-button">Share with nearby cell</button>
+</form>`
+                : ""
             }</li>`,
         )
         .join("\n")
@@ -323,24 +1162,46 @@ ${postButton("home", "Back to the park")}`,
   if (action === "talk") {
     const npcId = fields.npc ?? "";
     const npc = await getNpc(npcId);
-    if (!npc) {
+    const playerAtLocation = await ensurePlayer(
+      authenticated.id,
+      authenticated.name,
+    );
+    const currentLocation = await getLocation(playerAtLocation.location);
+    const npcIsHere = currentLocation?.regionId === playerAtLocation.region &&
+      currentLocation.interactions
+        .filter((interaction) => interaction.kind === "npcs")
+        .some((interaction) => interaction.npcIds?.includes(npcId));
+    if (!npc || !npcIsHere) {
       context.response.status = 404;
-      context.response.body = "Citizen not found.";
+      context.response.body = "Citizen not found here.";
       return;
     }
 
     // Entering a conversation fresh (no option chosen yet).
     if (!fields.node || !fields.option) {
-      await respondWithNode(context.response, npc.id, npc.start, null);
+      await respondWithNode(
+        context.response,
+        npc.id,
+        npc.start,
+        null,
+        playerAtLocation,
+      );
       return;
     }
 
     // Choosing an option within the current node.
-    let player = await ensurePlayer(PLAYER_ID, PLAYER_NAME);
-    const result = resolveSelection(npc, fields.node, fields.option, player, await getQuests());
+    let player = playerAtLocation;
+    const result = resolveSelection(
+      npc,
+      fields.node,
+      fields.option,
+      player,
+      await getQuests(),
+    );
     if (!result) {
       context.response.status = 404;
-      context.response.body = "That option was never available. Nothing is available.";
+      context.response.body =
+        "That option was never available. Nothing is available.";
       return;
     }
 
@@ -348,7 +1209,8 @@ ${postButton("home", "Back to the park")}`,
     let reveal: string | null = null;
     if (result.grantedQuest) {
       player = acceptQuest(player, result.grantedQuest);
-      const objective = result.grantedQuest.stages[0]?.objective ?? "Await instructions.";
+      const objective = result.grantedQuest.stages[0]?.objective ??
+        "Await instructions.";
       reveal = renderQuestReveal(result.grantedQuest.title, objective);
     }
 
@@ -371,13 +1233,310 @@ ${postButton("home", "Back to the park")}`,
       speakerName: npc.name,
       line: result.option.response,
       reveal,
-    });
+    }, player);
     return;
   }
 
   context.response.status = 400;
   context.response.body = "Unrecognized action.";
 });
+
+// ── Multiplayer helpers ────────────────────────────────────────────────────
+
+async function renderMultiplayer(player: Player): Promise<string> {
+  const nearby = (await listPlayersAtLocation(player.region, player.location))
+    .filter((candidate) => candidate.id !== player.id);
+  const cell = await getCellForPlayer(player.id);
+  const invitations = cell ? [] : await listCellInvites(player.id);
+  const itemNames = new Map(
+    (await getItems()).map((item) => [item.id, item.name]),
+  );
+
+  const presenceRows = nearby.length
+    ? (await Promise.all(nearby.map(async (candidate) => {
+      const trusted = player.trustedPlayerIds.includes(candidate.id);
+      const candidateCell = await getCellForPlayer(candidate.id);
+      const trustForm = `<form method="post" action="/">
+  <input type="hidden" name="a" value="${
+        trusted ? "revoke_trust" : "trust_player"
+      }">
+  <input type="hidden" name="player" value="${escapeHtml(candidate.id)}">
+  <button type="submit" class="link-button">${
+        trusted ? "Revoke trust" : "Trust"
+      }</button>
+</form>`;
+      const inviteForm = cell?.leaderId === player.id && !candidateCell
+        ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="invite_to_cell">
+  <input type="hidden" name="player" value="${escapeHtml(candidate.id)}">
+  <button type="submit" class="link-button">Invite to ${
+          escapeHtml(cell.name)
+        }</button>
+</form>`
+        : "";
+      const itemOptions = player.inventory.map((itemId) =>
+        `<option value="${escapeHtml(itemId)}">${
+          escapeHtml(itemNames.get(itemId) ?? itemId)
+        }</option>`
+      ).join("");
+      const sharing = trusted
+        ? `<div class="sharing-controls">
+${
+          itemOptions
+            ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="share_item">
+  <input type="hidden" name="player" value="${escapeHtml(candidate.id)}">
+  <select name="item" aria-label="Item to share">${itemOptions}</select>
+  <button type="submit" class="link-button">Give item</button>
+</form>`
+            : ""
+        }
+${
+          (player.intel[player.region] ?? 0) > 0
+            ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="share_intel">
+  <input type="hidden" name="player" value="${escapeHtml(candidate.id)}">
+  <button type="submit" class="link-button">Share local intel</button>
+</form>`
+            : ""
+        }
+</div>`
+        : "";
+      const cellLabel = candidateCell
+        ? ` · <em>${escapeHtml(candidateCell.name)}</em>`
+        : "";
+      return `<li><strong>${escapeHtml(candidate.name)}</strong>${cellLabel}
+${trustForm}${inviteForm}${sharing}</li>`;
+    }))).join("\n")
+    : `<li>No other active citizens are recorded here.</li>`;
+
+  let cellBody = "";
+  if (cell) {
+    const members = (await Promise.all(cell.memberIds.map((id) =>
+      getPlayer(id)
+    )))
+      .filter((member) => member !== null);
+    cellBody = `<h4>Cell: ${escapeHtml(cell.name)}</h4>
+<ul>${
+      members.map((member) =>
+        `<li>${escapeHtml(member.name)}${
+          member.id === cell.leaderId ? " · leader" : ""
+        }</li>`
+      ).join("\n")
+    }</ul>
+${postButton("leave_cell", "Leave cell")}`;
+  } else {
+    const inviteRows = (await Promise.all(
+      invitations.map(async (invite) => ({
+        invite,
+        cell: await getCell(invite.cellId),
+      })),
+    ))
+      .filter((entry) => entry.cell !== null)
+      .map(({ invite, cell }) =>
+        `<li><strong>${escapeHtml(cell!.name)}</strong>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="accept_cell_invite">
+  <input type="hidden" name="invite" value="${escapeHtml(invite.id)}">
+  <button type="submit" class="link-button">Accept invitation</button>
+</form>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="decline_cell_invite">
+  <input type="hidden" name="invite" value="${escapeHtml(invite.id)}">
+  <button type="submit" class="link-button">Decline</button>
+</form></li>`
+      ).join("\n");
+    cellBody = `<h4>Your Cell</h4>
+${inviteRows ? `<p>Pending invitations:</p><ul>${inviteRows}</ul>` : ""}
+<form method="post" action="/">
+  <input type="hidden" name="a" value="create_cell">
+  <label for="cell-name">Create a cell</label>
+  <input id="cell-name" name="name" minlength="2" maxlength="32" required>
+  <button type="submit" class="link-button">File Cell</button>
+</form>`;
+  }
+
+  return `<section class="multiplayer">
+<h3>Citizens Present</h3>
+<p>Presence reflects characters active here during the past fifteen minutes.</p>
+<ul class="presence-list">${presenceRows}</ul>
+${cellBody}
+</section>`;
+}
+
+// ── Sublocation helpers ────────────────────────────────────────────────────
+
+async function resolveCurrentLocation(
+  player: Player,
+  approvedLocationIds: string[],
+): Promise<{ player: Player; location: Sublocation | null }> {
+  const locations = (await getLocations()).filter((location) =>
+    location.regionId === player.region &&
+    approvedLocationIds.includes(location.id)
+  );
+  const location =
+    locations.find((candidate) => candidate.id === player.location) ??
+      locations[0] ?? null;
+  if (location && player.location !== location.id) {
+    player = { ...player, location: location.id };
+    await savePlayer(player);
+  }
+  return { player, location };
+}
+
+async function renderLocalTravel(
+  player: Player,
+  current: Sublocation,
+): Promise<string> {
+  const locations = (await getLocations()).filter((location) =>
+    location.regionId === player.region
+  );
+  const rows = locations.map((location) => {
+    if (location.id === current.id) {
+      return `<li><strong>${
+        escapeHtml(location.name)
+      }</strong> — you are here</li>`;
+    }
+    return `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="local_travel">
+  <input type="hidden" name="location" value="${escapeHtml(location.id)}">
+  <button type="submit" class="link-button">Go to ${
+      escapeHtml(location.name)
+    }</button>
+</form>
+</li>`;
+  }).join("\n");
+  return `<section class="local-travel">
+<h3>Elsewhere in the City</h3>
+<ul class="travel-list">${rows}</ul>
+</section>`;
+}
+
+function renderLocationInteractions(location: Sublocation): string {
+  const rows = location.interactions.map((interaction) =>
+    `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="location_interaction">
+  <input type="hidden" name="interaction" value="${escapeHtml(interaction.id)}">
+  <button type="submit" class="dialogue-option">${
+      escapeHtml(interaction.label)
+    }</button>
+</form>
+<span>${escapeHtml(interaction.description)}</span>
+</li>`
+  ).join("\n");
+  return `<section class="location-interactions">
+<h3>Available Here</h3>
+<ul class="interaction-list">${rows}</ul>
+</section>`;
+}
+
+async function respondWithLocationInteraction(
+  response: { type?: string; body: unknown; status?: number },
+  player: Player,
+  location: Sublocation,
+  interaction: LocationInteraction,
+): Promise<void> {
+  let body = "";
+  switch (interaction.kind) {
+    case "npcs": {
+      const npcs =
+        (await Promise.all((interaction.npcIds ?? []).map((id) => getNpc(id))))
+          .filter((npc) => npc !== null);
+      const rows = npcs.length
+        ? npcs.map((npc) =>
+          `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="talk">
+  <input type="hidden" name="npc" value="${escapeHtml(npc.id)}">
+  <button type="submit" class="npc-link">${
+            escapeHtml(npc.name)
+          }</button> — <em>${escapeHtml(npc.role)}</em>
+</form>
+</li>`
+        ).join("\n")
+        : `<li>No one here wants to be entered into the record.</li>`;
+      body = `<section><h3>${
+        escapeHtml(interaction.label)
+      }</h3><ul class="npc-list">${rows}</ul></section>`;
+      break;
+    }
+    case "market":
+      body = await renderMarket(player);
+      break;
+    case "workbench":
+      body = await renderWorkbench(player);
+      break;
+    case "cameras":
+      body = await renderCameraBoard(player);
+      break;
+    case "espionage":
+      body = await renderEspionage(player);
+      break;
+    case "encounter":
+      body = await renderEncounterBoard(player);
+      break;
+    case "message_board":
+      body = await renderMessageBoard(player, location, null);
+      break;
+    case "activity": {
+      const result = performLocationAction(player, location, interaction);
+      if (result.ok) await savePlayer(result.player);
+      const note = result.reason
+        ? `<p class="flag-note">${escapeHtml(result.reason)}</p>`
+        : "";
+      body = `<section class="location-result">
+<h3>${escapeHtml(interaction.label)}</h3>
+<p>${escapeHtml(result.narrative)}</p>
+${note}
+<p>Funds: ${result.player.currency}cr · Suspicion: ${result.player.suspicion} · Intel here: ${
+        result.player.intel[result.player.region] ?? 0
+      }</p>
+</section>`;
+      break;
+    }
+  }
+  response.type = "text/html";
+  response.body = renderPage({
+    title: `${location.name} — ${interaction.label}`,
+    body: `<p class="eyebrow">${escapeHtml(location.name)}</p>${body}${
+      postButton("home", "Return to the location")
+    }`,
+  });
+}
+
+async function renderMessageBoard(
+  player: Player,
+  location: Sublocation,
+  error: string | null,
+): Promise<string> {
+  const posts = await listMessagePosts(player.region);
+  const rows = posts.length
+    ? posts.map((post) =>
+      `<li data-post-id="${escapeHtml(post.id)}">
+<p>${escapeHtml(post.body)}</p>
+<small>${escapeHtml(post.author)} · <time datetime="${
+        escapeHtml(post.postedAt)
+      }">${escapeHtml(new Date(post.postedAt).toLocaleString())}</time></small>
+</li>`
+    ).join("\n")
+    : `<li>No notices have survived moderation.</li>`;
+  return `<section class="message-board">
+<h3>${escapeHtml(location.name)} — Regional Message Board</h3>
+<p>Posts are visible throughout ${
+    escapeHtml((await getRegion(player.region))?.name ?? player.region)
+  }. Keep it short. Assume it is evidence.</p>
+${error ? `<p class="flag-note">${escapeHtml(error)}</p>` : ""}
+<form method="post" action="/">
+  <input type="hidden" name="a" value="message_post">
+  <label for="message">Leave a notice</label>
+  <textarea id="message" name="message" maxlength="${MAX_MESSAGE_LENGTH}" required></textarea>
+  <button type="submit" class="dialogue-option">Post Notice</button>
+</form>
+<ul class="message-list">${rows}</ul>
+</section>`;
+}
 
 // ── Camera helpers ──────────────────────────────────────────────────────────
 
@@ -393,8 +1552,12 @@ async function renderCameraBoard(player: Player): Promise<string> {
   const coverage = coverageLevel(await listCameras(), player.region);
   const coveragePct = Math.round(coverage * 100);
 
-  const installWait = Math.ceil(cooldownRemaining(region?.cameraCooldowns, "install") / 1000);
-  const dismantleWait = Math.ceil(cooldownRemaining(region?.cameraCooldowns, "dismantle") / 1000);
+  const installWait = Math.ceil(
+    cooldownRemaining(region?.cameraCooldowns, "install") / 1000,
+  );
+  const dismantleWait = Math.ceil(
+    cooldownRemaining(region?.cameraCooldowns, "dismantle") / 1000,
+  );
 
   const rows = cameras.length
     ? cameras
@@ -427,7 +1590,9 @@ async function renderCameraBoard(player: Player): Promise<string> {
 
   return `<section class="camera-board">
 <h3>Surveillance Ledger — ${region?.name ?? player.region}</h3>
-<p>Coverage: ${coveragePct}% · Your suspicion: ${player.suspicion} · Scrap held: ${totalScrap(player)}</p>
+<p>Coverage: ${coveragePct}% · Your suspicion: ${player.suspicion} · Scrap held: ${
+    totalScrap(player)
+  }</p>
 <ul class="camera-list">
 ${rows}
 </ul>
@@ -456,7 +1621,9 @@ async function renderWorkbench(player: Player): Promise<string> {
   <button type="submit" class="dialogue-option">Craft</button>
 </form>`
         : `<em>insufficient</em>`;
-      return `<li><strong>${name}</strong> — ${describeCost(r)} · ${CRAFT_FEE}cr license ${btn}</li>`;
+      return `<li><strong>${name}</strong> — ${
+        describeCost(r)
+      } · ${CRAFT_FEE}cr license ${btn}</li>`;
     })
     .join("\n");
 
@@ -485,7 +1652,9 @@ async function renderMarket(player: Player): Promise<string> {
     if (summary) {
       history.set(
         itemId,
-        ` <em class="price-history">last ${summary.last}cr · avg ${summary.average}cr · ${summary.min}–${summary.max}cr over ${summary.sales} sale${summary.sales === 1 ? "" : "s"}</em>`,
+        ` <em class="price-history">last ${summary.last}cr · avg ${summary.average}cr · ${summary.min}–${summary.max}cr over ${summary.sales} sale${
+          summary.sales === 1 ? "" : "s"
+        }</em>`,
       );
     }
   }
@@ -497,7 +1666,8 @@ async function renderMarket(player: Player): Promise<string> {
   const sellRows = held.length
     ? held
       .map(
-        (i) => `<li>
+        (i) =>
+          `<li>
 <form method="post" action="/">
   <input type="hidden" name="a" value="sell">
   <input type="hidden" name="item" value="${i.id}">
@@ -527,8 +1697,12 @@ async function renderMarket(player: Player): Promise<string> {
   <input type="hidden" name="lst" value="${l.id}">
   <button type="submit" class="dialogue-option">Buy</button>
 </form>`;
-        const adjusted = price !== l.price ? ` <em>(decree-adjusted from ${l.price}cr)</em>` : "";
-        return `<li><strong>${name}</strong> — ${price}cr ${own ? "(yours) " : ""}${action}${adjusted}${history.get(l.itemId) ?? ""}</li>`;
+        const adjusted = price !== l.price
+          ? ` <em>(decree-adjusted from ${l.price}cr)</em>`
+          : "";
+        return `<li><strong>${name}</strong> — ${price}cr ${
+          own ? "(yours) " : ""
+        }${action}${adjusted}${history.get(l.itemId) ?? ""}</li>`;
       })
       .join("\n")
     : `<li>The board is bare. The Ministry blames supply chains.</li>`;
@@ -555,7 +1729,56 @@ async function renderEspionage(player: Player): Promise<string> {
   if (isRestricted(player, region.id)) {
     return `<section class="espionage">
 <h3>Fieldwork</h3>
-<p>The checkpoints here have your photograph. ${escapeHtml(region.name)} is closed to you.</p>
+<p>The checkpoints here have your photograph. ${
+      escapeHtml(region.name)
+    } is closed to you.</p>
+</section>`;
+  }
+  const cell = await getCellForPlayer(player.id);
+  const cellOperation = cell ? await getCellOperation(cell.id) : null;
+  if (cell && cellOperation) {
+    const participants = (await Promise.all(
+      cellOperation.participantIds.map((id) => getPlayer(id)),
+    )).filter((participant) => participant !== null);
+    const roster = participants.map((participant) =>
+      escapeHtml(participant.name)
+    ).join(", ");
+    const log = cellOperation.log.map((line) => `<li>${escapeHtml(line)}</li>`)
+      .join("\n");
+    if (cellOperation.status === "completed") {
+      return `<section class="espionage cell-operation">
+<h3>Cell Field Operation — Complete</h3>
+<p>${
+        escapeHtml(cell.name)
+      } recovered the dossier. Every participant received 20cr and 3 local intel.</p>
+<p>Participants: ${roster}</p>
+<ul class="operation-log">${log}</ul>
+${postButton("clear_cell_operation", "Close operation file")}
+</section>`;
+    }
+    const stage = CELL_OPERATION_STAGES[cellOperation.stageIndex];
+    const lastActor = cellOperation.completedBy.at(-1);
+    const mayAct = cellOperation.participantIds.includes(player.id) &&
+      lastActor !== player.id;
+    const contribution = mayAct && stage
+      ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="cell_operation_advance">
+  <input type="hidden" name="op" value="${stage.action}">
+  <button type="submit" class="dialogue-option">Contribute: ${
+        escapeHtml(stage.label)
+      }</button>
+</form>`
+      : `<p><em>Another participant must carry the next stage.</em></p>`;
+    return `<section class="espionage cell-operation">
+<h3>Cell Field Operation</h3>
+<p><strong>Stage ${
+      cellOperation.stageIndex + 1
+    } of ${CELL_OPERATION_STAGES.length}:</strong> ${
+      escapeHtml(stage?.label ?? "Await instructions")
+    }</p>
+<p>Participants: ${roster}</p>
+<ul class="operation-log">${log}</ul>
+${contribution}
 </section>`;
   }
   const intel = player.intel[region.id] ?? 0;
@@ -567,7 +1790,8 @@ async function renderEspionage(player: Player): Promise<string> {
   ];
   const rows = ops
     .map(
-      ([op, label]) => `<li>
+      ([op, label]) =>
+        `<li>
 <form method="post" action="/">
   <input type="hidden" name="a" value="espionage">
   <input type="hidden" name="op" value="${op}">
@@ -578,10 +1802,20 @@ async function renderEspionage(player: Player): Promise<string> {
     .join("\n");
   return `<section class="espionage">
 <h3>Fieldwork</h3>
-<p>Intel here: ${intel} · Flags on your file: ${flags}${flags > 0 ? " (market fees apply)" : ""}</p>
+<p>Intel here: ${intel} · Flags on your file: ${flags}${
+    flags > 0 ? " (market fees apply)" : ""
+  }</p>
 <ul class="espionage-list">
 ${rows}
 </ul>
+${
+    cell
+      ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="cell_operation_start">
+  <button type="submit" class="dialogue-option">Open Cell Operation</button>
+</form>`
+      : ""
+  }
 </section>`;
 }
 
@@ -591,7 +1825,10 @@ async function renderDecrees(player: Player): Promise<string> {
   if (decrees.length === 0) return "";
   const rows = decrees
     .map(
-      (d) => `<li><strong>${escapeHtml(d.title)}</strong> — ${escapeHtml(d.proclamation)} <em>(prices ×${d.priceMultiplier})</em></li>`,
+      (d) =>
+        `<li><strong>${escapeHtml(d.title)}</strong> — ${
+          escapeHtml(d.proclamation)
+        } <em>(prices ×${d.priceMultiplier})</em></li>`,
     )
     .join("\n");
   return `<section class="decrees">
@@ -604,24 +1841,87 @@ ${rows}
 
 /** Active encounter, or the means to provoke one (spec §3.4). */
 async function renderEncounterBoard(player: Player): Promise<string> {
+  const cell = await getCellForPlayer(player.id);
+  const cellState = cell ? await getCellEncounter(cell.id) : null;
+  if (cell && cellState) {
+    const encounter = (await getEncounters()).find((candidate) =>
+      candidate.id === cellState.encounterId
+    );
+    if (encounter) {
+      const participants =
+        (await Promise.all(cellState.participantIds.map((id) => getPlayer(id))))
+          .filter((participant) => participant !== null);
+      const log = cellState.log.slice(-8).map((line) =>
+        `<li>${escapeHtml(line)}</li>`
+      ).join("\n");
+      const canAct = cellState.status === "ongoing" &&
+        cellState.participantIds.includes(player.id);
+      const moves = canAct
+        ? encounter.moves.map((move) =>
+          `<li>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="cell_move">
+  <input type="hidden" name="move" value="${escapeHtml(move.id)}">
+  <button type="submit" class="dialogue-option">${escapeHtml(move.label)}${
+            move.cost ? ` (${move.cost}cr)` : ""
+          }</button>
+</form>
+</li>`
+        ).join("\n")
+        : "";
+      const resolution = cellState.status !== "ongoing"
+        ? `<p>${
+          cellState.status === "victory"
+            ? "Rewards were disbursed to every recorded participant."
+            : "The cell operation has concluded."
+        }</p>${postButton("clear_cell_encounter", "Close operation file")}`
+        : "";
+      return `<section class="encounter cell-encounter">
+<h3>⚠ ${escapeHtml(cell.name)} vs. ${
+        escapeHtml(encounter.name)
+      } — ${cellState.enemyHp}/${encounter.maxHp} hp</h3>
+<p>Participants: ${
+        participants.map((participant) => escapeHtml(participant.name)).join(
+          ", ",
+        ) || "none"
+      }</p>
+<ul class="encounter-log">${log}</ul>
+${moves ? `<ul class="encounter-moves">${moves}</ul>` : ""}
+${
+        !canAct && cellState.status === "ongoing"
+          ? `<p>You are observing this operation, not participating in it.</p>`
+          : ""
+      }
+${resolution}
+</section>`;
+    }
+  }
   const state = await getEncounter(player.id);
   if (state) {
-    const encounter = (await getEncounters()).find((e) => e.id === state.encounterId);
+    const encounter = (await getEncounters()).find((e) =>
+      e.id === state.encounterId
+    );
     if (!encounter) return "";
     const moves = encounter.moves
       .map(
-        (m) => `<li>
+        (m) =>
+          `<li>
 <form method="post" action="/">
   <input type="hidden" name="a" value="move">
   <input type="hidden" name="move" value="${m.id}">
-  <button type="submit" class="dialogue-option">${escapeHtml(m.label)}${m.cost ? ` (${m.cost}cr)` : ""}</button>
+  <button type="submit" class="dialogue-option">${escapeHtml(m.label)}${
+            m.cost ? ` (${m.cost}cr)` : ""
+          }</button>
 </form>
 </li>`,
       )
       .join("\n");
-    const log = state.log.slice(-6).map((l) => `<li>${escapeHtml(l)}</li>`).join("\n");
+    const log = state.log.slice(-6).map((l) => `<li>${escapeHtml(l)}</li>`)
+      .join("\n");
     return `<section class="encounter">
-<h3>⚠ ${escapeHtml(encounter.name)} — ${state.enemyHp}/${encounter.maxHp} hp</h3>
+<h3>⚠ ${
+      escapeHtml(encounter.name)
+    } — ${state.enemyHp}/${encounter.maxHp} hp</h3>
 <ul class="encounter-log">
 ${log}
 </ul>
@@ -631,16 +1931,32 @@ ${moves}
 </section>`;
   }
   const bosses = (await getEncounters()).filter(
-    (e) => e.kind === "boss" && e.regions.includes(player.region) && !player.restricted.includes(player.region),
+    (e) =>
+      e.kind === "boss" && e.regions.includes(player.region) &&
+      !player.restricted.includes(player.region),
   );
   const bossRows = bosses
     .map(
-      (b) => `<li>
+      (b) =>
+        `<li>
 <form method="post" action="/">
   <input type="hidden" name="a" value="boss_start">
   <input type="hidden" name="enc" value="${b.id}">
-  <button type="submit" class="dialogue-option">Confront ${escapeHtml(b.name)}</button> <em>(boss — solo attempts are unwise)</em>
+  <button type="submit" class="dialogue-option">Confront ${
+          escapeHtml(b.name)
+        }</button> <em>(boss — solo attempts are unwise)</em>
 </form>
+${
+          cell
+            ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="cell_boss_start">
+  <input type="hidden" name="enc" value="${escapeHtml(b.id)}">
+  <button type="submit" class="dialogue-option">Mobilize ${
+              escapeHtml(cell.name)
+            }</button> <em>(requires two active members here)</em>
+</form>`
+            : ""
+        }
 </li>`,
     )
     .join("\n");
@@ -656,7 +1972,9 @@ ${bossRows ? `<ul class="boss-list">\n${bossRows}\n</ul>` : ""}
 
 /** Travel options to other regions (spec §3.0). */
 async function renderTravel(player: Player): Promise<string> {
-  const regions = (await getRegionContent()).filter((r) => r.id !== player.region);
+  const regions = (await getRegionContent()).filter((r) =>
+    r.id !== player.region
+  );
   if (regions.length === 0) return "";
   const stamped = hasBureaucratsStamp(player);
   const rows = regions
@@ -698,6 +2016,7 @@ async function respondWithNode(
   npcId: string,
   nextNodeId: string | null,
   block: ResponseBlock | null,
+  player: Player,
 ): Promise<void> {
   const npc = await getNpc(npcId);
   if (!npc) {
@@ -705,8 +2024,6 @@ async function respondWithNode(
     response.body = "Citizen not found.";
     return;
   }
-  const player = (await getPlayer(PLAYER_ID)) ?? (await ensurePlayer(PLAYER_ID, PLAYER_NAME));
-
   const parts: string[] = [];
   if (block) {
     const rendered = await renderDialogue(block.line, block.speakerArt);

@@ -16,10 +16,15 @@ export async function listRegions(s?: Store): Promise<Region[]> {
   return entries.map((e) => e.value);
 }
 
-/** Idempotent seeding. */
+/** Refresh authored region data while preserving live camera cooldown state. */
 export async function seedRegions(regions: Region[], s?: Store): Promise<void> {
   const st = s ?? await openStore();
   for (const region of regions) {
-    if (!(await st.get(key(region.id)))) await st.set(key(region.id), region);
+    const existing = await st.get<Region>(key(region.id));
+    await st.set(key(region.id), {
+      ...region,
+      stats: existing?.stats ?? region.stats,
+      cameraCooldowns: existing?.cameraCooldowns ?? region.cameraCooldowns,
+    });
   }
 }

@@ -6,8 +6,14 @@ function region(id: string, flockPresence: number): Region {
   return {
     id,
     name: id,
-    locations: [],
-    stats: { coverage: 0, unrest: 0, prosperity: 0, flockPresence, populationMood: "wary" },
+    locations: [`${id}_center`],
+    stats: {
+      coverage: 0,
+      unrest: 0,
+      prosperity: 0,
+      flockPresence,
+      populationMood: "wary",
+    },
     economyProfile: { consumes: [], produces: [], wageMultiplier: 1 },
   };
 }
@@ -20,8 +26,15 @@ function player(over: Partial<Player> = {}): Player {
     inventory: [],
     scrap: {},
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [],
+    flags: [],
+    intel: {},
+    restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
     ...over,
   };
 }
@@ -32,24 +45,25 @@ Deno.test("travelCost scales with destination Flock presence", () => {
 });
 
 Deno.test("travel moves the player and charges the cost", () => {
-  const dest = region("gulf_coast", 0.85);
+  const dest = region("new_orleans", 0.85);
   const result = travel(player(), dest);
   assert(result.ok);
-  assertEquals(result.player.region, "gulf_coast");
+  assertEquals(result.player.region, "new_orleans");
+  assertEquals(result.player.location, "new_orleans_center");
   assertEquals(result.player.currency, 100 - travelCost(dest));
 });
 
 Deno.test("travel rejects staying put and insufficient funds", () => {
-  const same = travel(player(), region("rust_belt", 0.7));
+  const same = travel(player(), region("cleveland", 0.7));
   assert(!same.ok);
   assertEquals(same.reason, "You are already there.");
-  const broke = travel(player({ currency: 0 }), region("gulf_coast", 0.85));
+  const broke = travel(player({ currency: 0 }), region("new_orleans", 0.85));
   assert(!broke.ok);
   assert(broke.reason?.includes("credits"));
 });
 
 Deno.test("Bureaucrat's Stamp halves travel cost", () => {
-  const dest = region("gulf_coast", 0.85);
+  const dest = region("new_orleans", 0.85);
   const stamped = player({ inventory: ["bureaucrats_stamp"] });
   assertEquals(travelCost(dest, stamped), Math.round(travelCost(dest) / 2));
   const result = travel(stamped, dest);

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "q_pnw_courier",
+    "title": "The Courier Run",
+    "hidden": true,
+    "trigger": { "npc": "pnw_moss", "dialogueOption": "ask_work" },
+    "stages": [
+      { "id": "s1", "objective": "Accept the courier arrangement from Moss." },
+      {
+        "id": "s2",
+        "objective": "Deliver nothing to no one. You were never here."
+      }
+    ],
+    "rewards": { "currency": 60, "items": ["cutters"] }
+  },
+  {
+    "id": "q_rap_distro",
+    "title": "Street Distribution",
+    "hidden": true,
+    "trigger": { "npc": "atl_lil_peep", "dialogueOption": "ask_distro" },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Peep-Peep's tape needs a gallery premiere. Marin Voss at New York City's Lost Property Office curates such things."
+      },
+      {
+        "id": "s2",
+        "objective": "The premiere needs a backer. Chadwick Brennan III on Wall Street funds anything that charts."
+      },
+      {
+        "id": "s3",
+        "objective": "Return to Lil Peep-Peep in Atlanta with the deal signed."
+      }
+    ],
+    "rewards": { "currency": 110, "items": ["limited_vinyl"] }
+  }
+]

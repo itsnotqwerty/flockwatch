@@ -1,6 +1,11 @@
 import { assert, assertEquals } from "$assert";
 import { createMemoryStore } from "./store.ts";
-import { defaultPlayer, ensurePlayer, getPlayer, savePlayer } from "./players.ts";
+import {
+  defaultPlayer,
+  ensurePlayer,
+  getPlayer,
+  savePlayer,
+} from "./players.ts";
 import {
   CONTENT_VERSION,
   ensureContentCurrent,
@@ -11,10 +16,19 @@ import {
 } from "./content.ts";
 import { npcs, quests } from "../game/fixtures.ts";
 import { getPriceHistory, PRICE_HISTORY_LIMIT, recordSale } from "./market.ts";
+import { getRegion, seedRegions } from "./regions.ts";
+import type { Region } from "../types.ts";
 
 Deno.test("price history records sales capped at the limit", async () => {
   const store = createMemoryStore();
-  const listing = { id: "lst_1", sellerId: "s1", itemId: "binoculars", price: 40, listedAt: "" };
+  const listing = {
+    id: "lst_1",
+    sellerId: "s1",
+    itemId: "binoculars",
+    regionId: "cleveland",
+    price: 40,
+    listedAt: "",
+  };
   await recordSale(listing, store);
   await recordSale({ ...listing, price: 60 }, store);
   const history = await getPriceHistory("binoculars", store);
@@ -50,16 +64,66 @@ Deno.test("player persistence", async () => {
   assertEquals(fresh.currency, 25);
 });
 
+Deno.test("legacy player regions migrate to city ids and a valid sublocation", async () => {
+  const store = createMemoryStore();
+  await store.set(["players", "legacy"], {
+    id: "legacy",
+    name: "Earlier Citizen",
+    currency: 25,
+    inventory: [],
+    scrap: {},
+    suspicion: 0,
+    region: "rust_belt",
+    quests: [],
+  });
+  const migrated = await getPlayer("legacy", store);
+  assertEquals(migrated?.region, "cleveland");
+  assertEquals(migrated?.location, "cuyahoga_rolling_mill");
+  assertEquals(migrated?.completedLocationActions, []);
+});
+
+Deno.test("region reseeding refreshes authored locations without resetting live stats", async () => {
+  const store = createMemoryStore();
+  const region: Region = {
+    id: "cleveland",
+    name: "Cleveland",
+    locations: ["old_location"],
+    stats: {
+      coverage: 0,
+      unrest: 0.3,
+      prosperity: 0.4,
+      flockPresence: 0.7,
+      populationMood: "wary",
+    },
+    economyProfile: { consumes: [], produces: [], wageMultiplier: 1.1 },
+  };
+  await seedRegions([region], store);
+  await store.set(["regions", "cleveland"], {
+    ...region,
+    stats: { ...region.stats, coverage: 0.75 },
+  });
+  await seedRegions([{ ...region, locations: ["new_location"] }], store);
+  const refreshed = await getRegion("cleveland", store);
+  assertEquals(refreshed?.locations, ["new_location"]);
+  assertEquals(refreshed?.stats.coverage, 0.75);
+});
+
 Deno.test("seedContent stores NPCs and quests without overwriting", async () => {
   const store = createMemoryStore();
   await seedContent(npcs, quests, store);
   assertEquals((await listNpcs(store)).length, npcs.length);
   assertEquals((await getNpc("clerk", store))?.name, "Clerk Gusteau");
-  assertEquals((await getQuest("q_form_27b", store))?.title, "A Matter of Form");
+  assertEquals(
+    (await getQuest("q_form_27b", store))?.title,
+    "A Matter of Form",
+  );
 
   // Re-seeding preserves an edited record.
   const clerk = (await getNpc("clerk", store))!;
-  await store.set(["npcs", "clerk"], { ...clerk, name: "Clerk Gusteau (Acting)" });
+  await store.set(["npcs", "clerk"], {
+    ...clerk,
+    name: "Clerk Gusteau (Acting)",
+  });
   await seedContent(npcs, quests, store);
   assertEquals((await getNpc("clerk", store))?.name, "Clerk Gusteau (Acting)");
 });
@@ -69,7 +133,10 @@ Deno.test("ensureContentCurrent refreshes stale content on version bump", async 
   // Simulate a store seeded by an older build (stale record, old version).
   await seedContent(npcs, quests, store);
   const clerk = (await getNpc("clerk", store))!;
-  await store.set(["npcs", "clerk"], { ...clerk, name: "Clerk Gusteau (Acting)" });
+  await store.set(["npcs", "clerk"], {
+    ...clerk,
+    name: "Clerk Gusteau (Acting)",
+  });
   await store.set(["meta", "content_version"], CONTENT_VERSION - 1);
 
   // Version moved on → records are overwritten, marker is updated.
@@ -78,7 +145,10 @@ Deno.test("ensureContentCurrent refreshes stale content on version bump", async 
   assertEquals(await store.get(["meta", "content_version"]), CONTENT_VERSION);
 
   // Same version → no-op.
-  await store.set(["npcs", "clerk"], { ...clerk, name: "Clerk Gusteau (Acting)" });
+  await store.set(["npcs", "clerk"], {
+    ...clerk,
+    name: "Clerk Gusteau (Acting)",
+  });
   assert(!(await ensureContentCurrent(npcs, quests, store)));
   assertEquals((await getNpc("clerk", store))?.name, "Clerk Gusteau (Acting)");
 });

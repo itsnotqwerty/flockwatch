@@ -15,7 +15,9 @@ export async function seedContent(
     if (!(await st.get(npcKey(npc.id)))) await st.set(npcKey(npc.id), npc);
   }
   for (const quest of quests) {
-    if (!(await st.get(questKey(quest.id)))) await st.set(questKey(quest.id), quest);
+    if (!(await st.get(questKey(quest.id)))) {
+      await st.set(questKey(quest.id), quest);
+    }
   }
 }
 
@@ -26,7 +28,7 @@ export async function seedContent(
  * Player state (quests held, inventory, currency) is never touched — only
  * the static content records.
  */
-export const CONTENT_VERSION = 7;
+export const CONTENT_VERSION = 8;
 
 const versionKey = ["meta", "content_version"];
 

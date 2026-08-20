@@ -214,6 +214,125 @@ export interface Region {
   cameraCooldowns?: CameraCooldowns;
 }
 
+// ── §4.9 Sublocations ──────────────────────────────────────────────────────
+
+export type LocationInteractionKind =
+  | "npcs"
+  | "market"
+  | "workbench"
+  | "cameras"
+  | "espionage"
+  | "encounter"
+  | "message_board"
+  | "activity";
+
+export interface LocationInteractionEffect {
+  /** Signed credit change. Negative values are costs. */
+  currency?: number;
+  /** Signed suspicion change, clamped to 0–100. */
+  suspicion?: number;
+  /** Intel added to the current region. */
+  intel?: number;
+  /** Scrap components granted by the interaction. */
+  scrap?: Partial<Record<ScrapComponent, number>>;
+  /** Item id granted by the interaction. */
+  item?: string;
+}
+
+export interface LocationInteraction {
+  id: string;
+  label: string;
+  description: string;
+  kind: LocationInteractionKind;
+  /** NPC ids exposed by an `npcs` interaction. */
+  npcIds?: string[];
+  /** Result copy shown after an `activity` interaction. */
+  result?: string;
+  /** Optional state change applied by an `activity` interaction. */
+  effect?: LocationInteractionEffect;
+  /** Whether an activity can reward a player only once. */
+  once?: boolean;
+}
+
+export interface Sublocation {
+  id: string;
+  regionId: string;
+  name: string;
+  description: string;
+  interactions: LocationInteraction[];
+}
+
+export interface MessagePost {
+  id: string;
+  regionId: string;
+  playerId: string;
+  author: string;
+  body: string;
+  postedAt: string;
+}
+
+// ── §4.10 Multiplayer ──────────────────────────────────────────────────────
+
+export interface Account {
+  id: string;
+  playerId: string;
+  createdAt: string;
+}
+
+export interface PlayerSession {
+  token: string;
+  accountId: string;
+  createdAt: string;
+}
+
+export interface Cell {
+  id: string;
+  name: string;
+  leaderId: string;
+  memberIds: string[];
+  createdAt: string;
+}
+
+export interface CellInvite {
+  id: string;
+  cellId: string;
+  inviterId: string;
+  inviteeId: string;
+  createdAt: string;
+}
+
+export type CellEncounterStatus = "ongoing" | "victory" | "defeat";
+
+export interface CellEncounterState {
+  cellId: string;
+  encounterId: string;
+  region: string;
+  location: string;
+  enemyHp: number;
+  status: CellEncounterStatus;
+  phaseIndex: number;
+  participantIds: string[];
+  log: string[];
+  startedAt: string;
+  updatedAt: string;
+}
+
+export type CellOperationStatus = "ongoing" | "completed";
+
+/** A cooperative, ordered espionage operation shared by one cell. */
+export interface CellOperationState {
+  cellId: string;
+  region: string;
+  location: string;
+  stageIndex: number;
+  status: CellOperationStatus;
+  participantIds: string[];
+  completedBy: string[];
+  log: string[];
+  startedAt: string;
+  updatedAt: string;
+}
+
 /** Cooldowns for camera activities, enforced per region across all players. */
 export type CameraCooldowns = Partial<Record<"install" | "dismantle", number>>;
 
@@ -281,6 +400,8 @@ export interface Player {
   scrap: Partial<Record<ScrapComponent, number>>;
   suspicion: number;
   region: string;
+  /** Current travelable sublocation within `region`. */
+  location: string;
   quests: PlayerQuest[];
   /** Persistent espionage flags from blown operations (spec §3.5). */
   flags: EspionageFlag[];
@@ -288,4 +409,10 @@ export interface Player {
   intel: Partial<Record<string, number>>;
   /** Regions where patrol encounters are suppressed (restricted — player is known). */
   restricted: string[];
+  /** One-time location activities already claimed by this player. */
+  completedLocationActions: string[];
+  /** Player ids this character has explicitly authorized for sharing. */
+  trustedPlayerIds: string[];
+  /** ISO timestamp used for same-location presence. */
+  lastSeenAt: string;
 }

@@ -1,5 +1,10 @@
 import { assert, assertEquals } from "$assert";
-import { applyMove, eligibleEncounters, rollEncounter, startEncounter } from "./encounters.ts";
+import {
+  applyMove,
+  eligibleEncounters,
+  rollEncounter,
+  startEncounter,
+} from "./encounters.ts";
 import type { Encounter, Player, Region } from "../types.ts";
 
 const patrol: Encounter = {
@@ -7,12 +12,19 @@ const patrol: Encounter = {
   name: "Test Patrol",
   art: "glangley",
   kind: "patrol",
-  regions: ["rust_belt"],
+  regions: ["cleveland"],
   minFlockPresence: 0.4,
   maxHp: 20,
   moves: [
     { id: "hit", label: "Hit", damage: 10, selfDamage: 0, suspicion: 2 },
-    { id: "flee", label: "Flee", damage: 0, selfDamage: 0, suspicion: 5, flees: true },
+    {
+      id: "flee",
+      label: "Flee",
+      damage: 0,
+      selfDamage: 0,
+      suspicion: 5,
+      flees: true,
+    },
   ],
   victoryLine: "You win.",
   defeatLine: "You lose.",
@@ -36,27 +48,52 @@ const boss: Encounter = {
 
 function player(over: Partial<Player> = {}): Player {
   return {
-    id: "p1", name: "Citizen", currency: 100, inventory: [], scrap: {},
-    suspicion: 0, region: "rust_belt", quests: [], flags: [], intel: {},
-    restricted: [], ...over,
+    id: "p1",
+    name: "Citizen",
+    currency: 100,
+    inventory: [],
+    scrap: {},
+    suspicion: 0,
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
+    quests: [],
+    flags: [],
+    intel: {},
+    restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
+    ...over,
   };
 }
 
 const region = (flockPresence: number): Region => ({
-  id: "rust_belt",
-  name: "The Rust Belt",
+  id: "cleveland",
+  name: "Cleveland",
   locations: [],
-  stats: { coverage: 0.5, unrest: 0.3, prosperity: 0.4, flockPresence, populationMood: "wary" },
+  stats: {
+    coverage: 0.5,
+    unrest: 0.3,
+    prosperity: 0.4,
+    flockPresence,
+    populationMood: "wary",
+  },
   economyProfile: { consumes: [], produces: [], wageMultiplier: 1 },
 });
 
 Deno.test("patrols gate on Flock presence; bosses do not", () => {
-  assertEquals(eligibleEncounters([patrol, boss], region(0.2), player()).map((e) => e.id), ["boss_x"]);
-  assertEquals(eligibleEncounters([patrol, boss], region(0.6), player()).length, 2);
+  assertEquals(
+    eligibleEncounters([patrol, boss], region(0.2), player()).map((e) => e.id),
+    ["boss_x"],
+  );
+  assertEquals(
+    eligibleEncounters([patrol, boss], region(0.6), player()).length,
+    2,
+  );
 });
 
 Deno.test("restricted players get no encounters", () => {
-  const p = player({ restricted: ["rust_belt"] });
+  const p = player({ restricted: ["cleveland"] });
   assertEquals(eligibleEncounters([patrol, boss], region(0.9), p), []);
 });
 

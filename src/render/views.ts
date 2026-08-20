@@ -29,7 +29,7 @@ export function renderPage({ title, body }: PageOptions): string {
 <header>
   <h1>FlockWatch</h1>
   <nav>
-    <a href="/">The Park</a>
+    <a href="/">Current Location</a>
     <span class="alpha-info" tabindex="0" role="note" aria-label="Alpha notice: This game is in an experimental alpha. Content may change and your playthrough may get reset.">ⓘ<span class="alpha-tooltip">This game is in an experimental alpha. Content may change and your playthrough may get reset.</span></span>
   </nav>
 </header>
@@ -40,12 +40,16 @@ ${body}
   <p>© 2026 Samuel Roux · <a href="https://github.com/itsnotqwerty/flockwatch">View the code</a></p>
 </footer>
 <script src="/interactivity.js" defer></script>
+<script src="/realtime.js" defer></script>
 </body>
 </html>`;
 }
 
 /** A grillsay bubble + art block as HTML (text stays real text, in <pre>). */
-export function renderDialogueBlock(rendered: string, speakerName: string): string {
+export function renderDialogueBlock(
+  rendered: string,
+  speakerName: string,
+): string {
   return `<figure class="dialogue">
 <figcaption>${escapeHtml(speakerName)}</figcaption>
 <pre>${escapeHtml(rendered)}</pre>
@@ -53,7 +57,10 @@ export function renderDialogueBlock(rendered: string, speakerName: string): stri
 }
 
 /** A quest-reveal notice shown after a hidden quest is assigned (spec §3.1). */
-export function renderQuestReveal(questTitle: string, objective: string): string {
+export function renderQuestReveal(
+  questTitle: string,
+  objective: string,
+): string {
   return `<aside class="quest-reveal">
 <p class="quest-reveal-title">New Assignment: ${escapeHtml(questTitle)}</p>
 <p>${escapeHtml(objective)}</p>
@@ -85,7 +92,8 @@ export function renderDialogueOptions(
 ): string {
   const items = options
     .map(
-      (o) => `<li>
+      (o) =>
+        `<li>
 <form method="post" action="/">
   <input type="hidden" name="a" value="talk">
   <input type="hidden" name="npc" value="${escapeHtml(npcId)}">

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "seattle",
+    "name": "Seattle",
+    "locations": [
+      "municipal_visitor_center",
+      "cascade_rainworks",
+      "evergreen_switchyard"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.55,
+      "prosperity": 0.62,
+      "flockPresence": 0.40,
+      "populationMood": "restless"
+    },
+    "economyProfile": {
+      "consumes": ["crafted_goods", "tools"],
+      "produces": ["scrap", "raw_materials"],
+      "wageMultiplier": 0.9
+    }
+  }
+]

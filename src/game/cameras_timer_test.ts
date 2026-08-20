@@ -19,8 +19,15 @@ function freshPlayer(id = "p1"): Player {
     inventory: [],
     scrap: {},
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [],
+    flags: [],
+    intel: {},
+    restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
   };
 }
 
@@ -42,30 +49,48 @@ Deno.test("stampActivity sets a cooldown that counts down", () => {
 Deno.test("install is blocked while on cooldown, then allowed", () => {
   resetCameraCounter();
   const now = 5_000_000;
-  const c1 = createContract("rust_belt", 100);
+  const c1 = createContract("cleveland", 100);
   const first = installCamera(c1, freshPlayer(), {}, 1, now);
   assert(first.wages > 0);
 
   // Second install immediately after is blocked by the region timer.
-  const c2 = createContract("rust_belt", 100);
+  const c2 = createContract("cleveland", 100);
   const blocked = installCamera(c2, first.player, first.cooldowns, 1, now);
   assertEquals(blocked.wages, 0);
   assertEquals(blocked.camera.status, "contracted");
 
   // After the cooldown, it succeeds.
-  const later = installCamera(c2, first.player, first.cooldowns, 1, now + ACTIVITY_COOLDOWNS.install);
+  const later = installCamera(
+    c2,
+    first.player,
+    first.cooldowns,
+    1,
+    now + ACTIVITY_COOLDOWNS.install,
+  );
   assert(later.wages > 0);
   assertEquals(later.camera.status, "active");
 });
 
 Deno.test("dismantle is blocked while on cooldown", () => {
   const now = 9_000_000;
-  const active = { ...createContract("rust_belt", 50), status: "active" as const };
+  const active = {
+    ...createContract("cleveland", 50),
+    status: "active" as const,
+  };
   const first = dismantleCamera(active, freshPlayer(), {}, 0, now);
   assertEquals(first.camera.status, "dismantled");
 
-  const active2 = { ...createContract("rust_belt", 50), status: "active" as const };
-  const blocked = dismantleCamera(active2, freshPlayer(), first.cooldowns, 0, now);
+  const active2 = {
+    ...createContract("cleveland", 50),
+    status: "active" as const,
+  };
+  const blocked = dismantleCamera(
+    active2,
+    freshPlayer(),
+    first.cooldowns,
+    0,
+    now,
+  );
   assertEquals(blocked.camera.status, "active"); // unchanged
   assertEquals(blocked.player.suspicion, 0); // no extra suspicion
 });
@@ -81,11 +106,23 @@ Deno.test("region cooldown gates ALL players, not just the installer", () => {
   resetCameraCounter();
   const now = 4_000_000;
   // Player A installs, putting the region on install cooldown.
-  const first = installCamera(createContract("rust_belt", 100), freshPlayer("pA"), {}, 1, now);
+  const first = installCamera(
+    createContract("cleveland", 100),
+    freshPlayer("pA"),
+    {},
+    1,
+    now,
+  );
   assert(first.wages > 0);
 
   // Player B — a different player entirely — is also blocked.
-  const other = installCamera(createContract("rust_belt", 100), freshPlayer("pB"), first.cooldowns, 1, now);
+  const other = installCamera(
+    createContract("cleveland", 100),
+    freshPlayer("pB"),
+    first.cooldowns,
+    1,
+    now,
+  );
   assertEquals(other.wages, 0);
   assertEquals(other.camera.status, "contracted");
 });

@@ -2,7 +2,11 @@
   {
     "id": "silicon_valley",
     "name": "Silicon Valley",
-    "locations": ["campus_loop", "server_farms", "cul_de_sac_heights"],
+    "locations": [
+      "office_of_zoning_compliance",
+      "perpetual_motion_capital",
+      "e_waste_reclamation_campus"
+    ],
     "stats": {
       "coverage": 0.0,
       "unrest": 0.15,

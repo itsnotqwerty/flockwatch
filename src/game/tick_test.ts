@@ -4,8 +4,8 @@ import type { Camera, Region } from "../types.ts";
 
 function region(overrides: Partial<Region["stats"]> = {}): Region {
   return {
-    id: "rust_belt",
-    name: "The Rust Belt",
+    id: "cleveland",
+    name: "Cleveland",
     locations: [],
     stats: {
       coverage: 0,
@@ -22,7 +22,7 @@ function region(overrides: Partial<Region["stats"]> = {}): Region {
 function cam(status: Camera["status"]): Camera {
   return {
     id: `c_${status}_${Math.random()}`,
-    region: "rust_belt",
+    region: "cleveland",
     status,
     installedBy: null,
     wageValue: 10,

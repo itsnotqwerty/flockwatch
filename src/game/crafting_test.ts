@@ -1,5 +1,5 @@
 import { assert, assertEquals } from "$assert";
-import { canCraft, CRAFT_FEE, craft, describeCost } from "./crafting.ts";
+import { canCraft, craft, CRAFT_FEE, describeCost } from "./crafting.ts";
 import type { CraftingRecipe, Player } from "../types.ts";
 
 const jammer: CraftingRecipe = {
@@ -17,11 +17,15 @@ function player(scrap: Player["scrap"], currency = 100): Player {
     inventory: [],
     scrap,
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [],
     flags: [],
     intel: {},
     restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
   };
 }
 

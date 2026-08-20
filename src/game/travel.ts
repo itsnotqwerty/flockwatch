@@ -46,11 +46,20 @@ export function travel(
   }
   const cost = travelCost(destination, player);
   if (player.currency < cost) {
-    return { ok: false, reason: `Travel costs ${cost} credits. You have ${player.currency}.`, player };
+    return {
+      ok: false,
+      reason: `Travel costs ${cost} credits. You have ${player.currency}.`,
+      player,
+    };
   }
   return {
     ok: true,
     reason: null,
-    player: { ...player, region: destination.id, currency: player.currency - cost },
+    player: {
+      ...player,
+      region: destination.id,
+      location: destination.locations[0] ?? player.location,
+      currency: player.currency - cost,
+    },
   };
 }

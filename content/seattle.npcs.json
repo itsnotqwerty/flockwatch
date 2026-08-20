@@ -1,0 +1,186 @@
+[
+  {
+    "id": "pnw_moss",
+    "name": "\"Moss\"",
+    "role": "Informant, Evergreen Switchyard",
+    "region": "seattle",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Keep your voice down. The rain doesn't cover as much as it used to. Neither do the trees.",
+        "options": [
+          {
+            "id": "ask_work",
+            "label": "Ask for work",
+            "response": "There's a courier run. No package, no paperwork, no questions. Standard arrangement.",
+            "next": "courier",
+            "grantsQuest": "q_pnw_courier"
+          },
+          {
+            "id": "cover_sheet_12f",
+            "label": "Ask about a routing cover sheet",
+            "response": "A cover sheet. In this economy. Lucky for you, the rain keeps old paperwork legible around here. Don't ask where it dried.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [1]
+          },
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Paper gets wet up here. Wet paper gets lost. Consider yours lost in exactly the right direction.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
+          },
+          {
+            "id": "report_orientation",
+            "label": "Report in after orientation",
+            "response": "I heard. The ridge heard. The cameras that work heard. You're on the roster. Bring rain gear.",
+            "next": null,
+            "advancesQuest": "q_flock_orientation"
+          },
+          {
+            "id": "ask_scrap",
+            "label": "Ask where the scrap goes",
+            "response": "Up the logging roads, mostly. Cameras up here are half unplugged. The other half are watching the wrong ridge.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Move along",
+            "response": "Smart. Standing still is how you get catalogued.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "courier",
+        "line": "You carry nothing, you know nothing, you were never here. Deliver nothing to no one. Clear?",
+        "options": [
+          {
+            "id": "accept_courier",
+            "label": "Nod slowly",
+            "response": "Good. The less you understand, the safer we both are.",
+            "next": "reset",
+            "advancesQuest": "q_pnw_courier"
+          },
+          {
+            "id": "decline_courier",
+            "label": "Ask what's actually in the package",
+            "response": "There is no package. There was never a package. You're learning.",
+            "next": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pnw_priya",
+    "name": "Harbor Engineer Priya",
+    "role": "Harbor Engineer, Cascade Rainworks",
+    "region": "seattle",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Half the cameras on this ridge aren't wired to anything. The other half are wired wrong. I keep the map.",
+        "options": [
+          {
+            "id": "ask_map",
+            "label": "Ask about the map",
+            "response": "The map is in my head. The head stays on my shoulders. That's the arrangement.",
+            "next": null
+          },
+          {
+            "id": "ask_work",
+            "label": "Ask about the terminal",
+            "response": "Timber terminal, mostly. Flock thinks we ship something else. We ship timber. It's almost disappointing.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave her to it",
+            "response": "Watch the ridge line. The unplugged ones are the ones that matter.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pnw_cole",
+    "name": "Barista-Inspector Cole",
+    "role": "Barista-Inspector, Municipal Visitor Center",
+    "region": "seattle",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Welcome to Seattle! Can I interest you in a latte, and also your hiking itinerary?",
+        "options": [
+          {
+            "id": "ask_latte",
+            "label": "Order the latte",
+            "response": "Oat milk? And while I steam this — any plans to visit the old logging roads? Purely for the trail recommendations.",
+            "next": null
+          },
+          {
+            "id": "ask_form_27b",
+            "label": "Ask about Form 27-B",
+            "response": "We don't... stock that form. Officially. I can stamp a requisition that says you never asked. The requisition is the form. Welcome to the Bureau.",
+            "next": null,
+            "grantsQuest": "q_form_27b"
+          },
+          {
+            "id": "process_form_12f",
+            "label": "Present Boomer Dave's Form 12-F",
+            "response": "Form 12-F, lawn ownership, out of state. I can stamp it, but it needs a routing cover sheet first. The cover sheet office was abolished. You'll want someone... unofficial.",
+            "next": null,
+            "advancesQuest": "q_boomer_errand",
+            "atStages": [0]
+          },
+          {
+            "id": "stamp_timesheets",
+            "label": "Ask for an official stamp",
+            "response": "Timesheets from Atlanta? Stamping things is my whole personality. Stamped. Twice. The second stamp makes it more official. That's just math.",
+            "next": null,
+            "advancesQuest": "q_foreman_wages",
+            "atStages": [1]
+          },
+          {
+            "id": "process_form_27b",
+            "label": "Submit the form for review",
+            "response": "Reviewed. Notarized. Denied appeal filed on your behalf. It still needs an agent's signature. Agents sign nothing. Enjoy the paradox.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [0, 1]
+          },
+          {
+            "id": "turn_in_form_27b",
+            "label": "Present the signed Form 27-B",
+            "response": "Signed? By an actual agent? I need to... yes. The stamp. You've earned it. The Bureau recognizes you. Paperwork fears you now.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [3]
+          },
+          {
+            "id": "ask_itinerary",
+            "label": "Decline to share your itinerary",
+            "response": "Of course! Privacy! I respect that. I'll just note down 'unaccompanied, evasive' for the welcome survey.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the visitor center",
+            "response": "Come back anytime! The cameras out front are just for weather. Weather and tourism.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

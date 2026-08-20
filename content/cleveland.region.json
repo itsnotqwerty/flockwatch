@@ -1,0 +1,23 @@
+[
+  {
+    "id": "cleveland",
+    "name": "Cleveland",
+    "locations": [
+      "cuyahoga_rolling_mill",
+      "lake_erie_freight_arcade",
+      "memorial_park_service_tunnel"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.31,
+      "prosperity": 0.44,
+      "flockPresence": 0.70,
+      "populationMood": "wary"
+    },
+    "economyProfile": {
+      "consumes": ["scrap", "raw_materials"],
+      "produces": ["crafted_goods", "tools"],
+      "wageMultiplier": 1.1
+    }
+  }
+]

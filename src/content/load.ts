@@ -2,17 +2,27 @@
  * Content loader: reads region-namespaced JSON content files from content/
  * (design §4), validates them, and returns the assembled roster.
  */
-import type { CraftingRecipe, Decree, Encounter, Item, Npc, Quest, Region } from "../types.ts";
+import type {
+  CraftingRecipe,
+  Decree,
+  Encounter,
+  Item,
+  Npc,
+  Quest,
+  Region,
+  Sublocation,
+} from "../types.ts";
 import {
+  type ContentIssue,
   validateCrossReferences,
   validateDecrees,
   validateEncounters,
   validateItems,
+  validateLocations,
   validateNpcs,
   validateQuests,
   validateRecipes,
   validateRegions,
-  type ContentIssue,
 } from "./validate.ts";
 
 const CONTENT_DIR = new URL("../../content/", import.meta.url);
@@ -21,6 +31,7 @@ export interface LoadedContent {
   npcs: Npc[];
   quests: Quest[];
   regions: Region[];
+  locations: Sublocation[];
   items: Item[];
   recipes: CraftingRecipe[];
   decrees: Decree[];
@@ -33,6 +44,7 @@ export async function loadContent(): Promise<LoadedContent> {
   const npcs: Npc[] = [];
   const quests: Quest[] = [];
   const regions: Region[] = [];
+  const locations: Sublocation[] = [];
   const items: Item[] = [];
   const recipes: CraftingRecipe[] = [];
   const decrees: Decree[] = [];
@@ -46,7 +58,10 @@ export async function loadContent(): Promise<LoadedContent> {
     try {
       data = JSON.parse(await Deno.readTextFile(url));
     } catch (err) {
-      issues.push({ file: entry.name, message: `invalid JSON: ${(err as Error).message}` });
+      issues.push({
+        file: entry.name,
+        message: `invalid JSON: ${(err as Error).message}`,
+      });
       continue;
     }
     if (entry.name.endsWith(".npcs.json")) {
@@ -58,6 +73,9 @@ export async function loadContent(): Promise<LoadedContent> {
     } else if (entry.name.endsWith(".region.json")) {
       issues.push(...validateRegions(data, entry.name));
       regions.push(...(data as Region[]));
+    } else if (entry.name === "locations.json") {
+      issues.push(...validateLocations(data, entry.name));
+      locations.push(...(data as Sublocation[]));
     } else if (entry.name === "items.json") {
       issues.push(...validateItems(data, entry.name));
       items.push(...(data as Item[]));
@@ -74,9 +92,21 @@ export async function loadContent(): Promise<LoadedContent> {
   }
 
   if (issues.length === 0) {
-    issues.push(...validateCrossReferences(npcs, quests, "content/"));
+    issues.push(
+      ...validateCrossReferences(npcs, quests, regions, locations, "content/"),
+    );
   }
-  return { npcs, quests, regions, items, recipes, decrees, encounters, issues };
+  return {
+    npcs,
+    quests,
+    regions,
+    locations,
+    items,
+    recipes,
+    decrees,
+    encounters,
+    issues,
+  };
 }
 
 /** Load content, throwing on any validation issue. */
@@ -84,15 +114,35 @@ export async function loadContentOrThrow(): Promise<{
   npcs: Npc[];
   quests: Quest[];
   regions: Region[];
+  locations: Sublocation[];
   items: Item[];
   recipes: CraftingRecipe[];
   decrees: Decree[];
   encounters: Encounter[];
 }> {
-  const { npcs, quests, regions, items, recipes, decrees, encounters, issues } = await loadContent();
+  const {
+    npcs,
+    quests,
+    regions,
+    locations,
+    items,
+    recipes,
+    decrees,
+    encounters,
+    issues,
+  } = await loadContent();
   if (issues.length > 0) {
     const detail = issues.map((i) => `  ${i.file}: ${i.message}`).join("\n");
     throw new Error(`Content validation failed:\n${detail}`);
   }
-  return { npcs, quests, regions, items, recipes, decrees, encounters };
+  return {
+    npcs,
+    quests,
+    regions,
+    locations,
+    items,
+    recipes,
+    decrees,
+    encounters,
+  };
 }

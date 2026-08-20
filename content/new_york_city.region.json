@@ -1,0 +1,23 @@
+[
+  {
+    "id": "new_york_city",
+    "name": "New York City",
+    "locations": [
+      "subway_platform_b",
+      "port_authority_lost_property",
+      "midtown_rooftop_relay"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.60,
+      "prosperity": 0.83,
+      "flockPresence": 0.88,
+      "populationMood": "hustling"
+    },
+    "economyProfile": {
+      "consumes": ["luxury_goods", "crafted_goods"],
+      "produces": ["currency", "influence"],
+      "wageMultiplier": 1.5
+    }
+  }
+]

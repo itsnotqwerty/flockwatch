@@ -2,7 +2,7 @@
   {
     "id": "atl_peaches",
     "name": "\"Peaches\"",
-    "role": "Informant, Peachtree Strip",
+    "role": "Informant, Peachtree Broadcast Roof",
     "region": "atlanta",
     "art": "informant",
     "start": "start",
@@ -111,7 +111,7 @@
   {
     "id": "atl_foreman_ray",
     "name": "Foreman Ray",
-    "role": "Flock Installation Crew, Sector 4",
+    "role": "Flock Installation Crew, Sector 4 Motor Pool",
     "region": "atlanta",
     "art": "foreman",
     "start": "start",
@@ -178,7 +178,7 @@
   {
     "id": "atl_lil_peep",
     "name": "Lil Peep-Peep",
-    "role": "Rapper, The Yard",
+    "role": "Rapper, Peachtree Broadcast Roof",
     "region": "atlanta",
     "art": "rapper",
     "start": "start",
@@ -245,7 +245,7 @@
   {
     "id": "atl_garrett",
     "name": "Mr. Garrett Langley",
-    "role": "Founder & CEO, Flock — Here to Listen",
+    "role": "Founder & CEO, Flock — Sector 4 Motor Pool",
     "region": "atlanta",
     "art": "glangley",
     "start": "start",

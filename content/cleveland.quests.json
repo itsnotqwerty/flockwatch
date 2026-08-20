@@ -1,0 +1,114 @@
+[
+  {
+    "id": "q_pigeon_audit",
+    "title": "The Pigeon Audit",
+    "hidden": true,
+    "trigger": { "npc": "groundskeeper", "dialogueOption": "ask_about_birds" },
+    "stages": [
+      { "id": "s1", "objective": "Count the pigeons. All of them." },
+      { "id": "s2", "objective": "Note which pigeons do not eat." },
+      { "id": "s3", "objective": "Report the count to Old Man Martinez." }
+    ],
+    "rewards": { "currency": 50, "items": ["binoculars"] }
+  },
+  {
+    "id": "q_form_27b",
+    "title": "A Matter of Form",
+    "hidden": true,
+    "trigger": { "npc": "clerk", "dialogueOption": "ask_form_27b" },
+    "stages": [
+      { "id": "s1", "objective": "Locate a blank Form 27-B." },
+      {
+        "id": "s2",
+        "objective": "Do not fill it in. Under any circumstances."
+      },
+      {
+        "id": "s3",
+        "objective": "Have it signed by a Flock agent. A real signature, on a form that does not exist."
+      },
+      { "id": "s4", "objective": "Return it to any clerk for collection." }
+    ],
+    "rewards": {
+      "currency": 35,
+      "items": ["form_27b_blank", "bureaucrats_stamp"]
+    }
+  },
+  {
+    "id": "q_flock_orientation",
+    "title": "Orientation (Voluntary)",
+    "hidden": true,
+    "trigger": { "npc": "informant", "dialogueOption": "ask_flock_contracts" },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Attend Flock orientation. Bring your own ladder."
+      },
+      { "id": "s2", "objective": "Accept a camera installation contract." }
+    ],
+    "rewards": { "currency": 75, "items": ["ladder_permit"] }
+  },
+  {
+    "id": "q_cyberhorse",
+    "title": "Serve the Cyberhorse",
+    "hidden": true,
+    "trigger": { "npc": "cyberhorse", "dialogueOption": "ask_quest" },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Recover the INFINITE CARBURETOR from the geese."
+      },
+      {
+        "id": "s2",
+        "objective": "Reset the HOOF-MODEM by counting the pigeons. Loudly."
+      },
+      {
+        "id": "s3",
+        "objective": "Fetch a wet pebble from the center of the duck pond."
+      },
+      { "id": "s4", "objective": "Gaze upon the truth of the Cyberhorse." }
+    ],
+    "rewards": { "currency": 5, "items": ["sci_fi_sunglasses"] }
+  },
+  {
+    "id": "q_boomer_errand",
+    "title": "An Errand of Civic Pride",
+    "hidden": true,
+    "trigger": { "npc": "boomer", "dialogueOption": "ask_errand" },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Take Boomer Dave's Form 12-F to any clerk for processing."
+      },
+      {
+        "id": "s2",
+        "objective": "The form needs a routing cover sheet. An informant can help. Quietly."
+      },
+      {
+        "id": "s3",
+        "objective": "Return the fully-processed form to Boomer Dave."
+      }
+    ],
+    "rewards": { "currency": 40, "items": ["lawn_chair_cushion"] }
+  },
+  {
+    "id": "q_cyberhorse2",
+    "title": "The Honk Dampener",
+    "hidden": true,
+    "trigger": { "npc": "cyberhorse", "dialogueOption": "ask_quest_again" },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Find a HONK DAMPENER. The geese grow bold. Start with Raymond, on Subway Platform B in New York City."
+      },
+      {
+        "id": "s2",
+        "objective": "Raymond traded it to a shrimpcaster in New Orleans. Retrieve it."
+      },
+      {
+        "id": "s3",
+        "objective": "Deliver the HONK DAMPENER to the Cyberhorse."
+      }
+    ],
+    "rewards": { "currency": 15, "items": ["golden_horseshoe"] }
+  }
+]

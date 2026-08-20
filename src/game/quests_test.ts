@@ -3,7 +3,10 @@ import { advanceStage, objectiveText, visibleQuests } from "./quests.ts";
 import { quests } from "./fixtures.ts";
 import type { Player } from "../types.ts";
 
-function playerWith(questId: string, status: "accepted" | "completed" | "failed"): Player {
+function playerWith(
+  questId: string,
+  status: "accepted" | "completed" | "failed",
+): Player {
   return {
     id: "test",
     name: "Tester",
@@ -11,8 +14,15 @@ function playerWith(questId: string, status: "accepted" | "completed" | "failed"
     inventory: [],
     scrap: {},
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [{ questId, status, stageIndex: 0 }],
+    flags: [],
+    intel: {},
+    restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
   };
 }
 
@@ -27,14 +37,23 @@ Deno.test("undiscovered quests never appear in the log", () => {
 });
 
 Deno.test("objectiveText returns stage objective for active quests", () => {
-  const [entry] = visibleQuests(playerWith("q_pigeon_audit", "accepted"), quests);
+  const [entry] = visibleQuests(
+    playerWith("q_pigeon_audit", "accepted"),
+    quests,
+  );
   assertEquals(objectiveText(entry), "Count the pigeons. All of them.");
 });
 
 Deno.test("objectiveText reports completed/failed status", () => {
-  const [done] = visibleQuests(playerWith("q_pigeon_audit", "completed"), quests);
+  const [done] = visibleQuests(
+    playerWith("q_pigeon_audit", "completed"),
+    quests,
+  );
   assert(objectiveText(done).startsWith("Completed"));
-  const [failed] = visibleQuests(playerWith("q_pigeon_audit", "failed"), quests);
+  const [failed] = visibleQuests(
+    playerWith("q_pigeon_audit", "failed"),
+    quests,
+  );
   assert(objectiveText(failed).startsWith("Failed"));
 });
 

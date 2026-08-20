@@ -6,15 +6,19 @@
  */
 import { loadContent } from "../src/content/load.ts";
 
-const { npcs, quests, regions, items, recipes, issues } = await loadContent();
+const { npcs, quests, regions, locations, items, recipes, issues } =
+  await loadContent();
 
 if (issues.length > 0) {
   console.error("Content validation failed:");
-  for (const issue of issues) console.error(`  ${issue.file}: ${issue.message}`);
+  for (const issue of issues) {
+    console.error(`  ${issue.file}: ${issue.message}`);
+  }
   Deno.exit(1);
 }
 
 console.log(
   `Content OK: ${npcs.length} NPCs, ${quests.length} quests, ${regions.length} regions, ` +
+    `${locations.length} sublocations, ` +
     `${items.length} items, ${recipes.length} recipes.`,
 );

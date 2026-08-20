@@ -1,0 +1,788 @@
+[
+  {
+    "id": "cuyahoga_rolling_mill",
+    "regionId": "cleveland",
+    "name": "Cuyahoga Rolling Mill",
+    "description": "The furnaces are cold. The compliance lights are not.",
+    "interactions": [
+      {
+        "id": "mill_workers",
+        "label": "Question the remaining shift",
+        "description": "Someone still punches the clock here.",
+        "kind": "npcs",
+        "npcIds": ["informant"]
+      },
+      {
+        "id": "mill_salvage",
+        "label": "Salvage the idle line",
+        "description": "Recover useful metal without becoming part of the inventory.",
+        "kind": "activity",
+        "result": "A dead control cabinet yields wiring and a circuit board. The mill records the loss as efficiency.",
+        "effect": {
+          "scrap": { "wiring": 2, "circuit_board": 1 },
+          "suspicion": 2
+        },
+        "once": true
+      },
+      {
+        "id": "mill_workbench",
+        "label": "Use the fabrication bench",
+        "description": "Heavy tools, heavier licensing requirements.",
+        "kind": "workbench"
+      },
+      {
+        "id": "mill_cameras",
+        "label": "Inspect the smokestack cameras",
+        "description": "Review installation contracts and active units.",
+        "kind": "cameras"
+      },
+      {
+        "id": "mill_patrol",
+        "label": "Walk the restricted floor",
+        "description": "Invite an industrial patrol to notice you.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "lake_erie_freight_arcade",
+    "regionId": "cleveland",
+    "name": "Lake Erie Freight Arcade",
+    "description": "Cargo changes hands beneath departure boards that list only delays.",
+    "interactions": [
+      {
+        "id": "freight_clerk",
+        "label": "Approach the freight counter",
+        "description": "Forms, rumors, and freight classifications are available.",
+        "kind": "npcs",
+        "npcIds": ["clerk"]
+      },
+      {
+        "id": "cleveland_market",
+        "label": "Open the freight market",
+        "description": "Trade goods on Cleveland's regional exchange.",
+        "kind": "market"
+      },
+      {
+        "id": "cleveland_board",
+        "label": "Read the freight notices",
+        "description": "Read or leave short posts for other Cleveland players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "freight_manifests",
+        "label": "Inspect freight manifests",
+        "description": "Look for cargo the Agencies mislabeled deliberately.",
+        "kind": "activity",
+        "result": "Three manifests disagree about the same sealed crate. The disagreement is useful.",
+        "effect": { "intel": 1, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "freight_courier",
+        "label": "Retain an unofficial courier",
+        "description": "Pay someone who knows which checkpoints are decorative.",
+        "kind": "activity",
+        "result": "The courier accepts five credits and gives you a timetable printed before the route existed.",
+        "effect": { "currency": -5, "intel": 1 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "memorial_park_service_tunnel",
+    "regionId": "cleveland",
+    "name": "Memorial Park Service Tunnel",
+    "description": "A maintenance corridor runs beneath the duck pond. Hoofprints continue into the concrete.",
+    "interactions": [
+      {
+        "id": "park_regulars",
+        "label": "Speak with the park regulars",
+        "description": "The groundskeeper, the mascot, and the Cyberhorse are present.",
+        "kind": "npcs",
+        "npcIds": ["groundskeeper", "boomer", "cyberhorse"]
+      },
+      {
+        "id": "count_pigeons",
+        "label": "Count the pigeons",
+        "description": "Count all of them, including the ones that do not eat.",
+        "kind": "activity",
+        "result": "The count changes whenever you write it down. You keep the least impossible number.",
+        "effect": { "intel": 1 },
+        "once": true
+      },
+      {
+        "id": "dredge_pond",
+        "label": "Dredge beneath the grate",
+        "description": "Reach into municipal water with institutional confidence.",
+        "kind": "activity",
+        "result": "You recover a wet lens and decide not to ask what it saw.",
+        "effect": { "scrap": { "lens": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "pond_cameras",
+        "label": "Inspect wildlife monitoring",
+        "description": "The ducks have a surveillance ledger.",
+        "kind": "cameras"
+      },
+      {
+        "id": "territorial_geese",
+        "label": "Enter goose territory",
+        "description": "Challenge whatever currently controls the pond.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "sector_4_motor_pool",
+    "regionId": "atlanta",
+    "name": "Sector 4 Motor Pool",
+    "description": "White installation vans idle beneath a sign reading COMMUNITY PARTNERSHIP.",
+    "interactions": [
+      {
+        "id": "motor_pool_staff",
+        "label": "Report to the motor-pool office",
+        "description": "Foreman Ray and executive supervision are available.",
+        "kind": "npcs",
+        "npcIds": ["atl_foreman_ray", "atl_garrett"]
+      },
+      {
+        "id": "motor_pool_cameras",
+        "label": "Review installation contracts",
+        "description": "Take wages, make coverage, ask no questions.",
+        "kind": "cameras"
+      },
+      {
+        "id": "motor_pool_workbench",
+        "label": "Use the electrical bench",
+        "description": "The tools are company property until they disappear.",
+        "kind": "workbench"
+      },
+      {
+        "id": "search_vans",
+        "label": "Search the installation vans",
+        "description": "Look for the paperwork that vanished from Ray's timesheets.",
+        "kind": "activity",
+        "result": "A permit sits beneath a coil of cable. Its signature predates the form.",
+        "effect": { "item": "ladder_permit", "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "dispatch_fieldwork",
+        "label": "Infiltrate dispatch",
+        "description": "Listen to the crews before the routes are published.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "cul_de_sac_heights_south",
+    "regionId": "atlanta",
+    "name": "Cul-de-Sac Heights South",
+    "description": "Every lawn is compliant. Every doorbell has an opinion.",
+    "interactions": [
+      {
+        "id": "hoa_resident",
+        "label": "Visit Boomer Hank",
+        "description": "He has notes from the last neighborhood-watch meeting.",
+        "kind": "npcs",
+        "npcIds": ["atl_boomer_hank"]
+      },
+      {
+        "id": "atlanta_board",
+        "label": "Use the HOA notice board",
+        "description": "Read or leave short posts for other Atlanta players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "watch_meeting",
+        "label": "Attend neighborhood watch",
+        "description": "Sit visibly and become less interesting for a while.",
+        "kind": "activity",
+        "result": "The minutes list you as PRESENT, COOPERATIVE, and POORLY HYDRATED.",
+        "effect": { "suspicion": -5 },
+        "once": true
+      },
+      {
+        "id": "garage_sale",
+        "label": "Browse the sanctioned garage sale",
+        "description": "Trade goods beneath the HOA's watchful bunting.",
+        "kind": "market"
+      },
+      {
+        "id": "tail_hoa",
+        "label": "Tail the HOA patrol",
+        "description": "Learn who reports whom and in what order.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "peachtree_broadcast_roof",
+    "regionId": "atlanta",
+    "name": "Peachtree Broadcast Roof",
+    "description": "A citywide information mast hums above a rooftop garden nobody waters.",
+    "interactions": [
+      {
+        "id": "roof_contacts",
+        "label": "Meet the rooftop contacts",
+        "description": "Peaches and Lil Peep-Peep are comparing frequencies.",
+        "kind": "npcs",
+        "npcIds": ["atl_peaches", "atl_lil_peep"]
+      },
+      {
+        "id": "hijack_display",
+        "label": "Hijack the information display",
+        "description": "Replace one approved sentence with another.",
+        "kind": "activity",
+        "result": "For eleven seconds, every sign reads THE BIRDS HAVE SUPERVISORS.",
+        "effect": { "intel": 1, "suspicion": 4 },
+        "once": true
+      },
+      {
+        "id": "roof_intercept",
+        "label": "Intercept headquarters traffic",
+        "description": "The tower broadcasts confidence without encryption.",
+        "kind": "espionage"
+      },
+      {
+        "id": "roof_cameras",
+        "label": "Inspect the rooftop relay",
+        "description": "Review high-exposure cameras and their contracts.",
+        "kind": "cameras"
+      },
+      {
+        "id": "roof_security",
+        "label": "Cross the security line",
+        "description": "Invite communications security to object.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "storm_drain_outfall_9",
+    "regionId": "new_orleans",
+    "name": "Storm Drain Outfall 9",
+    "description": "The water goes out. The listening equipment faces inward.",
+    "interactions": [
+      {
+        "id": "outfall_contacts",
+        "label": "Speak beneath the outfall",
+        "description": "Vern and Saltine both insist they arrived first.",
+        "kind": "npcs",
+        "npcIds": ["gulf_vern", "gulf_saltine"]
+      },
+      {
+        "id": "runoff_salvage",
+        "label": "Search the runoff traps",
+        "description": "Recover electronics filtered from the city's mistakes.",
+        "kind": "activity",
+        "result": "The trap contains wiring, a circuit board, and one municipal apology.",
+        "effect": {
+          "scrap": { "wiring": 1, "circuit_board": 1 },
+          "suspicion": 2
+        },
+        "once": true
+      },
+      {
+        "id": "buried_comms",
+        "label": "Tap the buried communications",
+        "description": "Follow a cable that does not appear on city plans.",
+        "kind": "espionage"
+      },
+      {
+        "id": "flood_cameras",
+        "label": "Inspect flood monitoring",
+        "description": "Review cameras trained on the wrong side of the levee.",
+        "kind": "cameras"
+      },
+      {
+        "id": "outfall_trouble",
+        "label": "Enter the service culvert",
+        "description": "Meet inspectors, wildlife, or both.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "shrimp_net_chapel",
+    "regionId": "new_orleans",
+    "name": "The Shrimp Net Chapel",
+    "description": "Votive lights glow behind nets repaired with surveillance wire.",
+    "interactions": [
+      {
+        "id": "chapel_artist",
+        "label": "Speak with Odette Marchand",
+        "description": "Her murals contain more serial numbers than saints.",
+        "kind": "npcs",
+        "npcIds": ["gulf_odette"]
+      },
+      {
+        "id": "new_orleans_board",
+        "label": "Read the parish notices",
+        "description": "Read or leave short posts for other New Orleans players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "leave_offering",
+        "label": "Leave a small offering",
+        "description": "Pay for the privilege of looking harmless.",
+        "kind": "activity",
+        "result": "A candle is lit in your name, then filed under an alias.",
+        "effect": { "currency": -3, "suspicion": -4 },
+        "once": true
+      },
+      {
+        "id": "net_bench",
+        "label": "Use the net-mending bench",
+        "description": "Craft tools from wire, knots, and regulatory ambiguity.",
+        "kind": "workbench"
+      },
+      {
+        "id": "read_murals",
+        "label": "Examine the chapel murals",
+        "description": "Trace recurring shapes that resemble camera routes.",
+        "kind": "activity",
+        "result": "The painted halos align with three unlisted relay sites.",
+        "effect": { "intel": 2 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "catfish_acres",
+    "regionId": "new_orleans",
+    "name": "Catfish Acres",
+    "description": "Houseboats and trailers share one address and several radio frequencies.",
+    "interactions": [
+      {
+        "id": "acres_residents",
+        "label": "Visit the residents",
+        "description": "Boomer Earl and Shrimpcaster LaRue are holding court.",
+        "kind": "npcs",
+        "npcIds": ["gulf_boomer_earl", "gulf_larue"]
+      },
+      {
+        "id": "search_sheds",
+        "label": "Search the abandoned sheds",
+        "description": "Look for marine hardware with terrestrial applications.",
+        "kind": "activity",
+        "result": "A corroded housing comes loose after only one tetanus-related thought.",
+        "effect": { "scrap": { "housing": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "acres_cameras",
+        "label": "Inspect neighborhood cameras",
+        "description": "Review mailbox units and subsidized installations.",
+        "kind": "cameras"
+      },
+      {
+        "id": "fish_fry",
+        "label": "Attend the fish fry",
+        "description": "Eat publicly. Suspicious people rarely bring napkins.",
+        "kind": "activity",
+        "result": "You leave fed, documented, and temporarily ordinary.",
+        "effect": { "currency": -4, "suspicion": -6 },
+        "once": true
+      },
+      {
+        "id": "watch_radio",
+        "label": "Monitor the watch radio",
+        "description": "Listen for your own description.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "municipal_visitor_center",
+    "regionId": "seattle",
+    "name": "Municipal Visitor Center",
+    "description": "Coffee, maps, and compulsory orientation are served from the same counter.",
+    "interactions": [
+      {
+        "id": "visitor_inspector",
+        "label": "Speak with Barista-Inspector Cole",
+        "description": "Order a stamp, a coffee, or an explanation.",
+        "kind": "npcs",
+        "npcIds": ["pnw_cole"]
+      },
+      {
+        "id": "seattle_board",
+        "label": "Use the visitor bulletin board",
+        "description": "Read or leave short posts for other Seattle players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "document_stamp",
+        "label": "Request an official stamp",
+        "description": "Present paperwork with confidence exceeding its validity.",
+        "kind": "activity",
+        "result": "Cole stamps the document without reading it. Professional courtesy is alive.",
+        "effect": { "suspicion": -2 },
+        "once": true
+      },
+      {
+        "id": "lost_and_found",
+        "label": "Search lost and found",
+        "description": "Inspect objects the city has classified as unclaimed.",
+        "kind": "activity",
+        "result": "You claim a pair of binoculars last seen watching their owner.",
+        "effect": { "item": "binoculars" },
+        "once": true
+      },
+      {
+        "id": "inspection_coffee",
+        "label": "Buy inspection coffee",
+        "description": "The receipt certifies that you were somewhere ordinary.",
+        "kind": "activity",
+        "result": "The coffee is severe. Your paper trail is comforting.",
+        "effect": { "currency": -3, "suspicion": -3 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "cascade_rainworks",
+    "regionId": "seattle",
+    "name": "Cascade Rainworks",
+    "description": "Stormwater is measured, redirected, and asked to accept the privacy policy.",
+    "interactions": [
+      {
+        "id": "rainworks_engineer",
+        "label": "Consult Harbor Engineer Priya",
+        "description": "She knows which pipes carry water and which carry data.",
+        "kind": "npcs",
+        "npcIds": ["pnw_priya"]
+      },
+      {
+        "id": "collection_grates",
+        "label": "Search the collection grates",
+        "description": "Recover raw material before Public Works inventories it.",
+        "kind": "activity",
+        "result": "A grate yields wiring and a lens polished by municipal rain.",
+        "effect": { "scrap": { "wiring": 1, "lens": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "rainworks_bench",
+        "label": "Use the maintenance bench",
+        "description": "Craft beneath a diagram labeled FLOW OF RESPONSIBILITY.",
+        "kind": "workbench"
+      },
+      {
+        "id": "watershed_cameras",
+        "label": "Inspect watershed cameras",
+        "description": "Review installations that allegedly watch salmon.",
+        "kind": "cameras"
+      },
+      {
+        "id": "environmental_reports",
+        "label": "Audit environmental reports",
+        "description": "Compare public rainfall with classified rainfall.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "evergreen_switchyard",
+    "regionId": "seattle",
+    "name": "Evergreen Switchyard",
+    "description": "Freight cars disappear into mist and reappear with better paperwork.",
+    "interactions": [
+      {
+        "id": "switchyard_contact",
+        "label": "Meet Moss",
+        "description": "Courier work is available to people who did not ask.",
+        "kind": "npcs",
+        "npcIds": ["pnw_moss"]
+      },
+      {
+        "id": "freight_car_salvage",
+        "label": "Search an idle freight car",
+        "description": "Recover something before its destination is invented.",
+        "kind": "activity",
+        "result": "A crate marked MOSS CONTROL contains a useful circuit board.",
+        "effect": { "scrap": { "circuit_board": 1 }, "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "rail_dispatch",
+        "label": "Intercept rail dispatch",
+        "description": "Listen for trains that officially never arrived.",
+        "kind": "espionage"
+      },
+      {
+        "id": "switchyard_patrol",
+        "label": "Cross the active tracks",
+        "description": "Risk a patrol in the rain.",
+        "kind": "encounter"
+      },
+      {
+        "id": "stowaway_route",
+        "label": "Study the stowaway route",
+        "description": "Learn the inexpensive way out of Seattle.",
+        "kind": "activity",
+        "result": "Moss marks a route in disappearing ink. You memorize it before policy changes.",
+        "effect": { "intel": 1 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "office_of_zoning_compliance",
+    "regionId": "silicon_valley",
+    "name": "Office of Zoning Compliance",
+    "description": "Every window is smart glass. None of it trusts you.",
+    "interactions": [
+      {
+        "id": "zoning_clerk",
+        "label": "Approach Clerk Miriam",
+        "description": "Request permits, denials, and denials of prior denials.",
+        "kind": "npcs",
+        "npcIds": ["sv_clerk_miriam"]
+      },
+      {
+        "id": "silicon_valley_board",
+        "label": "Use the civic-feedback terminal",
+        "description": "Read or leave short posts for other Silicon Valley players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "camera_variance",
+        "label": "Apply for a camera variance",
+        "description": "Ask permission to place what is already there.",
+        "kind": "activity",
+        "result": "Your variance is approved retroactively and denied prospectively.",
+        "effect": { "intel": 1 },
+        "once": true
+      },
+      {
+        "id": "public_records",
+        "label": "Search public ownership records",
+        "description": "Discover which shell company owns the public sidewalk.",
+        "kind": "espionage"
+      },
+      {
+        "id": "contradictory_forms",
+        "label": "Submit contradictory forms",
+        "description": "Overwhelm your file with mutually exclusive compliance.",
+        "kind": "activity",
+        "result": "The system cannot classify you without admitting an error. It chooses delay.",
+        "effect": { "suspicion": -5 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "perpetual_motion_capital",
+    "regionId": "silicon_valley",
+    "name": "Perpetual Motion Capital Lobby",
+    "description": "The valuation rises every time the revolving door completes a turn.",
+    "interactions": [
+      {
+        "id": "capital_contacts",
+        "label": "Speak with the lobby regulars",
+        "description": "Brad and Boomer Greg are between liquidity events.",
+        "kind": "npcs",
+        "npcIds": ["sv_brad", "sv_boomer_greg"]
+      },
+      {
+        "id": "market_projections",
+        "label": "Review market projections",
+        "description": "Trade using charts that become accurate after publication.",
+        "kind": "market"
+      },
+      {
+        "id": "volatile_scheme",
+        "label": "Enter a volatile short-term scheme",
+        "description": "Invest ten credits in a company with no present tense.",
+        "kind": "activity",
+        "result": "The position exits itself. You receive twelve credits and a founder's apology thread.",
+        "effect": { "currency": 2, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "tail_founders",
+        "label": "Tail the founders",
+        "description": "Follow the fleece vests toward undisclosed material information.",
+        "kind": "espionage"
+      },
+      {
+        "id": "lobby_security",
+        "label": "Enter the partner corridor",
+        "description": "Test how private the private market is.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "e_waste_reclamation_campus",
+    "regionId": "silicon_valley",
+    "name": "E-Waste Reclamation Campus",
+    "description": "Yesterday's future is sorted into profitable bins.",
+    "interactions": [
+      {
+        "id": "reclamation_contacts",
+        "label": "Speak with the perimeter staff",
+        "description": "Ping and Groundskeeper Walt know what the campus discards.",
+        "kind": "npcs",
+        "npcIds": ["sv_ping", "sv_groundskeeper_walt"]
+      },
+      {
+        "id": "e_waste_salvage",
+        "label": "Salvage discarded electronics",
+        "description": "Recover components before the recycling ledger does.",
+        "kind": "activity",
+        "result": "A prototype becomes two circuit boards and several nondisclosure obligations.",
+        "effect": { "scrap": { "circuit_board": 2 }, "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "precision_bench",
+        "label": "Use the precision workbench",
+        "description": "Craft with tools calibrated to investor expectations.",
+        "kind": "workbench"
+      },
+      {
+        "id": "inventory_cameras",
+        "label": "Inspect inventory cameras",
+        "description": "Review automated installations and takedown opportunities.",
+        "kind": "cameras"
+      },
+      {
+        "id": "security_drone",
+        "label": "Enter the autonomous yard",
+        "description": "Challenge a security system still in public beta.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "subway_platform_b",
+    "regionId": "new_york_city",
+    "name": "Subway Platform B",
+    "description": "No train is scheduled. Everyone is waiting anyway.",
+    "interactions": [
+      {
+        "id": "platform_contact",
+        "label": "Speak with Raymond",
+        "description": "He knows where lost objects go before Lost Property does.",
+        "kind": "npcs",
+        "npcIds": ["nyc_raymond"]
+      },
+      {
+        "id": "search_benches",
+        "label": "Search beneath the benches",
+        "description": "Recover what commuters abandoned deliberately.",
+        "kind": "activity",
+        "result": "A lens rolls from beneath a bench. It is warm and recently interested.",
+        "effect": { "scrap": { "lens": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "tail_transit",
+        "label": "Tail a transit officer",
+        "description": "Follow the person pretending not to watch the platform.",
+        "kind": "espionage"
+      },
+      {
+        "id": "platform_cameras",
+        "label": "Inspect platform surveillance",
+        "description": "Review cameras with excellent views of delays.",
+        "kind": "cameras"
+      },
+      {
+        "id": "subway_trouble",
+        "label": "Enter the service passage",
+        "description": "Risk a patrol or a transit-specific inconvenience.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "port_authority_lost_property",
+    "regionId": "new_york_city",
+    "name": "Port Authority Lost Property Office",
+    "description": "Everything arrives here eventually, including explanations.",
+    "interactions": [
+      {
+        "id": "lost_property_contacts",
+        "label": "Question the office regulars",
+        "description": "Sable and Marin Voss are evaluating unclaimed culture.",
+        "kind": "npcs",
+        "npcIds": ["nyc_sable", "nyc_marin"]
+      },
+      {
+        "id": "new_york_city_board",
+        "label": "Read the public notices",
+        "description": "Read or leave short posts for other New York City players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "lost_property_market",
+        "label": "Browse the property auction",
+        "description": "Trade items whose owners failed to complete Form L-0ST.",
+        "kind": "market"
+      },
+      {
+        "id": "file_claim",
+        "label": "File a speculative claim",
+        "description": "Describe an object vaguely enough to satisfy policy.",
+        "kind": "activity",
+        "result": "The clerk gives you a survey tripod and asks you to leave before ownership clarifies.",
+        "effect": { "item": "survey_tripod", "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "shipping_records",
+        "label": "Examine interstate records",
+        "description": "Trace packages that crossed state lines without moving.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "midtown_rooftop_relay",
+    "regionId": "new_york_city",
+    "name": "Midtown Rooftop Relay",
+    "description": "The skyline blinks in protocols tourists cannot see.",
+    "interactions": [
+      {
+        "id": "rooftop_finance",
+        "label": "Consult Chad Brennan",
+        "description": "He prices surveillance as an emerging asset class.",
+        "kind": "npcs",
+        "npcIds": ["nyc_chad"]
+      },
+      {
+        "id": "midtown_cameras",
+        "label": "Inspect the rooftop relay",
+        "description": "Review high-value camera contracts and active units.",
+        "kind": "cameras"
+      },
+      {
+        "id": "encrypted_traffic",
+        "label": "Intercept encrypted traffic",
+        "description": "Listen to the part of the city that never sleeps because it is polling.",
+        "kind": "espionage"
+      },
+      {
+        "id": "deploy_jammer",
+        "label": "Deploy a borrowed jammer",
+        "description": "Create one brief and expensive blind spot.",
+        "kind": "activity",
+        "result": "The relay misses seven seconds and files all seven as suspicious weather.",
+        "effect": { "suspicion": -3, "intel": 1 },
+        "once": true
+      },
+      {
+        "id": "rooftop_response",
+        "label": "Cross the response perimeter",
+        "description": "Invite Midtown surveillance response to introduce itself.",
+        "kind": "encounter"
+      }
+    ]
+  }
+]

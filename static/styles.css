@@ -11,7 +11,9 @@
   --line: #5c5c58;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -101,8 +103,39 @@ main {
 main > h2,
 main > p,
 main > ul.npc-list,
-main > form:last-child {
+main > form:last-child,
+main > .character-bar {
   grid-column: 1 / -1;
+}
+
+.character-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0.75rem;
+  background: #30302e;
+  border: 1px solid var(--line);
+}
+
+.character-bar form {
+  margin: 0;
+}
+
+.live-status {
+  margin-left: auto;
+  color: var(--surveillance);
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+main > p.eyebrow {
+  margin: 0;
+  color: var(--surveillance);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* Every board renders as a panel card. */
@@ -201,7 +234,9 @@ h2 {
   margin: 0;
 }
 
-a { color: var(--surveillance); }
+a {
+  color: var(--surveillance);
+}
 
 /* grillsay dialogue blocks */
 figure.dialogue {
@@ -312,4 +347,75 @@ ul.quest-log li {
 }
 
 /* generic forms stack with breathing room */
-main form { margin: 0.5rem 0; }
+main form {
+  margin: 0.5rem 0;
+}
+
+input,
+select,
+textarea {
+  background: #30302e;
+  border: 1px solid var(--muted);
+  color: var(--ink);
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+}
+
+.account-gate input,
+.multiplayer input {
+  display: block;
+  width: min(100%, 24rem);
+  margin: 0.35rem 0 0.65rem;
+}
+
+.sharing-controls,
+.presence-list li > form,
+.quest-log form {
+  display: inline-block;
+  margin: 0.35rem 0.35rem 0 0;
+}
+
+.sharing-controls form {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.operation-log {
+  max-height: 14rem;
+  overflow-y: auto;
+}
+
+.interaction-list li > span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.message-board textarea {
+  display: block;
+  width: 100%;
+  min-height: 5rem;
+  margin: 0.35rem 0 0.65rem;
+  padding: 0.6rem;
+  resize: vertical;
+  background: #30302e;
+  border: 1px solid var(--muted);
+  color: var(--ink);
+  font: inherit;
+}
+
+.message-list p {
+  margin: 0 0 0.2rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.message-list small {
+  color: var(--muted);
+}
+
+.flag-note {
+  color: var(--stamp);
+}

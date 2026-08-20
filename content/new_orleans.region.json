@@ -1,0 +1,23 @@
+[
+  {
+    "id": "new_orleans",
+    "name": "New Orleans",
+    "locations": [
+      "storm_drain_outfall_9",
+      "shrimp_net_chapel",
+      "catfish_acres"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.20,
+      "prosperity": 0.71,
+      "flockPresence": 0.85,
+      "populationMood": "compliant"
+    },
+    "economyProfile": {
+      "consumes": ["scrap"],
+      "produces": ["currency", "luxury_goods"],
+      "wageMultiplier": 1.3
+    }
+  }
+]

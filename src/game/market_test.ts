@@ -25,11 +25,15 @@ function player(over: Partial<Player> = {}): Player {
     inventory: [],
     scrap: {},
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [],
     flags: [],
     intel: {},
     restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
     ...over,
   };
 }
@@ -42,7 +46,7 @@ Deno.test("createListing removes the item from inventory (atomic)", () => {
   assertEquals(result.value.seller.inventory, []);
   assertEquals(result.value.listing.price, 40);
   assertEquals(result.value.listing.itemId, "binoculars");
-  assertEquals(result.value.listing.regionId, "rust_belt"); // regional board
+  assertEquals(result.value.listing.regionId, "cleveland"); // regional board
 });
 
 Deno.test("createListing rejects untradeable, unheld, and bad-price listings", () => {
@@ -79,7 +83,12 @@ Deno.test("buyListing applies decree multipliers and flag surcharges", () => {
     expiresAt: "2027-01-01T00:00:00Z",
   };
   // Clean buyer: pays the decreed price (60), seller receives 60.
-  const clean = buyListing(player({ id: "b1", currency: 100 }), value.seller, value.listing, [decree]);
+  const clean = buyListing(
+    player({ id: "b1", currency: 100 }),
+    value.seller,
+    value.listing,
+    [decree],
+  );
   assert(clean.ok);
   assertEquals(clean.value.paid, 60);
   assertEquals(clean.value.seller.currency, 60);
@@ -87,7 +96,13 @@ Deno.test("buyListing applies decree multipliers and flag surcharges", () => {
   const flagged = player({
     id: "b2",
     currency: 100,
-    flags: [{ id: "f1", region: "rust_belt", action: "tail", reason: "made", flaggedAt: "" }],
+    flags: [{
+      id: "f1",
+      region: "cleveland",
+      action: "tail",
+      reason: "made",
+      flaggedAt: "",
+    }],
   });
   const dirty = buyListing(flagged, value.seller, value.listing, [decree]);
   assert(dirty.ok);
@@ -100,7 +115,9 @@ Deno.test("buyListing rejects self-purchase and insufficient funds", () => {
   const { value } = createListing(seller, binoculars, 50);
   const listing = value.listing;
   assert(!buyListing(value.seller, value.seller, listing).ok); // self
-  assert(!buyListing(player({ id: "b2", currency: 10 }), value.seller, listing).ok); // poor
+  assert(
+    !buyListing(player({ id: "b2", currency: 10 }), value.seller, listing).ok,
+  ); // poor
 });
 
 Deno.test("cancelListing returns the item to the seller only", () => {

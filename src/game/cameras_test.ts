@@ -18,16 +18,28 @@ function freshPlayer(): Player {
     inventory: [],
     scrap: {},
     suspicion: 0,
-    region: "rust_belt",
+    region: "cleveland",
+    location: "cuyahoga_rolling_mill",
     quests: [],
+    flags: [],
+    intel: {},
+    restricted: [],
+    completedLocationActions: [],
+    trustedPlayerIds: [],
+    lastSeenAt: "",
   };
 }
 
 Deno.test("contract → install pays wages and activates the camera", () => {
   resetCameraCounter();
-  const contract = createContract("rust_belt", 100);
+  const contract = createContract("cleveland", 100);
   assertEquals(contract.status, "contracted");
-  const { camera, player, wages } = installCamera(contract, freshPlayer(), undefined, 1.1);
+  const { camera, player, wages } = installCamera(
+    contract,
+    freshPlayer(),
+    undefined,
+    1.1,
+  );
   assertEquals(camera.status, "active");
   assertEquals(camera.installedBy, "p1");
   assertEquals(wages, 110); // 100 * 1.1 multiplier
@@ -35,7 +47,10 @@ Deno.test("contract → install pays wages and activates the camera", () => {
 });
 
 Deno.test("installing a non-contracted camera is a no-op", () => {
-  const cam = { ...createContract("rust_belt", 100), status: "active" as const };
+  const cam = {
+    ...createContract("cleveland", 100),
+    status: "active" as const,
+  };
   const player = freshPlayer();
   const { player: after, wages } = installCamera(cam, player, undefined);
   assertEquals(wages, 0);
@@ -43,8 +58,16 @@ Deno.test("installing a non-contracted camera is a no-op", () => {
 });
 
 Deno.test("dismantling yields scrap and accrues suspicion", () => {
-  const active = { ...createContract("rust_belt", 50), status: "active" as const };
-  const { camera, player } = dismantleCamera(active, freshPlayer(), undefined, 0.5);
+  const active = {
+    ...createContract("cleveland", 50),
+    status: "active" as const,
+  };
+  const { camera, player } = dismantleCamera(
+    active,
+    freshPlayer(),
+    undefined,
+    0.5,
+  );
   assertEquals(camera.status, "dismantled");
   assertEquals(totalScrap(player), active.scrapYield.length);
   assertEquals(player.scrap.lens, 1);
@@ -52,9 +75,14 @@ Deno.test("dismantling yields scrap and accrues suspicion", () => {
 });
 
 Deno.test("dismantling a non-active camera is a no-op", () => {
-  const contracted = createContract("rust_belt", 50);
+  const contracted = createContract("cleveland", 50);
   const player = freshPlayer();
-  const { camera, player: after } = dismantleCamera(contracted, player, undefined, 0.5);
+  const { camera, player: after } = dismantleCamera(
+    contracted,
+    player,
+    undefined,
+    0.5,
+  );
   assertEquals(camera.status, "contracted");
   assertEquals(totalScrap(after), 0);
   assertEquals(after.suspicion, 0);
@@ -66,12 +94,12 @@ Deno.test("coverage scales suspicion", () => {
 
 Deno.test("coverageLevel reflects active over total sites", () => {
   const cams = [
-    { ...createContract("rust_belt", 1), status: "active" as const },
-    { ...createContract("rust_belt", 1), status: "active" as const },
-    { ...createContract("rust_belt", 1), status: "dismantled" as const },
+    { ...createContract("cleveland", 1), status: "active" as const },
+    { ...createContract("cleveland", 1), status: "active" as const },
+    { ...createContract("cleveland", 1), status: "dismantled" as const },
     { ...createContract("other", 1), status: "active" as const },
   ];
   // 2 active of 3 regional sites (contracted sites excluded).
-  assertEquals(coverageLevel(cams, "rust_belt"), 2 / 3);
+  assertEquals(coverageLevel(cams, "cleveland"), 2 / 3);
   assertEquals(coverageLevel([], "nowhere"), 0);
 });
