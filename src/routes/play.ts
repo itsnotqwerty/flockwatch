@@ -2049,9 +2049,10 @@ async function respondWithNode(
   }
 
   if (nextNodeId === null) {
+    parts.push(renderReset(npcId));
     parts.push(postButton("home", "Walk away"));
   } else if (nextNodeId === "reset") {
-    // Generic reset control: offer to start the conversation over (and a way out).
+    // Authored reset sentinel: offer to start over and a way out.
     parts.push(renderReset(npcId));
     parts.push(postButton("home", "Walk away"));
   } else {
@@ -2065,6 +2066,9 @@ async function respondWithNode(
     parts.push(renderDialogueBlock(rendered, npc.name));
     const options = availableOptions(npc, nextNodeId, player);
     parts.push(renderDialogueOptions(npcId, nextNodeId, options));
+    // Once a choice has been made, the player can restart without having to
+    // find an authored reset branch in this NPC's tree.
+    if (block) parts.push(renderReset(npcId));
   }
 
   response.type = "text/html";
