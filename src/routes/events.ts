@@ -16,6 +16,92 @@ function sameOrigin(requestUrl: URL, origin: string | null): boolean {
   }
 }
 
+function attachRegionalSocket(
+  socket: WebSocket,
+  player: NonNullable<Awaited<ReturnType<typeof getPlayerForSession>>>,
+  region: string,
+): void {
+  let unsubscribe: (() => void) | null = null;
+  let heartbeat: ReturnType<typeof setInterval> | null = null;
+  const send = (event: RegionEvent) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(event));
+    }
+  };
+  const cleanup = () => {
+    unsubscribe?.();
+    unsubscribe = null;
+    if (heartbeat !== null) clearInterval(heartbeat);
+    heartbeat = null;
+  };
+
+  socket.onopen = () => {
+    unsubscribe = regionEvents.subscribe(region, send);
+    send({
+      id: crypto.randomUUID(),
+      type: "presence.changed",
+      region,
+      occurredAt: new Date().toISOString(),
+      actorId: player.id,
+      location: player.location,
+      data: { name: player.name, status: "connected" },
+    });
+    regionEvents.publish({
+      type: "presence.changed",
+      region,
+      actorId: player.id,
+      location: player.location,
+      data: { name: player.name, status: "connected" },
+    });
+    heartbeat = setInterval(() => {
+      send({
+        id: crypto.randomUUID(),
+        type: "presence.changed",
+        region,
+        occurredAt: new Date().toISOString(),
+        actorId: player.id,
+        location: player.location,
+        data: { status: "heartbeat" },
+      });
+    }, 25_000);
+  };
+  socket.onclose = cleanup;
+  socket.onerror = cleanup;
+}
+
+/** Upgrade regional channels before entering Oak's Node compatibility layer. */
+export async function upgradeRegionalSocket(
+  request: Request,
+): Promise<Response | null> {
+  const match = new URL(request.url).pathname.match(/^\/events\/([^/]+)$/);
+  if (!match || match[1] === "session") return null;
+  if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
+    return null;
+  }
+
+  const token = sessionTokenFromCookie(request.headers.get("cookie"));
+  const player = token ? await getPlayerForSession(token) : null;
+  if (!player) {
+    return new Response("A character session is required.", { status: 401 });
+  }
+
+  const region = decodeURIComponent(match[1]);
+  if (player.region !== region) {
+    return new Response("Your character is not assigned to that channel.", {
+      status: 403,
+    });
+  }
+  if (!sameOrigin(new URL(request.url), request.headers.get("origin"))) {
+    return new Response("Cross-origin channel subscriptions are refused.", {
+      status: 403,
+    });
+  }
+
+  const { socket, response } = Deno.upgradeWebSocket(request);
+  attachRegionalSocket(socket, player, region);
+  return response;
+}
+
 eventsRouter.get("/events/session", async (context) => {
   const token = sessionTokenFromCookie(context.request.headers.get("cookie"));
   const player = token ? await getPlayerForSession(token) : null;
@@ -64,50 +150,5 @@ eventsRouter.get("/events/:region", async (context) => {
       "This Oak runtime does not provide native WebSocket upgrades.";
     return;
   }
-  let unsubscribe: (() => void) | null = null;
-  let heartbeat: number | null = null;
-  const send = (event: RegionEvent) => {
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify(event));
-    }
-  };
-  const cleanup = () => {
-    unsubscribe?.();
-    unsubscribe = null;
-    if (heartbeat !== null) clearInterval(heartbeat);
-    heartbeat = null;
-  };
-
-  socket.onopen = () => {
-    unsubscribe = regionEvents.subscribe(region, send);
-    send({
-      id: crypto.randomUUID(),
-      type: "presence.changed",
-      region,
-      occurredAt: new Date().toISOString(),
-      actorId: player.id,
-      location: player.location,
-      data: { name: player.name, status: "connected" },
-    });
-    regionEvents.publish({
-      type: "presence.changed",
-      region,
-      actorId: player.id,
-      location: player.location,
-      data: { name: player.name, status: "connected" },
-    });
-    heartbeat = setInterval(() => {
-      send({
-        id: crypto.randomUUID(),
-        type: "presence.changed",
-        region,
-        occurredAt: new Date().toISOString(),
-        actorId: player.id,
-        location: player.location,
-        data: { status: "heartbeat" },
-      });
-    }, 25_000);
-  };
-  socket.onclose = cleanup;
-  socket.onerror = cleanup;
+  attachRegionalSocket(socket, player, region);
 });

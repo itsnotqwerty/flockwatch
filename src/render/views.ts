@@ -13,10 +13,14 @@ function escapeHtml(text: string): string {
 export interface PageOptions {
   title: string;
   body: string;
+  locationName?: string;
 }
 
 /** Wrap page body in the shared shell. */
-export function renderPage({ title, body }: PageOptions): string {
+export function renderPage({ title, body, locationName }: PageOptions): string {
+  const locationLabel = locationName
+    ? escapeHtml(locationName)
+    : "Current Location";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +33,7 @@ export function renderPage({ title, body }: PageOptions): string {
 <header>
   <h1>FlockWatch</h1>
   <nav>
-    <a href="/">Current Location</a>
+    <a href="/">${locationLabel}</a>
     <span class="alpha-info" tabindex="0" role="note" aria-label="Alpha notice: This game is in an experimental alpha. Content may change and your playthrough may get reset.">ⓘ<span class="alpha-tooltip">This game is in an experimental alpha. Content may change and your playthrough may get reset.</span></span>
   </nav>
 </header>

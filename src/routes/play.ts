@@ -263,6 +263,7 @@ playRouter.get("/", async (context) => {
   context.response.type = "text/html";
   context.response.body = renderPage({
     title: "FlockWatch",
+    locationName: location.name,
     body: `<div class="character-bar" data-player-id="${
       escapeHtml(player.id)
     }" data-region="${escapeHtml(player.region)}"><strong>${

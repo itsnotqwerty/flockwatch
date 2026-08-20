@@ -1,7 +1,7 @@
 import { Application } from "oak";
 import { viewsRouter } from "./src/routes/views.ts";
 import { playRouter } from "./src/routes/play.ts";
-import { eventsRouter } from "./src/routes/events.ts";
+import { eventsRouter, upgradeRegionalSocket } from "./src/routes/events.ts";
 import { regionEvents } from "./src/realtime/region-events.ts";
 import { CONTENT_VERSION, ensureContentCurrent } from "./src/state/content.ts";
 import { seedRegions } from "./src/state/regions.ts";
@@ -57,14 +57,6 @@ app.use(viewsRouter.routes());
 app.use(playRouter.allowedMethods());
 app.use(eventsRouter.allowedMethods());
 app.use(viewsRouter.allowedMethods());
-app.use(async (context, next) => {
-  const root = "./static";
-  try {
-    await context.send({ root });
-  } catch {
-    await next();
-  }
-});
 
 // Scheduled stat tick (design §3.3): recompute regional stats from cameras.
 async function tick(): Promise<void> {
@@ -81,5 +73,57 @@ setInterval(
   TICK_MS,
 );
 
-app.listen({ port: PORT });
+const STATIC_FILES: Record<string, { path: URL; type: string }> = {
+  "/styles.css": {
+    path: new URL("./static/styles.css", import.meta.url),
+    type: "text/css; charset=utf-8",
+  },
+  "/interactivity.js": {
+    path: new URL("./static/interactivity.js", import.meta.url),
+    type: "text/javascript; charset=utf-8",
+  },
+  "/realtime.js": {
+    path: new URL("./static/realtime.js", import.meta.url),
+    type: "text/javascript; charset=utf-8",
+  },
+  "/robots.txt": {
+    path: new URL("./static/robots.txt", import.meta.url),
+    type: "text/plain; charset=utf-8",
+  },
+  "/sitemap.xml": {
+    path: new URL("./static/sitemap.xml", import.meta.url),
+    type: "application/xml; charset=utf-8",
+  },
+};
+
+async function serve(request: Request): Promise<Response> {
+  const upgraded = await upgradeRegionalSocket(request);
+  if (upgraded) return upgraded;
+
+  const asset = STATIC_FILES[new URL(request.url).pathname];
+  if (asset && (request.method === "GET" || request.method === "HEAD")) {
+    const bytes = await Deno.readFile(asset.path);
+    return new Response(request.method === "HEAD" ? null : bytes, {
+      headers: {
+        "cache-control": "public, max-age=300",
+        "content-type": asset.type,
+      },
+    });
+  }
+
+  const response = await app.handle(request);
+  if (!response) return new Response(null, { status: 204 });
+  const hasBody = request.method !== "HEAD" &&
+    ![204, 205, 304].includes(response.status);
+  return new Response(
+    hasBody ? await response.arrayBuffer() : null,
+    {
+      status: response.status,
+      statusText: response.statusText,
+      headers: [...response.headers],
+    },
+  );
+}
+
+Deno.serve({ port: PORT }, serve);
 console.log(`Server is running on http://localhost:${PORT}`);
