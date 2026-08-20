@@ -6,6 +6,11 @@
 export interface Store {
   get<T>(key: string[]): Promise<T | null>;
   set<T>(key: string[], value: T): Promise<void>;
+  setIfAbsent<T>(
+    key: string[],
+    value: T,
+    expireIn?: number,
+  ): Promise<boolean>;
   delete(key: string[]): Promise<void>;
   list<T>(prefix: string[]): Promise<Array<{ key: string[]; value: T }>>;
   close(): void;
@@ -23,6 +28,12 @@ export function createMemoryStore(): Store {
     set<T>(key: string[], value: T): Promise<void> {
       map.set(encode(key), value);
       return Promise.resolve();
+    },
+    setIfAbsent<T>(key: string[], value: T): Promise<boolean> {
+      const encoded = encode(key);
+      if (map.has(encoded)) return Promise.resolve(false);
+      map.set(encoded, value);
+      return Promise.resolve(true);
     },
     delete(key: string[]): Promise<void> {
       map.delete(encode(key));
@@ -54,10 +65,23 @@ export function createKvStore(kv: Deno.Kv): Store {
     async set<T>(key: string[], value: T): Promise<void> {
       await kv.set(key, value);
     },
+    async setIfAbsent<T>(
+      key: string[],
+      value: T,
+      expireIn?: number,
+    ): Promise<boolean> {
+      const result = await kv.atomic()
+        .check({ key, versionstamp: null })
+        .set(key, value, expireIn === undefined ? undefined : { expireIn })
+        .commit();
+      return result.ok;
+    },
     async delete(key: string[]): Promise<void> {
       await kv.delete(key);
     },
-    async list<T>(prefix: string[]): Promise<Array<{ key: string[]; value: T }>> {
+    async list<T>(
+      prefix: string[],
+    ): Promise<Array<{ key: string[]; value: T }>> {
       const out: Array<{ key: string[]; value: T }> = [];
       for await (const entry of kv.list<T>({ prefix })) {
         out.push({ key: entry.key as string[], value: entry.value });

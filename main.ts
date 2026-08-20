@@ -38,6 +38,12 @@ const CONTRACT_WAGES: Record<string, number[]> = {
   atlanta: [130, 95, 160, 110],
   silicon_valley: [180, 220],
   new_york_city: [150, 200, 175, 125, 240],
+  los_angeles: [145, 190, 125],
+  denver: [95, 120, 110],
+  albuquerque: [80, 105, 90],
+  chicago: [125, 150, 115],
+  boston: [140, 175, 130],
+  miami: [130, 165, 120],
 };
 for (const region of regions) {
   if ((await camerasInRegion(region.id)).length > 0) continue;

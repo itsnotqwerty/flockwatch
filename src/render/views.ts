@@ -16,11 +16,20 @@ export interface PageOptions {
   locationName?: string;
 }
 
+function protectPostForms(body: string): string {
+  return body.replaceAll(
+    '<form method="post" action="/">',
+    () =>
+      `<form method="post" action="/">\n  <input type="hidden" name="request_id" value="${crypto.randomUUID()}">`,
+  );
+}
+
 /** Wrap page body in the shared shell. */
 export function renderPage({ title, body, locationName }: PageOptions): string {
   const locationLabel = locationName
     ? escapeHtml(locationName)
     : "Current Location";
+  const protectedBody = protectPostForms(body);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +47,7 @@ export function renderPage({ title, body, locationName }: PageOptions): string {
   </nav>
 </header>
 <main>
-${body}
+${protectedBody}
 </main>
 <footer>
   <p>© 2026 Samuel Roux · <a href="https://github.com/itsnotqwerty/flockwatch">View the code</a></p>

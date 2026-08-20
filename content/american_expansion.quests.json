@@ -1,0 +1,164 @@
+[
+  {
+    "id": "q_la_continental_cut",
+    "title": "The Continental Cut",
+    "hidden": true,
+    "trigger": {
+      "npc": "la_marisol",
+      "dialogueOption": "ask_continental_cut"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Carry Marisol's master reel over the mountains to Eli Snow at Denver's Union Weather Hall."
+      },
+      {
+        "id": "s2",
+        "objective": "Take Eli's weatherproof copy to Lena Kowalski beneath Lower Wacker Drive in Chicago."
+      },
+      {
+        "id": "s3",
+        "objective": "Return the eastbound broadcast ledger to Marisol at Echo Park in Los Angeles."
+      }
+    ],
+    "rewards": {
+      "currency": 145,
+      "items": ["limited_vinyl"]
+    }
+  },
+  {
+    "id": "q_den_weather_chain",
+    "title": "Weather Without Borders",
+    "hidden": true,
+    "trigger": {
+      "npc": "den_eli",
+      "dialogueOption": "ask_weather_chain"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Bring Eli's pressure ledger south to Inez Romero at Albuquerque's Old Town Frequency Shop."
+      },
+      {
+        "id": "s2",
+        "objective": "Deliver Inez's desert calibration to Sol Navarro at the Miami Port Causeway Exchange."
+      },
+      {
+        "id": "s3",
+        "objective": "Return Sol's hurricane comparison to Eli Snow in Denver."
+      }
+    ],
+    "rewards": {
+      "currency": 135,
+      "items": ["cutters"]
+    }
+  },
+  {
+    "id": "q_abq_sunwire",
+    "title": "Sunwire Relay",
+    "hidden": true,
+    "trigger": {
+      "npc": "abq_inez",
+      "dialogueOption": "ask_sunwire"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Take Inez's solar cipher west to Marisol Vega at Echo Park in Los Angeles."
+      },
+      {
+        "id": "s2",
+        "objective": "Carry Marisol's decoded frame to Mae Donnelly at the Boston Harbor Archive."
+      },
+      {
+        "id": "s3",
+        "objective": "Return Mae's archival checksum to Inez in Albuquerque."
+      }
+    ],
+    "rewards": {
+      "currency": 150,
+      "items": ["signal_jammer"]
+    }
+  },
+  {
+    "id": "q_chi_freight_ghost",
+    "title": "The Freight Ghost",
+    "hidden": true,
+    "trigger": {
+      "npc": "chi_lena",
+      "dialogueOption": "ask_freight_ghost"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Ask Mae Donnelly at the Boston Harbor Archive why Chicago freight appears in colonial manifests."
+      },
+      {
+        "id": "s2",
+        "objective": "Take Mae's copied seal to Eli Snow at Denver's Union Weather Hall for altitude testing."
+      },
+      {
+        "id": "s3",
+        "objective": "Return the verified seal to Lena beneath Lower Wacker Drive in Chicago."
+      }
+    ],
+    "rewards": {
+      "currency": 140,
+      "items": ["orange_vest"]
+    }
+  },
+  {
+    "id": "q_bos_common_record",
+    "title": "The Common Record",
+    "hidden": true,
+    "trigger": {
+      "npc": "bos_mae",
+      "dialogueOption": "ask_common_record"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Bring Mae's watermarked page to Sol Navarro at Miami's Port Causeway Exchange."
+      },
+      {
+        "id": "s2",
+        "objective": "Take Sol's ultraviolet reading to Marisol Vega at Echo Park in Los Angeles."
+      },
+      {
+        "id": "s3",
+        "objective": "Return Marisol's film scan to Mae at the Boston Harbor Archive."
+      }
+    ],
+    "rewards": {
+      "currency": 155,
+      "items": ["binoculars"]
+    }
+  },
+  {
+    "id": "q_mia_tide_ledger",
+    "title": "The Tide Ledger",
+    "hidden": true,
+    "trigger": {
+      "npc": "mia_sol",
+      "dialogueOption": "ask_tide_ledger"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Carry Sol's tide ledger to Inez Romero in Albuquerque, where dry air preserves wet evidence."
+      },
+      {
+        "id": "s2",
+        "objective": "Bring Inez's restored coordinates to Lena Kowalski beneath Lower Wacker Drive in Chicago."
+      },
+      {
+        "id": "s3",
+        "objective": "Return Lena's inland shipping match to Sol at the Miami Port Causeway Exchange."
+      }
+    ],
+    "rewards": {
+      "currency": 145,
+      "items": ["survey_tripod"]
+    }
+  }
+]

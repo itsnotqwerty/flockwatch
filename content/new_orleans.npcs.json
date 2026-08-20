@@ -78,10 +78,10 @@
   },
   {
     "id": "gulf_larue",
-    "name": "Shrimpcaster LaRue",
-    "role": "Shrimpcaster, Catfish Acres",
+    "name": "Fisherman LaRue",
+    "role": "Fisherman, Catfish Acres",
     "region": "new_orleans",
-    "art": "shrimpcaster",
+    "art": "fisherman",
     "start": "start",
     "nodes": [
       {
@@ -137,8 +137,8 @@
             "next": "sweeps"
           },
           {
-            "id": "ask_shrimpcaster",
-            "label": "Mention the shrimpcaster's pelicans",
+            "id": "ask_fisherman",
+            "label": "Mention the fisherman's pelicans",
             "response": "LaRue is CLOSE! The pelicans aren't wired, they're ANTENNAS FOR THE TIDE GAUGES! Every gauge is a LISTENING POST with a float! I DISCONNECTED THREE! The tide KEPT REPORTING!",
             "next": null
           },

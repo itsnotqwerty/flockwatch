@@ -14,7 +14,7 @@ import {
   resolveSelection,
 } from "../game/dialogue.ts";
 import { advanceStage, objectiveText, visibleQuests } from "../game/quests.ts";
-import { renderDialogue } from "../render/grillsay.ts";
+import { loadArt, renderDialogue } from "../render/grillsay.ts";
 import {
   renderDialogueBlock,
   renderDialogueOptions,
@@ -98,6 +98,8 @@ import {
   normalizeMessageBody,
   saveMessagePost,
 } from "../state/message-board.ts";
+import { moderateMessagePost } from "../state/message-moderation.ts";
+import { claimActionRequest } from "../state/action-requests.ts";
 import {
   createCharacterAccount,
   deleteSession,
@@ -339,6 +341,12 @@ playRouter.post("/", async (context) => {
     return;
   }
   const authenticated = await touchPlayer(sessionPlayer);
+
+  if (!(await claimActionRequest(authenticated.id, fields.request_id))) {
+    context.response.status = 303;
+    context.response.redirect("/");
+    return;
+  }
 
   if (action === "home") {
     context.response.redirect("/");
@@ -817,21 +825,26 @@ playRouter.post("/", async (context) => {
     if (!message) {
       error = `Posts must contain 1–${MAX_MESSAGE_LENGTH} characters.`;
     } else {
-      const post: MessagePost = {
-        id: `${Date.now()}_${crypto.randomUUID()}`,
-        regionId: player.region,
-        playerId: player.id,
-        author: player.name,
-        body: message,
-        postedAt: new Date().toISOString(),
-      };
-      await saveMessagePost(post);
-      publishRegion("message.posted", player, {
-        postId: post.id,
-        author: post.author,
-        body: post.body,
-        postedAt: post.postedAt,
-      });
+      const moderation = await moderateMessagePost(player.id, message);
+      if (!moderation.allowed) {
+        error = moderation.message;
+      } else {
+        const post: MessagePost = {
+          id: `${Date.now()}_${crypto.randomUUID()}`,
+          regionId: player.region,
+          playerId: player.id,
+          author: player.name,
+          body: message,
+          postedAt: new Date().toISOString(),
+        };
+        await saveMessagePost(post);
+        publishRegion("message.posted", player, {
+          postId: post.id,
+          author: post.author,
+          body: post.body,
+          postedAt: post.postedAt,
+        });
+      }
     }
     context.response.type = "text/html";
     context.response.body = renderPage({
@@ -1108,6 +1121,7 @@ ${postButton("home", "Melt into the crowd")}`,
         context.response.body = renderPage({
           title: encounter.name,
           body: `<h2>${escapeHtml(encounter.name)}</h2>
+${renderDialogueBlock(await loadArt(encounter.art), encounter.name)}
 <ul class="encounter-log">
 ${turn.state.log.map((l) => `<li>${escapeHtml(l)}</li>`).join("\n")}
 </ul>
@@ -1881,6 +1895,7 @@ async function renderEncounterBoard(player: Player): Promise<string> {
 <h3>⚠ ${escapeHtml(cell.name)} vs. ${
         escapeHtml(encounter.name)
       } — ${cellState.enemyHp}/${encounter.maxHp} hp</h3>
+${renderDialogueBlock(await loadArt(encounter.art), encounter.name)}
 <p>Participants: ${
         participants.map((participant) => escapeHtml(participant.name)).join(
           ", ",
@@ -1923,6 +1938,7 @@ ${resolution}
 <h3>⚠ ${
       escapeHtml(encounter.name)
     } — ${state.enemyHp}/${encounter.maxHp} hp</h3>
+${renderDialogueBlock(await loadArt(encounter.art), encounter.name)}
 <ul class="encounter-log">
 ${log}
 </ul>

@@ -1,0 +1,728 @@
+[
+  {
+    "id": "la_marisol",
+    "name": "Marisol Vega",
+    "role": "Film Archivist, Echo Park Backlot",
+    "region": "los_angeles",
+    "art": "artho",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Every camera in this town wants a close-up. I keep the footage that looked away.",
+        "options": [
+          {
+            "id": "ask_continental_cut",
+            "label": "Ask about the unmarked film reel",
+            "response": "It records the same surveillance test in three time zones. Denver can weatherproof it. Chicago can put it on the air.",
+            "next": null,
+            "grantsQuest": "q_la_continental_cut"
+          },
+          {
+            "id": "hand_sunwire",
+            "label": "Deliver Inez's solar cipher",
+            "response": "These frames are not sun damage. They are instructions written in glare. Mae in Boston will know the checksum.",
+            "next": null,
+            "advancesQuest": "q_abq_sunwire",
+            "atStages": [0]
+          },
+          {
+            "id": "scan_common_record",
+            "label": "Show her the watermarked record",
+            "response": "The watermark resolves under old studio lamps. Mae's page names a camera office that officially opens next year.",
+            "next": null,
+            "advancesQuest": "q_bos_common_record",
+            "atStages": [1]
+          },
+          {
+            "id": "close_continental_cut",
+            "label": "Return the eastbound broadcast ledger",
+            "response": "Coast to mountains to lake and back. That is a national release, whether they approve it or not.",
+            "next": null,
+            "advancesQuest": "q_la_continental_cut",
+            "atStages": [2]
+          },
+          {
+            "id": "ask_backlot",
+            "label": "Ask who owns the backlot",
+            "response": "Four shell companies and one retired pigeon. The pigeon has the cleanest books.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "la_deacon",
+    "name": "Deacon Price",
+    "role": "Signal Mechanic, Union Depot",
+    "region": "los_angeles",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Union Station has more antennas than trains. I service the ones listed as decorative palms.",
+        "options": [
+          {
+            "id": "ask_palms",
+            "label": "Ask about the decorative palms",
+            "response": "They shed no leaves and need a firmware window every Tuesday. Very drought tolerant.",
+            "next": null
+          },
+          {
+            "id": "ask_routes",
+            "label": "Ask about eastbound routes",
+            "response": "Everything east goes through weather, freight, or paperwork. Usually all three.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step away from the signal cabinet",
+            "response": "Mind the platform cameras. They arrive before the trains do.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "la_jules",
+    "name": "Jules Static",
+    "role": "Pirate Radio Host, San Pedro",
+    "region": "los_angeles",
+    "art": "rapper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Broadcast local, interfere national. That is not a slogan. It is an electrical condition.",
+        "options": [
+          {
+            "id": "ask_show",
+            "label": "Ask about tonight's show",
+            "response": "Port traffic, coded dedications, and twenty minutes of gulls jamming a patrol frequency.",
+            "next": null
+          },
+          {
+            "id": "ask_signal",
+            "label": "Ask where the signal reaches",
+            "response": "On a clear night? Catalina. On a strange night? Cleveland.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Sign off",
+            "response": "Stay tuned. Staying tuned is different from being tracked. Mostly.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "den_eli",
+    "name": "Eli Snow",
+    "role": "Weather Records Technician, Union Hall",
+    "region": "denver",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The forecast is public. The list of people who checked it is not.",
+        "options": [
+          {
+            "id": "ask_weather_chain",
+            "label": "Ask about the duplicate pressure maps",
+            "response": "The desert and the coast logged the same impossible storm. I need readings from both before the map corrects itself.",
+            "next": null,
+            "grantsQuest": "q_den_weather_chain"
+          },
+          {
+            "id": "weatherproof_cut",
+            "label": "Deliver Marisol's master reel",
+            "response": "I sealed it against snow, dust, and official curiosity. Lena in Chicago has the freight band to broadcast it.",
+            "next": null,
+            "advancesQuest": "q_la_continental_cut",
+            "atStages": [0]
+          },
+          {
+            "id": "test_freight_seal",
+            "label": "Altitude-test Mae's copied seal",
+            "response": "The ink expands above five thousand feet. It reveals a Chicago routing number beneath the colonial date.",
+            "next": null,
+            "advancesQuest": "q_chi_freight_ghost",
+            "atStages": [1]
+          },
+          {
+            "id": "close_weather_chain",
+            "label": "Return the hurricane comparison",
+            "response": "Same pressure signature, two thousand miles apart. The weather is sharing an account.",
+            "next": null,
+            "advancesQuest": "q_den_weather_chain",
+            "atStages": [2]
+          },
+          {
+            "id": "ask_snow",
+            "label": "Ask about mountain snow",
+            "response": "It melts into five states and reports to six agencies before breakfast.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "den_jun",
+    "name": "Jun Park",
+    "role": "Trail Steward, Front Range Uplink",
+    "region": "denver",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The trail counters count hikers. The new ones count hesitation.",
+        "options": [
+          {
+            "id": "ask_counters",
+            "label": "Inspect the trail counters",
+            "response": "Step past twice and it calls you indecisive. Step past three times and it calls a ranger.",
+            "next": null
+          },
+          {
+            "id": "ask_uplink",
+            "label": "Ask about the summit uplink",
+            "response": "Good line of sight from here to every bad idea on the plains.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Head downhill",
+            "response": "Take water. Altitude makes the forms feel heavier.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "den_tasha",
+    "name": "Tasha Reed",
+    "role": "Night Clerk, Colfax Mile Marker",
+    "region": "denver",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Colfax runs long enough to outlast most alibis.",
+        "options": [
+          {
+            "id": "ask_motels",
+            "label": "Ask about the motel ledgers",
+            "response": "Every room is vacant and every key is warm. Tourism is recovering strangely.",
+            "next": null
+          },
+          {
+            "id": "ask_marker",
+            "label": "Read the mile marker",
+            "response": "It says Boston one way, Los Angeles the other, and COMPLY straight ahead.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Continue down the avenue",
+            "response": "Keep moving. Parked cars get entered into the census.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "abq_inez",
+    "name": "Inez Romero",
+    "role": "Radio Repairer, Old Town",
+    "region": "albuquerque",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Sunlight is free. They are trying to make the frequencies subscription only.",
+        "options": [
+          {
+            "id": "ask_sunwire",
+            "label": "Ask about the solar cipher",
+            "response": "The array burned a message into its own cells. Los Angeles can read the frames. Boston can prove they are old.",
+            "next": null,
+            "grantsQuest": "q_abq_sunwire"
+          },
+          {
+            "id": "calibrate_weather",
+            "label": "Deliver Eli's pressure ledger",
+            "response": "The desert reading matches a storm surge. Sol in Miami keeps the coastal half of this impossible weather.",
+            "next": null,
+            "advancesQuest": "q_den_weather_chain",
+            "atStages": [0]
+          },
+          {
+            "id": "restore_tide_ledger",
+            "label": "Dry and restore Sol's tide ledger",
+            "response": "Salt hid a rail coordinate in the margins. Lena in Chicago can match it to inland freight.",
+            "next": null,
+            "advancesQuest": "q_mia_tide_ledger",
+            "atStages": [0]
+          },
+          {
+            "id": "close_sunwire",
+            "label": "Return the archival checksum",
+            "response": "The signal crossed both coasts and came home older than when it left. That is proof enough for me.",
+            "next": null,
+            "advancesQuest": "q_abq_sunwire",
+            "atStages": [2]
+          },
+          {
+            "id": "ask_shop",
+            "label": "Browse the repair shelves",
+            "response": "Everything works. Nothing broadcasts under its legal name.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "abq_nico",
+    "name": "Nico Yazzie",
+    "role": "Rail Electrician, Albuquerque Yards",
+    "region": "albuquerque",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Freight comes through at night with no logos and too many cooling fans.",
+        "options": [
+          {
+            "id": "ask_freight",
+            "label": "Ask about the unmarked freight",
+            "response": "It heads west empty and returns heavy. The seals say municipal weather.",
+            "next": null
+          },
+          {
+            "id": "ask_power",
+            "label": "Trace the yard power",
+            "response": "Half the draw goes uphill to an array that claims to be a picnic shelter.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Clear the tracks",
+            "response": "Good. The next train is not on a schedule you are cleared to read.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "abq_rosa",
+    "name": "Rosa Baca",
+    "role": "Balloon Ground Crew, Sandia Shadow",
+    "region": "albuquerque",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Balloons drift. Surveillance platforms maintain an approved scenic altitude.",
+        "options": [
+          {
+            "id": "ask_balloons",
+            "label": "Ask which balloons are real",
+            "response": "The real ones wave back. The others rotate exactly twelve degrees per minute.",
+            "next": null
+          },
+          {
+            "id": "ask_mountain",
+            "label": "Ask about the mountain shadow",
+            "response": "Radio goes quiet there. People remember their own thoughts for a few minutes.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Release the tether",
+            "response": "Let it rise. The sky has less paperwork than the ground.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chi_lena",
+    "name": "Lena Kowalski",
+    "role": "Freight Dispatcher, Lower Wacker",
+    "region": "chicago",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Chicago moves the country's freight. The country moves its mistakes through Chicago.",
+        "options": [
+          {
+            "id": "ask_freight_ghost",
+            "label": "Ask about the train with no arrival",
+            "response": "Its seal appears in Boston records two centuries early. Mae has the archive. Denver can test the ink.",
+            "next": null,
+            "grantsQuest": "q_chi_freight_ghost"
+          },
+          {
+            "id": "log_continental_cut",
+            "label": "Broadcast Marisol's weatherproof reel",
+            "response": "The freight band carried it east in eleven seconds. Here is the ledger before the network denies hearing it.",
+            "next": null,
+            "advancesQuest": "q_la_continental_cut",
+            "atStages": [1]
+          },
+          {
+            "id": "match_tide_coordinates",
+            "label": "Match Inez's restored coordinates",
+            "response": "They belong to a container that left Miami wet and reached Chicago before it departed.",
+            "next": null,
+            "advancesQuest": "q_mia_tide_ledger",
+            "atStages": [1]
+          },
+          {
+            "id": "close_freight_ghost",
+            "label": "Return the verified seal",
+            "response": "Now the ghost has a routing number. That makes it somebody's budget problem.",
+            "next": null,
+            "advancesQuest": "q_chi_freight_ghost",
+            "atStages": [2]
+          },
+          {
+            "id": "ask_lower_level",
+            "label": "Ask how far down the road goes",
+            "response": "Far enough that daylight becomes an administrative rumor.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chi_omar",
+    "name": "Omar Bell",
+    "role": "Bridge Tender, Lakefront Switchhouse",
+    "region": "chicago",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The river changed direction once. The cameras still file reports facing the old way.",
+        "options": [
+          {
+            "id": "ask_bridges",
+            "label": "Ask which bridge listens",
+            "response": "The one that opens when no boat is coming. It needs the clear view.",
+            "next": null
+          },
+          {
+            "id": "ask_lake",
+            "label": "Ask about the lake relays",
+            "response": "Fresh water, saltwater paperwork. Signals wash ashore from every coast.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Let the bridge close",
+            "response": "Stand clear. Infrastructure gets territorial after dark.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chi_darnell",
+    "name": "Darnell Price",
+    "role": "Union Steward, Stockyards Annex",
+    "region": "chicago",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The stockyards closed. The time clocks stayed employed.",
+        "options": [
+          {
+            "id": "ask_clocks",
+            "label": "Inspect the time clocks",
+            "response": "They punch in workers who retired before the cameras were installed.",
+            "next": null
+          },
+          {
+            "id": "ask_union",
+            "label": "Ask what the union tracks",
+            "response": "Wages, injuries, and which break-room vents started asking questions.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Clock out",
+            "response": "Keep the stub. It proves you were here and also that you were not scheduled.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bos_mae",
+    "name": "Mae Donnelly",
+    "role": "Municipal Archivist, Boston Harbor",
+    "region": "boston",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Boston keeps every record, especially the ones written before the event.",
+        "options": [
+          {
+            "id": "ask_common_record",
+            "label": "Ask about the page dated next winter",
+            "response": "The watermark is modern, the paper is colonial, and the signature belongs to an office in Miami. Start there.",
+            "next": null,
+            "grantsQuest": "q_bos_common_record"
+          },
+          {
+            "id": "trace_freight_seal",
+            "label": "Show her Chicago's freight seal",
+            "response": "It appears on a harbor manifest from 1791. Take this copy to Denver; altitude separates old ink from new lies.",
+            "next": null,
+            "advancesQuest": "q_chi_freight_ghost",
+            "atStages": [0]
+          },
+          {
+            "id": "checksum_sunwire",
+            "label": "Verify Marisol's decoded frame",
+            "response": "The checksum predates the solar panel by eighty years. Inez deserves the impossible original.",
+            "next": null,
+            "advancesQuest": "q_abq_sunwire",
+            "atStages": [1]
+          },
+          {
+            "id": "close_common_record",
+            "label": "Return the film scan",
+            "response": "Excellent. The archive now contains proof, a duplicate, and a denial in triplicate.",
+            "next": null,
+            "advancesQuest": "q_bos_common_record",
+            "atStages": [2]
+          },
+          {
+            "id": "ask_archive",
+            "label": "Ask how deep the archive goes",
+            "response": "Three floors below sea level and one floor below municipal memory.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bos_priya",
+    "name": "Priya Shah",
+    "role": "Transit Counsel, Lost Green Line Stop",
+    "region": "boston",
+    "art": "financebro",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The train is delayed by an inquiry into whether this platform legally exists.",
+        "options": [
+          {
+            "id": "ask_stop",
+            "label": "Ask where the stop appears on maps",
+            "response": "Only on maps printed during leap years and one restaurant placemat.",
+            "next": null
+          },
+          {
+            "id": "ask_case",
+            "label": "Ask about the legal inquiry",
+            "response": "The city sued the platform. The platform failed to appear. Default judgment is pending.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Take the stairs",
+            "response": "A practical choice. I cannot advise it officially.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bos_finn",
+    "name": "Finn O'Rourke",
+    "role": "Custodian, Cambridge Review Board",
+    "region": "boston",
+    "art": "groundskeeper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The board reviews ethics upstairs. I review what they throw away downstairs.",
+        "options": [
+          {
+            "id": "ask_minutes",
+            "label": "Ask about discarded minutes",
+            "response": "Every concern was noted. None survived the recycling schedule.",
+            "next": null
+          },
+          {
+            "id": "ask_lab",
+            "label": "Ask about the sealed lab",
+            "response": "They study public trust. The specimens keep trying to escape.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Exit through peer review",
+            "response": "Two reviewers objected, so naturally you are approved.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mia_sol",
+    "name": "Sol Navarro",
+    "role": "Marine Cargo Examiner, Port Causeway",
+    "region": "miami",
+    "art": "fisherman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Every container has a declared origin. The tide keeps submitting corrections.",
+        "options": [
+          {
+            "id": "ask_tide_ledger",
+            "label": "Ask about the waterlogged ledger",
+            "response": "It lists inland ports at sea level and Miami cargo in Chicago yesterday. Inez can restore the salt damage.",
+            "next": null,
+            "grantsQuest": "q_mia_tide_ledger"
+          },
+          {
+            "id": "compare_weather",
+            "label": "Deliver Inez's desert calibration",
+            "response": "It matches our hurricane sensor exactly. Take this comparison back to Eli before the next forecast changes history.",
+            "next": null,
+            "advancesQuest": "q_den_weather_chain",
+            "atStages": [1]
+          },
+          {
+            "id": "read_common_record",
+            "label": "Inspect Mae's watermarked page",
+            "response": "Ultraviolet light reveals a Los Angeles film code. Marisol Vega will know which studio printed it.",
+            "next": null,
+            "advancesQuest": "q_bos_common_record",
+            "atStages": [0]
+          },
+          {
+            "id": "close_tide_ledger",
+            "label": "Return the inland shipping match",
+            "response": "So the tide reaches Chicago now. Good. I was worried geography still meant something.",
+            "next": null,
+            "advancesQuest": "q_mia_tide_ledger",
+            "atStages": [2]
+          },
+          {
+            "id": "ask_port",
+            "label": "Ask who watches the causeway",
+            "response": "Customs watches cargo. Flock watches customs. The gulls watch everybody.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mia_camila",
+    "name": "Camila Reyes",
+    "role": "Community Broadcaster, Little Havana",
+    "region": "miami",
+    "art": "rapper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The cafecito is strong, the signal is stronger, and neither has a permit.",
+        "options": [
+          {
+            "id": "ask_station",
+            "label": "Ask about the neighborhood station",
+            "response": "Music by day, storm routes by night, names of missing cameras whenever needed.",
+            "next": null
+          },
+          {
+            "id": "ask_coffee",
+            "label": "Ask what is in the coffee",
+            "response": "Sugar, courage, and enough voltage to cross Biscayne Bay.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave a dedication",
+            "response": "I will play it after the weather alert and before the official correction.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mia_teo",
+    "name": "Teo Green",
+    "role": "Wetland Surveyor, Everglades Edge",
+    "region": "miami",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The sawgrass does not need cameras. It remembers where you stepped.",
+        "options": [
+          {
+            "id": "ask_sensors",
+            "label": "Ask about the wetland sensors",
+            "response": "Half measure water. Half measure people looking at the water.",
+            "next": null
+          },
+          {
+            "id": "ask_path",
+            "label": "Ask for the dry path",
+            "response": "There is no dry path. There is only the path where the paperwork floats.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Back away from the waterline",
+            "response": "Slowly. The alligators are not agents, but they do accept tips.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

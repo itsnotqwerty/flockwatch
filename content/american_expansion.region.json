@@ -1,0 +1,128 @@
+[
+  {
+    "id": "los_angeles",
+    "name": "Los Angeles",
+    "locations": [
+      "la_union_signal_depot",
+      "la_echo_park_backlot",
+      "la_san_pedro_skyline"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.58,
+      "prosperity": 0.79,
+      "flockPresence": 0.72,
+      "populationMood": "performing"
+    },
+    "economyProfile": {
+      "consumes": ["luxury_goods", "tools"],
+      "produces": ["currency", "influence"],
+      "wageMultiplier": 1.35
+    }
+  },
+  {
+    "id": "denver",
+    "name": "Denver",
+    "locations": [
+      "den_union_weather_hall",
+      "den_colfax_mile_marker",
+      "den_front_range_uplink"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.38,
+      "prosperity": 0.68,
+      "flockPresence": 0.51,
+      "populationMood": "altitude-adjusted"
+    },
+    "economyProfile": {
+      "consumes": ["crafted_goods", "luxury_goods"],
+      "produces": ["raw_materials", "tools"],
+      "wageMultiplier": 1.05
+    }
+  },
+  {
+    "id": "albuquerque",
+    "name": "Albuquerque",
+    "locations": [
+      "abq_rail_yards",
+      "abq_old_town_frequency_shop",
+      "abq_sandia_shadow_array"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.47,
+      "prosperity": 0.49,
+      "flockPresence": 0.43,
+      "populationMood": "sunstruck"
+    },
+    "economyProfile": {
+      "consumes": ["tools", "crafted_goods"],
+      "produces": ["raw_materials", "scrap"],
+      "wageMultiplier": 0.92
+    }
+  },
+  {
+    "id": "chicago",
+    "name": "Chicago",
+    "locations": [
+      "chi_lower_wacker_dispatch",
+      "chi_lakefront_switchhouse",
+      "chi_stockyards_annex"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.54,
+      "prosperity": 0.73,
+      "flockPresence": 0.67,
+      "populationMood": "wind-tested"
+    },
+    "economyProfile": {
+      "consumes": ["raw_materials", "tools"],
+      "produces": ["crafted_goods", "currency"],
+      "wageMultiplier": 1.18
+    }
+  },
+  {
+    "id": "boston",
+    "name": "Boston",
+    "locations": [
+      "bos_harbor_archive",
+      "bos_green_line_lost_stop",
+      "bos_cambridge_review_board"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.45,
+      "prosperity": 0.84,
+      "flockPresence": 0.76,
+      "populationMood": "historically concerned"
+    },
+    "economyProfile": {
+      "consumes": ["crafted_goods", "luxury_goods"],
+      "produces": ["influence", "currency"],
+      "wageMultiplier": 1.28
+    }
+  },
+  {
+    "id": "miami",
+    "name": "Miami",
+    "locations": [
+      "mia_little_havana_dispatch",
+      "mia_port_causeway_exchange",
+      "mia_everglades_edge_station"
+    ],
+    "stats": {
+      "coverage": 0.0,
+      "unrest": 0.52,
+      "prosperity": 0.77,
+      "flockPresence": 0.61,
+      "populationMood": "storm-ready"
+    },
+    "economyProfile": {
+      "consumes": ["tools", "crafted_goods"],
+      "produces": ["luxury_goods", "currency"],
+      "wageMultiplier": 1.22
+    }
+  }
+]

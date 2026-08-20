@@ -9,7 +9,13 @@
       "new_orleans",
       "seattle",
       "atlanta",
-      "silicon_valley"
+      "silicon_valley",
+      "los_angeles",
+      "denver",
+      "albuquerque",
+      "chicago",
+      "boston",
+      "miami"
     ],
     "minFlockPresence": 0.3,
     "maxHp": 24,
@@ -56,7 +62,15 @@
     "name": "Signal Interceptor Van",
     "art": "foreman",
     "kind": "patrol",
-    "regions": ["silicon_valley", "new_york_city", "atlanta"],
+    "regions": [
+      "silicon_valley",
+      "new_york_city",
+      "atlanta",
+      "los_angeles",
+      "chicago",
+      "boston",
+      "miami"
+    ],
     "minFlockPresence": 0.55,
     "maxHp": 36,
     "moves": [

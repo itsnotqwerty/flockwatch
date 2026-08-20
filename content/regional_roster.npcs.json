@@ -1,0 +1,240 @@
+[
+  {
+    "id": "pnw_mara",
+    "name": "Mara Chen",
+    "role": "Ferry Signal Technician, Municipal Visitor Center",
+    "region": "seattle",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The ferries use foghorns. The new signals use passenger names.",
+        "options": [
+          {
+            "id": "ask_ferries",
+            "label": "Ask about the ferry signals",
+            "response": "Every crossing reports its passengers twice: once to shore and once somewhere inland.",
+            "next": null
+          },
+          {
+            "id": "ask_fog",
+            "label": "Ask what moves in the fog",
+            "response": "Boats, mostly. The antennas move only when nobody is looking.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Return the maintenance badge",
+            "response": "Keep it dry. The scanner trusts water damage more than people.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "la_nia",
+    "name": "Nia Brooks",
+    "role": "Longshore Union Recorder, San Pedro",
+    "region": "los_angeles",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The cranes lift cargo. My ledger lifts the names they tried to erase.",
+        "options": [
+          {
+            "id": "ask_ledger",
+            "label": "Ask about the union ledger",
+            "response": "Every missing shift points to the same sealed yard and the same camera contractor.",
+            "next": null
+          },
+          {
+            "id": "ask_containers",
+            "label": "Ask which containers hum",
+            "response": "The empty ones. Full containers have nothing to prove.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Sign out of the port",
+            "response": "Use the blue pen. Black ink goes straight to management.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "den_mateo",
+    "name": "Mateo Ruiz",
+    "role": "Snowplow Radio Operator, Colfax Mile Marker",
+    "region": "denver",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Snow covers every lane except the one the cameras requested first.",
+        "options": [
+          {
+            "id": "ask_plows",
+            "label": "Ask about the plow routes",
+            "response": "Officially we clear hospitals first. Unofficially we clear line of sight.",
+            "next": null
+          },
+          {
+            "id": "ask_radio",
+            "label": "Listen to the plow radio",
+            "response": "Half road reports, half camera maintenance, all classified as weather.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step away from the salt truck",
+            "response": "Watch your boots. The city invoices footprints by weight.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "abq_elena",
+    "name": "Elena Chávez",
+    "role": "Diner Owner, Old Town Frequency Shop",
+    "region": "albuquerque",
+    "art": "boomer",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "I serve breakfast all day because the clocks keep changing their story.",
+        "options": [
+          {
+            "id": "ask_regulars",
+            "label": "Ask about the late-night regulars",
+            "response": "Rail crews, balloon crews, and one inspector who never orders food.",
+            "next": null
+          },
+          {
+            "id": "ask_receipts",
+            "label": "Inspect the receipt roll",
+            "response": "It prints radio coordinates after midnight. I charge them for coffee anyway.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Settle the check",
+            "response": "Cash is honest. Cards remember too much.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chi_yvette",
+    "name": "Yvette King",
+    "role": "Lake Radio Host, Lakefront Switchhouse",
+    "region": "chicago",
+    "art": "rapper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The lake carries every signal east, then sends the interesting ones back.",
+        "options": [
+          {
+            "id": "ask_broadcast",
+            "label": "Ask about the overnight broadcast",
+            "response": "Weather, freight, blues, and names the official traffic report forgot.",
+            "next": null
+          },
+          {
+            "id": "ask_echo",
+            "label": "Ask about the lake echo",
+            "response": "It repeats Chicago clearly and adds one sentence from somewhere else.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the request line",
+            "response": "I will play it when the bridge opens for nobody.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bos_leo",
+    "name": "Leo Baptiste",
+    "role": "Harbor Fisherman, Boston Harbor Archive",
+    "region": "boston",
+    "art": "fisherman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The harbor gives back everything except the paperwork that sank it.",
+        "options": [
+          {
+            "id": "ask_catch",
+            "label": "Ask what the nets caught",
+            "response": "Two cod, one camera housing, and a permit dated seventeen ninety-one.",
+            "next": null
+          },
+          {
+            "id": "ask_buoys",
+            "label": "Ask about the new buoys",
+            "response": "They mark the channel and count who looks at it.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step off the pier",
+            "response": "Mind the gulls. They work for whoever has fries.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mia_lucia",
+    "name": "Lucía Torres",
+    "role": "Storm Shutter Contractor, Little Havana Dispatch",
+    "region": "miami",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "I board windows before storms and uncover cameras after them.",
+        "options": [
+          {
+            "id": "ask_shutters",
+            "label": "Ask which shutters are wired",
+            "response": "The free municipal ones. Nothing is free once it needs a network address.",
+            "next": null
+          },
+          {
+            "id": "ask_storms",
+            "label": "Ask about the last hurricane",
+            "response": "It removed three roofs and revealed seven antennas nobody owned.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Return the drill",
+            "response": "Keep the screws. After the next warning, every hardware store forgets them.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  }
+]

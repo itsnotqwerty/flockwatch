@@ -359,7 +359,7 @@
       {
         "id": "acres_residents",
         "label": "Visit the residents",
-        "description": "Boomer Earl and Shrimpcaster LaRue are holding court.",
+        "description": "Boomer Earl and Fisherman LaRue are holding court.",
         "kind": "npcs",
         "npcIds": ["gulf_boomer_earl", "gulf_larue"]
       },
@@ -403,10 +403,10 @@
     "interactions": [
       {
         "id": "visitor_inspector",
-        "label": "Speak with Barista-Inspector Cole",
-        "description": "Order a stamp, a coffee, or an explanation.",
+        "label": "Speak with the visitor-center staff",
+        "description": "Cole and Mara can offer a stamp, a coffee, or an explanation.",
         "kind": "npcs",
-        "npcIds": ["pnw_cole"]
+        "npcIds": ["pnw_cole", "pnw_mara"]
       },
       {
         "id": "seattle_board",
@@ -781,6 +781,768 @@
         "id": "rooftop_response",
         "label": "Cross the response perimeter",
         "description": "Invite Midtown surveillance response to introduce itself.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "la_union_signal_depot",
+    "regionId": "los_angeles",
+    "name": "Union Signal Depot",
+    "description": "Departure boards flicker between train times and audience metrics.",
+    "interactions": [
+      {
+        "id": "la_depot_mechanic",
+        "label": "Find the signal mechanic",
+        "description": "Deacon Price works behind a row of decorative antenna palms.",
+        "kind": "npcs",
+        "npcIds": ["la_deacon"]
+      },
+      {
+        "id": "la_depot_salvage",
+        "label": "Search a retired departure board",
+        "description": "Recover components before the next schedule revision.",
+        "kind": "activity",
+        "result": "The board surrenders wiring and a lens still focused on yesterday.",
+        "effect": { "scrap": { "wiring": 2, "lens": 1 }, "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "la_depot_bench",
+        "label": "Use the signal bench",
+        "description": "Craft beside a diagram of lines that officially do not connect.",
+        "kind": "workbench"
+      },
+      {
+        "id": "la_depot_cameras",
+        "label": "Audit platform cameras",
+        "description": "Review contracts for units that arrived before the rails.",
+        "kind": "cameras"
+      },
+      {
+        "id": "la_depot_patrol",
+        "label": "Cross the restricted platform",
+        "description": "Invite transit compliance to check your destination.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "la_echo_park_backlot",
+    "regionId": "los_angeles",
+    "name": "Echo Park Backlot",
+    "description": "A neighborhood street repeats for six blocks because only one block was built.",
+    "interactions": [
+      {
+        "id": "la_backlot_archivist",
+        "label": "Visit Marisol's archive",
+        "description": "Film canisters hold footage the city forgot to classify.",
+        "kind": "npcs",
+        "npcIds": ["la_marisol"]
+      },
+      {
+        "id": "la_board",
+        "label": "Read the call-sheet board",
+        "description": "Read or leave short posts for other Los Angeles players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "la_market",
+        "label": "Browse the prop liquidation",
+        "description": "Trade items whose screen credits were removed in editing.",
+        "kind": "market"
+      },
+      {
+        "id": "la_screening",
+        "label": "Screen an unmarked reel",
+        "description": "Watch long enough to learn who edited the public record.",
+        "kind": "activity",
+        "result": "A single frame shows a relay route disguised as a continuity note.",
+        "effect": { "intel": 2, "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "la_tail_producer",
+        "label": "Tail an executive producer",
+        "description": "Follow the person who keeps approving surveillance reshoots.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "la_san_pedro_skyline",
+    "regionId": "los_angeles",
+    "name": "San Pedro Skyline",
+    "description": "Container cranes write slow messages against the Pacific fog.",
+    "interactions": [
+      {
+        "id": "la_port_broadcaster",
+        "label": "Meet the harbor broadcasters",
+        "description": "Jules and Nia trade reports between pirate and cargo frequencies.",
+        "kind": "npcs",
+        "npcIds": ["la_jules", "la_nia"]
+      },
+      {
+        "id": "la_container_search",
+        "label": "Search a misrouted container",
+        "description": "Open freight listed as empty but drawing power.",
+        "kind": "activity",
+        "result": "A humming crate yields a circuit board and no customs explanation.",
+        "effect": { "scrap": { "circuit_board": 1 }, "suspicion": 3 },
+        "once": true
+      },
+      {
+        "id": "la_port_cameras",
+        "label": "Inspect crane cameras",
+        "description": "Review units that watch containers watching the water.",
+        "kind": "cameras"
+      },
+      {
+        "id": "la_intercept_harbor",
+        "label": "Intercept harbor control",
+        "description": "Listen for ships that dock only in databases.",
+        "kind": "espionage"
+      },
+      {
+        "id": "la_port_security",
+        "label": "Enter the bonded yard",
+        "description": "Test how firmly the port understands the word bonded.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "den_union_weather_hall",
+    "regionId": "denver",
+    "name": "Union Weather Hall",
+    "description": "Forecast maps cover the walls. None agree on when today began.",
+    "interactions": [
+      {
+        "id": "den_weather_technician",
+        "label": "Consult Eli Snow",
+        "description": "He keeps the pressure records that were excluded for being impolite.",
+        "kind": "npcs",
+        "npcIds": ["den_eli"]
+      },
+      {
+        "id": "den_board",
+        "label": "Use the avalanche notice board",
+        "description": "Read or leave short posts for other Denver players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "den_market",
+        "label": "Open the outfitter exchange",
+        "description": "Trade gear tested against altitude and municipal review.",
+        "kind": "market"
+      },
+      {
+        "id": "den_compare_forecasts",
+        "label": "Compare sealed forecasts",
+        "description": "Look for weather issued before its sensors came online.",
+        "kind": "activity",
+        "result": "Two maps share a storm signature and three classified footnotes.",
+        "effect": { "intel": 2 },
+        "once": true
+      },
+      {
+        "id": "den_weather_wire",
+        "label": "Tap the forecast wire",
+        "description": "Intercept what the weather service tells its own cameras.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "den_colfax_mile_marker",
+    "regionId": "denver",
+    "name": "Colfax Mile Marker",
+    "description": "A motel sign counts vacancies, vehicles, and unapproved pauses.",
+    "interactions": [
+      {
+        "id": "den_colfax_clerk",
+        "label": "Speak with the Colfax regulars",
+        "description": "Tasha and Mateo keep separate ledgers on the avenue's traffic.",
+        "kind": "npcs",
+        "npcIds": ["den_tasha", "den_mateo"]
+      },
+      {
+        "id": "den_motel_drawer",
+        "label": "Search the motel key drawer",
+        "description": "Look behind keys assigned to rooms that do not exist.",
+        "kind": "activity",
+        "result": "A false key tag conceals a coil of useful wiring.",
+        "effect": { "scrap": { "wiring": 2 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "den_diner_receipt",
+        "label": "Buy an alibi breakfast",
+        "description": "A dated receipt makes your route look ordinary.",
+        "kind": "activity",
+        "result": "The coffee is endless. The official interest in you is briefly not.",
+        "effect": { "currency": -4, "suspicion": -5 },
+        "once": true
+      },
+      {
+        "id": "den_colfax_cameras",
+        "label": "Inspect motel cameras",
+        "description": "Review units trained on the parking lot and nothing else, allegedly.",
+        "kind": "cameras"
+      },
+      {
+        "id": "den_colfax_patrol",
+        "label": "Walk the unlit block",
+        "description": "Risk meeting the patrol between working streetlights.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "den_front_range_uplink",
+    "regionId": "denver",
+    "name": "Front Range Uplink",
+    "description": "A summit shelter points more equipment at the plains than the sky.",
+    "interactions": [
+      {
+        "id": "den_trail_steward",
+        "label": "Find Jun Park",
+        "description": "The trail steward knows which counters count more than hikers.",
+        "kind": "npcs",
+        "npcIds": ["den_jun"]
+      },
+      {
+        "id": "den_uplink_bench",
+        "label": "Use the alpine repair bench",
+        "description": "Craft with tools tethered against wind and theft.",
+        "kind": "workbench"
+      },
+      {
+        "id": "den_uplink_cameras",
+        "label": "Audit summit cameras",
+        "description": "Review scenic units with excellent views of license plates.",
+        "kind": "cameras"
+      },
+      {
+        "id": "den_intercept_plains",
+        "label": "Intercept the plains relay",
+        "description": "Listen downrange toward half the country.",
+        "kind": "espionage"
+      },
+      {
+        "id": "den_counter_salvage",
+        "label": "Open a retired trail counter",
+        "description": "Recover its optics before the next hiking season.",
+        "kind": "activity",
+        "result": "The counter contains a clean lens and a list of suspicious switchbacks.",
+        "effect": { "scrap": { "lens": 1 }, "intel": 1 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "abq_rail_yards",
+    "regionId": "albuquerque",
+    "name": "Albuquerque Rail Yards",
+    "description": "Long shadows divide freight that arrived from freight that never left.",
+    "interactions": [
+      {
+        "id": "abq_rail_electrician",
+        "label": "Find Nico Yazzie",
+        "description": "He repairs engines with unexplained cooling demands.",
+        "kind": "npcs",
+        "npcIds": ["abq_nico"]
+      },
+      {
+        "id": "abq_market",
+        "label": "Browse the night freight market",
+        "description": "Trade goods between trains with inconsistent manifests.",
+        "kind": "market"
+      },
+      {
+        "id": "abq_freight_salvage",
+        "label": "Search an unmarked service car",
+        "description": "Recover hardware from a train classified as weather.",
+        "kind": "activity",
+        "result": "A vent panel conceals wiring and a sun-baked circuit board.",
+        "effect": {
+          "scrap": { "wiring": 1, "circuit_board": 1 },
+          "suspicion": 2
+        },
+        "once": true
+      },
+      {
+        "id": "abq_rail_bench",
+        "label": "Use the locomotive bench",
+        "description": "Craft beneath a maintenance chart written in three time zones.",
+        "kind": "workbench"
+      },
+      {
+        "id": "abq_yard_patrol",
+        "label": "Cross the midnight tracks",
+        "description": "Invite rail security to question your timetable.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "abq_old_town_frequency_shop",
+    "regionId": "albuquerque",
+    "name": "Old Town Frequency Shop",
+    "description": "Radios, solar cells, and tourist maps share one dustless window.",
+    "interactions": [
+      {
+        "id": "abq_radio_repairer",
+        "label": "Consult the frequency-shop operators",
+        "description": "Inez and Elena repair signals no licensed receiver admits hearing.",
+        "kind": "npcs",
+        "npcIds": ["abq_inez", "abq_elena"]
+      },
+      {
+        "id": "abq_board",
+        "label": "Use the community frequency board",
+        "description": "Read or leave short posts for other Albuquerque players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "abq_solar_test",
+        "label": "Test a scorched solar cell",
+        "description": "Recover the pattern heat wrote into its contacts.",
+        "kind": "activity",
+        "result": "The cell returns one useful circuit board and a repeating coordinate.",
+        "effect": { "scrap": { "circuit_board": 1 }, "intel": 1 },
+        "once": true
+      },
+      {
+        "id": "abq_tap_tourist_band",
+        "label": "Tap the tourist radio band",
+        "description": "Listen beneath restaurant tips for relay instructions.",
+        "kind": "espionage"
+      },
+      {
+        "id": "abq_old_town_cameras",
+        "label": "Inspect plaza cameras",
+        "description": "Review heritage units with suspiciously modern optics.",
+        "kind": "cameras"
+      }
+    ]
+  },
+  {
+    "id": "abq_sandia_shadow_array",
+    "regionId": "albuquerque",
+    "name": "Sandia Shadow Array",
+    "description": "Balloons rise where the mountain blocks ordinary radio and approved memory.",
+    "interactions": [
+      {
+        "id": "abq_ground_crew",
+        "label": "Join Rosa Baca's ground crew",
+        "description": "She knows which balloons drift and which maintain position.",
+        "kind": "npcs",
+        "npcIds": ["abq_rosa"]
+      },
+      {
+        "id": "abq_tether_salvage",
+        "label": "Inspect a severed tether",
+        "description": "Recover components from a balloon that descended without landing.",
+        "kind": "activity",
+        "result": "The tether housing contains a polished lens and no lift gas.",
+        "effect": { "scrap": { "housing": 1, "lens": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "abq_array_cameras",
+        "label": "Audit the shadow array",
+        "description": "Review units aimed into the radio silence.",
+        "kind": "cameras"
+      },
+      {
+        "id": "abq_intercept_balloon",
+        "label": "Intercept balloon telemetry",
+        "description": "Listen for scenic platforms reporting human movement.",
+        "kind": "espionage"
+      },
+      {
+        "id": "abq_array_patrol",
+        "label": "Enter the launch perimeter",
+        "description": "Meet whoever arrives when a balloon loses authorization.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "chi_lower_wacker_dispatch",
+    "regionId": "chicago",
+    "name": "Lower Wacker Dispatch",
+    "description": "Traffic echoes beneath the city until every route sounds confidential.",
+    "interactions": [
+      {
+        "id": "chi_dispatcher",
+        "label": "Report to Lena Kowalski",
+        "description": "She routes freight through streets daylight does not supervise.",
+        "kind": "npcs",
+        "npcIds": ["chi_lena"]
+      },
+      {
+        "id": "chi_board",
+        "label": "Read the dispatch chalkboard",
+        "description": "Read or leave short posts for other Chicago players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "chi_market",
+        "label": "Open the freight exchange",
+        "description": "Trade goods moving between coasts and municipal blind spots.",
+        "kind": "market"
+      },
+      {
+        "id": "chi_dispatch_intercept",
+        "label": "Intercept tunnel dispatch",
+        "description": "Listen for routes omitted from the surface map.",
+        "kind": "espionage"
+      },
+      {
+        "id": "chi_manifest_audit",
+        "label": "Compare duplicate manifests",
+        "description": "Find the freight that arrived before it shipped.",
+        "kind": "activity",
+        "result": "A duplicate route number reveals one useful piece of local intel.",
+        "effect": { "intel": 1, "suspicion": 1 },
+        "once": true
+      }
+    ]
+  },
+  {
+    "id": "chi_lakefront_switchhouse",
+    "regionId": "chicago",
+    "name": "Lakefront Switchhouse",
+    "description": "Bridge controls blink beside a lake too large for the city's filing system.",
+    "interactions": [
+      {
+        "id": "chi_bridge_tender",
+        "label": "Speak with the switchhouse regulars",
+        "description": "Omar and Yvette track bridges, vessels, and lakefront radio traffic.",
+        "kind": "npcs",
+        "npcIds": ["chi_omar", "chi_yvette"]
+      },
+      {
+        "id": "chi_bridge_cameras",
+        "label": "Inspect bridge cameras",
+        "description": "Review units facing the river's former direction.",
+        "kind": "cameras"
+      },
+      {
+        "id": "chi_control_salvage",
+        "label": "Search a retired control cabinet",
+        "description": "Recover hardware from infrastructure that never fully retires.",
+        "kind": "activity",
+        "result": "The cabinet yields a housing and wiring labeled RIVER, OLD DIRECTION.",
+        "effect": { "scrap": { "housing": 1, "wiring": 1 } },
+        "once": true
+      },
+      {
+        "id": "chi_switch_bench",
+        "label": "Use the bridge repair bench",
+        "description": "Craft while the road waits above the water.",
+        "kind": "workbench"
+      },
+      {
+        "id": "chi_bridge_patrol",
+        "label": "Cross during a false opening",
+        "description": "Risk meeting lakefront response halfway across.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "chi_stockyards_annex",
+    "regionId": "chicago",
+    "name": "Stockyards Timekeeping Annex",
+    "description": "The industry left. Its clocks continue documenting a full shift.",
+    "interactions": [
+      {
+        "id": "chi_union_steward",
+        "label": "Meet Darnell Price",
+        "description": "The union steward keeps records for workers and ghosts alike.",
+        "kind": "npcs",
+        "npcIds": ["chi_darnell"]
+      },
+      {
+        "id": "chi_punch_clock",
+        "label": "Punch an obsolete time card",
+        "description": "Create a harmless record of authorized labor.",
+        "kind": "activity",
+        "result": "The clock accepts your card and briefly classifies you as employed.",
+        "effect": { "suspicion": -4 },
+        "once": true
+      },
+      {
+        "id": "chi_annex_cameras",
+        "label": "Inspect timekeeping cameras",
+        "description": "Review units watching shifts that ended decades ago.",
+        "kind": "cameras"
+      },
+      {
+        "id": "chi_follow_inspector",
+        "label": "Follow the labor inspector",
+        "description": "Learn why inspections continue after the workforce left.",
+        "kind": "espionage"
+      },
+      {
+        "id": "chi_annex_patrol",
+        "label": "Enter the sealed clock room",
+        "description": "Invite an automated foreman to enforce a dead shift.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "bos_harbor_archive",
+    "regionId": "boston",
+    "name": "Boston Harbor Archive",
+    "description": "Salt air reaches records stored three floors below the waterline.",
+    "interactions": [
+      {
+        "id": "bos_archivist",
+        "label": "Consult the harbor archivists",
+        "description": "Mae and Leo compare future-dated records with the harbor catch.",
+        "kind": "npcs",
+        "npcIds": ["bos_mae", "bos_leo"]
+      },
+      {
+        "id": "bos_board",
+        "label": "Read the harbor broadside",
+        "description": "Read or leave short posts for other Boston players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "bos_market",
+        "label": "Browse the municipal estate sale",
+        "description": "Trade property whose ownership predates the department.",
+        "kind": "market"
+      },
+      {
+        "id": "bos_archive_search",
+        "label": "Search the future-dated drawer",
+        "description": "Read tomorrow's paperwork before policy catches up.",
+        "kind": "activity",
+        "result": "A carbon copy names a relay office hidden beneath a historic plaque.",
+        "effect": { "intel": 2, "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "bos_tail_curator",
+        "label": "Tail the night curator",
+        "description": "Follow the archivist who returns files nobody checked out.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "bos_green_line_lost_stop",
+    "regionId": "boston",
+    "name": "Green Line Lost Stop",
+    "description": "A platform waits between stations and outside municipal consensus.",
+    "interactions": [
+      {
+        "id": "bos_transit_counsel",
+        "label": "Ask Priya Shah for guidance",
+        "description": "She represents a platform in litigation against the city.",
+        "kind": "npcs",
+        "npcIds": ["bos_priya"]
+      },
+      {
+        "id": "bos_lost_property",
+        "label": "Search beneath the phantom bench",
+        "description": "Recover what commuters lost at a stop they deny using.",
+        "kind": "activity",
+        "result": "A loose panel yields a lens and a transfer valid nowhere.",
+        "effect": { "scrap": { "lens": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "bos_platform_cameras",
+        "label": "Inspect transit cameras",
+        "description": "Review units assigned to a station with no budget line.",
+        "kind": "cameras"
+      },
+      {
+        "id": "bos_transit_bench",
+        "label": "Use the maintenance bench",
+        "description": "Craft beside a live rail and an unsigned waiver.",
+        "kind": "workbench"
+      },
+      {
+        "id": "bos_tunnel_patrol",
+        "label": "Enter the outbound tunnel",
+        "description": "Risk encountering transit enforcement between jurisdictions.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "bos_cambridge_review_board",
+    "regionId": "boston",
+    "name": "Cambridge Review Board",
+    "description": "Ethical concerns enter upstairs and leave as recycled paper downstairs.",
+    "interactions": [
+      {
+        "id": "bos_custodian",
+        "label": "Speak with Finn O'Rourke",
+        "description": "The custodian reviews what peer review discards.",
+        "kind": "npcs",
+        "npcIds": ["bos_finn"]
+      },
+      {
+        "id": "bos_review_intercept",
+        "label": "Intercept a closed review",
+        "description": "Listen through a ventilation system with no conflict policy.",
+        "kind": "espionage"
+      },
+      {
+        "id": "bos_recycling_search",
+        "label": "Search the ethics recycling",
+        "description": "Recover the hardware attached to a rejected concern.",
+        "kind": "activity",
+        "result": "A shredded memo still contains one intact circuit board.",
+        "effect": { "scrap": { "circuit_board": 1 }, "intel": 1 },
+        "once": true
+      },
+      {
+        "id": "bos_lab_cameras",
+        "label": "Audit research cameras",
+        "description": "Review consent forms signed by the equipment itself.",
+        "kind": "cameras"
+      },
+      {
+        "id": "bos_review_patrol",
+        "label": "Enter the sealed laboratory",
+        "description": "Challenge a security review with no public minutes.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "mia_little_havana_dispatch",
+    "regionId": "miami",
+    "name": "Little Havana Dispatch",
+    "description": "Coffee windows and radio antennas keep the block awake through every alert.",
+    "interactions": [
+      {
+        "id": "mia_broadcaster",
+        "label": "Visit the neighborhood dispatchers",
+        "description": "Camila and Lucía broadcast routes the official alerts omit.",
+        "kind": "npcs",
+        "npcIds": ["mia_camila", "mia_lucia"]
+      },
+      {
+        "id": "mia_board",
+        "label": "Use the cafecito message wall",
+        "description": "Read or leave short posts for other Miami players.",
+        "kind": "message_board"
+      },
+      {
+        "id": "mia_market",
+        "label": "Browse the neighborhood exchange",
+        "description": "Trade goods between storm updates and domino games.",
+        "kind": "market"
+      },
+      {
+        "id": "mia_buy_coffee",
+        "label": "Buy a dispatch cafecito",
+        "description": "Acquire energy and an ordinary receipt.",
+        "kind": "activity",
+        "result": "The coffee resets your pulse and softens the official interest in it.",
+        "effect": { "currency": -3, "suspicion": -4 },
+        "once": true
+      },
+      {
+        "id": "mia_radio_intercept",
+        "label": "Monitor the storm band",
+        "description": "Listen beneath weather alerts for route corrections.",
+        "kind": "espionage"
+      }
+    ]
+  },
+  {
+    "id": "mia_port_causeway_exchange",
+    "regionId": "miami",
+    "name": "Port Causeway Exchange",
+    "description": "Cargo crosses turquoise water under cameras rated for hurricanes and subpoenas.",
+    "interactions": [
+      {
+        "id": "mia_cargo_examiner",
+        "label": "Report to Sol Navarro",
+        "description": "He compares customs declarations with what the tide actually delivered.",
+        "kind": "npcs",
+        "npcIds": ["mia_sol"]
+      },
+      {
+        "id": "mia_port_cameras",
+        "label": "Inspect causeway cameras",
+        "description": "Review marine units that spend most of their time watching drivers.",
+        "kind": "cameras"
+      },
+      {
+        "id": "mia_marine_bench",
+        "label": "Use the corrosion bench",
+        "description": "Craft with tools designed for salt, heat, and denied claims.",
+        "kind": "workbench"
+      },
+      {
+        "id": "mia_container_search",
+        "label": "Open a waterlogged container",
+        "description": "Recover freight before customs reclassifies it as weather.",
+        "kind": "activity",
+        "result": "A sealed case holds wiring and a surprisingly dry housing.",
+        "effect": { "scrap": { "wiring": 1, "housing": 1 }, "suspicion": 2 },
+        "once": true
+      },
+      {
+        "id": "mia_customs_patrol",
+        "label": "Cross the customs line",
+        "description": "Invite port compliance to inspect your declared purpose.",
+        "kind": "encounter"
+      }
+    ]
+  },
+  {
+    "id": "mia_everglades_edge_station",
+    "regionId": "miami",
+    "name": "Everglades Edge Station",
+    "description": "Sawgrass surrounds a monitoring station built to observe everything but itself.",
+    "interactions": [
+      {
+        "id": "mia_wetland_surveyor",
+        "label": "Find Teo Green",
+        "description": "He surveys sensors that count water, wildlife, and hesitation.",
+        "kind": "npcs",
+        "npcIds": ["mia_teo"]
+      },
+      {
+        "id": "mia_sensor_salvage",
+        "label": "Inspect a flooded sensor",
+        "description": "Recover hardware the swamp has already decommissioned.",
+        "kind": "activity",
+        "result": "Mud releases a lens and one length of waterproof wiring.",
+        "effect": { "scrap": { "lens": 1, "wiring": 1 }, "suspicion": 1 },
+        "once": true
+      },
+      {
+        "id": "mia_wetland_cameras",
+        "label": "Audit wetland cameras",
+        "description": "Review units that classify people as invasive movement.",
+        "kind": "cameras"
+      },
+      {
+        "id": "mia_intercept_station",
+        "label": "Tap the edge station",
+        "description": "Listen for reports sent inland from the waterline.",
+        "kind": "espionage"
+      },
+      {
+        "id": "mia_swamp_patrol",
+        "label": "Enter the restricted boardwalk",
+        "description": "Risk meeting compliance where the pavement ends.",
         "kind": "encounter"
       }
     ]
