@@ -70,6 +70,12 @@ city has an isolated event channel for presence, message-board posts, market and
 camera changes, region ticks, and cooperative operations; clients reconnect with
 bounded exponential backoff.
 
+Production reverse proxies must preserve WebSocket upgrades. The included nginx
+template forwards `Upgrade` and `Connection`, disables proxy buffering, and
+keeps regional channels open between heartbeat events. After updating an
+existing installation, render the new template and reload nginx with
+`sudo nginx -t && sudo systemctl reload nginx`.
+
 ### A Nation Under Watch
 
 The world of FlockWatch is organized around watched cities: Cleveland, New
