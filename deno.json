@@ -7,7 +7,7 @@
     "check-content": "deno run --allow-read=./content tools/check_content.ts"
   },
   "imports": {
-    "oak": "jsr:@oak/oak",
+    "oak": "npm:@oakserver/oak",
 		"$assert": "jsr:@std/assert"
   },
   "exclude": [

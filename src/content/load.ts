@@ -53,6 +53,7 @@ export async function loadContent(): Promise<LoadedContent> {
 
   for await (const entry of Deno.readDir(CONTENT_DIR)) {
     if (!entry.isFile || !entry.name.endsWith(".json")) continue;
+    if (/^(gulf_coast|new_york|pacific_northwest|rust_belt)\./.test(entry.name)) continue;
     const url = new URL(entry.name, CONTENT_DIR);
     let data: unknown;
     try {
