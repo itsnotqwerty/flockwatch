@@ -25,6 +25,18 @@
     let pendingReload = false;
 
     const reloadWhenSafe = () => {
+      const mainView = document.querySelector(
+        "main > .character-bar[data-player-id][data-region]",
+      );
+      if (!mainView) {
+        // Dialogue, markets, message boards, and action results are POST-backed
+        // views. Reloading one would replay the POST (or trigger the replay
+        // guard) and throw the player back to the main sublocation screen.
+        // Those views pick up current state naturally when the player leaves.
+        pendingReload = false;
+        status.textContent = "Regional update pending";
+        return;
+      }
       const active = document.activeElement;
       const editing = active &&
         ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName);
@@ -52,7 +64,10 @@
     const appendMessagePost = (event) => {
       const list = document.querySelector(".message-board .message-list");
       if (!list || !event.data?.body || !event.data?.author) return false;
-      if (event.data.postId && list.querySelector(`[data-post-id="${CSS.escape(event.data.postId)}"]`)) {
+      if (
+        event.data.postId &&
+        list.querySelector(`[data-post-id="${CSS.escape(event.data.postId)}"]`)
+      ) {
         return true;
       }
       const item = document.createElement("li");
@@ -103,8 +118,8 @@
           return;
         }
         if (event.type === "message.posted" && appendMessagePost(event)) return;
-        clearTimeout(window.flockwatchReloadTimer);
-        window.flockwatchReloadTimer = setTimeout(reloadWhenSafe, 250);
+        clearTimeout(globalThis.flockwatchReloadTimer);
+        globalThis.flockwatchReloadTimer = setTimeout(reloadWhenSafe, 250);
       });
       socket.addEventListener("close", () => {
         status.textContent = "Regional channel reconnecting…";
