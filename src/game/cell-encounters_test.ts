@@ -50,6 +50,7 @@ const boss: Encounter = {
     selfDamage: 1,
     suspicion: 2,
   }],
+  enemyMoves: [],
   victoryLine: "Filed.",
   defeatLine: "Denied.",
   payout: 50,

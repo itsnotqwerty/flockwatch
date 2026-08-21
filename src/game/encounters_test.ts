@@ -27,6 +27,22 @@ const patrol: Encounter = {
       flees: true,
     },
   ],
+  enemyMoves: [
+    {
+      id: "glare",
+      label: "Glare menacingly",
+      damage: 0,
+      selfDamage: 0,
+      suspicion: 3,
+    },
+    {
+      id: "swat",
+      label: "Swat at you",
+      damage: 4,
+      selfDamage: 0,
+      suspicion: 0,
+    },
+  ],
   victoryLine: "You win.",
   defeatLine: "You lose.",
   payout: 10,
@@ -105,12 +121,13 @@ Deno.test("rollEncounter returns null below the spawn chance", () => {
 });
 
 Deno.test("moves damage the enemy; victory pays out and clears suspicion", () => {
+  const passive: Encounter = { ...patrol, enemyMoves: [] };
   const p = player({ suspicion: 20 });
-  const state = startEncounter(patrol, p);
-  const t1 = applyMove(patrol, state, p, "hit")!;
+  const state = startEncounter(passive, p);
+  const t1 = applyMove(passive, state, p, "hit")!;
   assertEquals(t1.state.enemyHp, 10);
   assertEquals(t1.player.suspicion, 22);
-  const t2 = applyMove(patrol, t1.state, t1.player, "hit")!;
+  const t2 = applyMove(passive, t1.state, t1.player, "hit")!;
   assertEquals(t2.state.status, "victory");
   assertEquals(t2.player.currency, 110);
   assert(t2.player.inventory.includes("cutters"));
@@ -120,8 +137,9 @@ Deno.test("moves damage the enemy; victory pays out and clears suspicion", () =>
 });
 
 Deno.test("crafted combat gear raises damage and masks suspicion", () => {
+  const passive: Encounter = { ...patrol, enemyMoves: [] };
   const p = player({ inventory: ["shock_baton", "covert_vest"] });
-  const turn = applyMove(patrol, startEncounter(patrol, p), p, "hit")!;
+  const turn = applyMove(passive, startEncounter(passive, p), p, "hit")!;
   assertEquals(turn.state.enemyHp, 5); // 10 base + 5 from the baton
   assertEquals(turn.player.suspicion, 0); // vest absorbs the move's +2
 });
@@ -133,13 +151,14 @@ Deno.test("fleeing ends the encounter in 'fled'", () => {
 });
 
 Deno.test("boss phases announce as hp crosses thresholds", () => {
+  const passiveBoss: Encounter = { ...boss, enemyMoves: [] };
   const p = player();
-  let state = startEncounter(boss, p);
+  let state = startEncounter(passiveBoss, p);
   let pl = p;
   // 100 → 40 crosses both 0.5 and 0.2? No: 6 hits of 10 = 40, crossing 0.5 only.
   const phaseLines: string[] = [];
   for (let i = 0; i < 5; i++) {
-    const t = applyMove(boss, state, pl, "hit")!;
+    const t = applyMove(passiveBoss, state, pl, "hit")!;
     state = t.state;
     pl = t.player;
     if (t.phaseLine) phaseLines.push(t.phaseLine);
@@ -148,7 +167,7 @@ Deno.test("boss phases announce as hp crosses thresholds", () => {
   assertEquals(state.enemyHp, 50);
   // Two more hits: 50 → 30 → still above 20; then one more crosses 0.2.
   for (let i = 0; i < 3; i++) {
-    const t = applyMove(boss, state, pl, "hit")!;
+    const t = applyMove(passiveBoss, state, pl, "hit")!;
     state = t.state;
     pl = t.player;
     if (t.phaseLine) phaseLines.push(t.phaseLine);
@@ -158,14 +177,16 @@ Deno.test("boss phases announce as hp crosses thresholds", () => {
 });
 
 Deno.test("suspicion hitting the cap mid-fight is a defeat", () => {
+  const passive: Encounter = { ...patrol, enemyMoves: [] };
   const p = player({ suspicion: 99 });
-  const turn = applyMove(patrol, startEncounter(patrol, p), p, "hit")!;
+  const turn = applyMove(passive, startEncounter(passive, p), p, "hit")!;
   assertEquals(turn.state.status, "defeat");
 });
 
 Deno.test("random quips are picked on start and on ongoing turns", () => {
   const quippy: Encounter = {
     ...patrol,
+    enemyMoves: [],
     quips: ["Quip A.", "Quip B.", "Quip C."],
   };
   const p = player();
@@ -181,7 +202,8 @@ Deno.test("random quips are picked on start and on ongoing turns", () => {
   assertEquals(kill.state.status, "victory");
   assertEquals(kill.state.quip, "Quip A."); // previous quip unchanged
   // Encounters without quips never set one.
-  const plain = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5)!;
+  const passive: Encounter = { ...patrol, enemyMoves: [] };
+  const plain = applyMove(passive, startEncounter(passive, p), p, "hit", 0.5)!;
   assertEquals(plain.state.quip, undefined);
   assertEquals(plain.state.log.length, 2);
 });
@@ -190,6 +212,7 @@ Deno.test("self-damage lowers persistent hp; defeat at 0", () => {
   const p = player({ hp: 8 });
   const rough: Encounter = {
     ...patrol,
+    enemyMoves: [],
     moves: [
       { id: "hit", label: "Hit", damage: 5, selfDamage: 6, suspicion: 0 },
     ],
@@ -200,6 +223,27 @@ Deno.test("self-damage lowers persistent hp; defeat at 0", () => {
   const t2 = applyMove(rough, t1.state, t1.player, "hit")!;
   assertEquals(t2.player.hp, 0);
   assertEquals(t2.state.status, "defeat");
+});
+
+Deno.test("surviving enemies counter-attack with a random move", () => {
+  const p = player({ hp: 40 });
+  // enemyRoll 1.0 selects the last move (swat: 4 damage).
+  const t1 = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5, 1.0)!;
+  assertEquals(t1.player.hp, 36);
+  assert(
+    t1.state.log.some((l) => l.includes("Test Patrol answers: Swat at you.")),
+  );
+  // enemyRoll 0.0 selects glare: no damage, +3 suspicion.
+  const t2 = applyMove(patrol, t1.state, t1.player, "hit", 0.5, 0.0)!;
+  assertEquals(t2.state.status, "victory"); // 10+10 hp damage kills 20hp patrol
+  assertEquals(t2.player.hp, 36); // dead enemies don't counter
+});
+
+Deno.test("enemy counters can finish the player", () => {
+  const p = player({ hp: 4 });
+  const t = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5, 1.0)!;
+  assertEquals(t.player.hp, 0);
+  assertEquals(t.state.status, "defeat");
 });
 
 Deno.test("hotel rest costs 30cr and restores hp to full", () => {

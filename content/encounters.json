@@ -51,6 +51,32 @@
         "flees": true
       }
     ],
+    "enemyMoves": [
+      {
+        "id": "demand_id",
+        "label": "Demand identification",
+        "damage": 0,
+        "suspicion": 5
+      },
+      {
+        "id": "stamp_file",
+        "label": "Stamp your file NONCOMPLIANT",
+        "damage": 3,
+        "suspicion": 3
+      },
+      {
+        "id": "recite_code",
+        "label": "Recite the penal code from memory",
+        "damage": 5,
+        "suspicion": 1
+      },
+      {
+        "id": "radio_backup",
+        "label": "Radio for backup, slowly",
+        "damage": 0,
+        "suspicion": 8
+      }
+    ],
     "victoryLine": "The auditor stamps your file SATISFACTORY and forgets you exist.",
     "defeatLine": "The audit concludes. You are carried away by the paperwork.",
     "quips": [
@@ -103,6 +129,32 @@
         "selfDamage": 0,
         "suspicion": 10,
         "flees": true
+      }
+    ],
+    "enemyMoves": [
+      {
+        "id": "ping",
+        "label": "Sweep a triangulation ping",
+        "damage": 4,
+        "suspicion": 4
+      },
+      {
+        "id": "feedback",
+        "label": "Blast RF feedback",
+        "damage": 7,
+        "suspicion": 0
+      },
+      {
+        "id": "log_imei",
+        "label": "Log your device's IMEI",
+        "damage": 0,
+        "suspicion": 9
+      },
+      {
+        "id": "jam_band",
+        "label": "Jam your favorite frequency",
+        "damage": 3,
+        "suspicion": 2
       }
     ],
     "victoryLine": "The van's array goes dark. Somewhere, a dashboard fills with red.",
@@ -163,6 +215,32 @@
         "selfDamage": 0,
         "suspicion": 4,
         "flees": true
+      }
+    ],
+    "enemyMoves": [
+      {
+        "id": "glyph_rant",
+        "label": "Unspool a glyph rant at you",
+        "damage": 4,
+        "suspicion": 0
+      },
+      {
+        "id": "point_shout",
+        "label": "Point and shout 'FED'",
+        "damage": 0,
+        "suspicion": 9
+      },
+      {
+        "id": "gnome_throw",
+        "label": "Throw the garden gnome",
+        "damage": 6,
+        "suspicion": 2
+      },
+      {
+        "id": "follow_block",
+        "label": "Follow you down the block, narrating",
+        "damage": 0,
+        "suspicion": 6
       }
     ],
     "victoryLine": "He declares you 'one of the unchipped' and salutes you with a garden gnome.",
@@ -226,6 +304,32 @@
         "flees": true
       }
     ],
+    "enemyMoves": [
+      {
+        "id": "photo_plate",
+        "label": "Photograph your license plate",
+        "damage": 0,
+        "suspicion": 7
+      },
+      {
+        "id": "hoa_citation",
+        "label": "Issue an informal HOA citation",
+        "damage": 3,
+        "suspicion": 4
+      },
+      {
+        "id": "loud_call",
+        "label": "Loudly call 'the non-emergency line'",
+        "damage": 0,
+        "suspicion": 10
+      },
+      {
+        "id": "leaf_blower",
+        "label": "Deploy the leaf blower at dawn-volume",
+        "damage": 6,
+        "suspicion": 0
+      }
+    ],
     "victoryLine": "He decides you're good people and waves you through. His Ring camera is already uploading.",
     "defeatLine": "He photographed your face, your shoes, and your 'attitude' for the Facebook group.",
     "quips": [
@@ -276,6 +380,32 @@
         "selfDamage": 0,
         "suspicion": 12,
         "flees": true
+      }
+    ],
+    "enemyMoves": [
+      {
+        "id": "injunction",
+        "label": "Serve a summary injunction",
+        "damage": 8,
+        "suspicion": 4
+      },
+      {
+        "id": "redact",
+        "label": "Redact your testimony mid-sentence",
+        "damage": 0,
+        "suspicion": 10
+      },
+      {
+        "id": "task_force",
+        "label": "Convene an emergency task force",
+        "damage": 12,
+        "suspicion": 6
+      },
+      {
+        "id": "smile",
+        "label": "Smile for the cameras you didn't notice",
+        "damage": 5,
+        "suspicion": 5
       }
     ],
     "victoryLine": "Hale's career is formally concluded. The region breathes.",

@@ -519,6 +519,27 @@ export function validateEncounters(
         }
       }
     }
+    if (!Array.isArray(raw.enemyMoves) || raw.enemyMoves.length === 0) {
+      issues.push({
+        file,
+        message: at("enemyMoves must be a non-empty array"),
+      });
+    } else {
+      for (const m of raw.enemyMoves) {
+        if (!requireString(m?.id) || !requireString(m?.label)) {
+          issues.push({ file, message: at("enemy move missing id or label") });
+          continue;
+        }
+        for (const k of ["damage", "suspicion"] as const) {
+          if (typeof m[k] !== "number") {
+            issues.push({
+              file,
+              message: at(`enemy move ${m.id}: ${k} must be a number`),
+            });
+          }
+        }
+      }
+    }
     if (typeof raw.payout !== "number" || raw.payout < 0) {
       issues.push({
         file,

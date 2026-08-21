@@ -136,6 +136,8 @@ export interface Encounter {
   minFlockPresence: number;
   maxHp: number;
   moves: EncounterMove[];
+  /** The enemy's own repertoire; one is used at random each turn it survives. */
+  enemyMoves: EncounterMove[];
   victoryLine: string;
   defeatLine: string;
   /** Randomized enemy barks shown during combat (spec §3.4 flavor). */

@@ -127,6 +127,7 @@ export function applyMove(
   player: Player,
   moveId: string,
   roll: number = Math.random(),
+  enemyRoll: number = Math.random(),
 ): TurnResult | null {
   if (state.status !== "ongoing") return null;
   const move = encounter.moves.find((m) => m.id === moveId);
@@ -216,6 +217,37 @@ export function applyMove(
     if (updated.suspicion >= 100) {
       status = "defeat";
       log.push(encounter.defeatLine);
+    }
+  }
+
+  if (status === "ongoing") {
+    // The enemy retaliates with one of its own moves at random.
+    const counter = encounter.enemyMoves.length > 0
+      ? encounter.enemyMoves[
+        Math.min(
+          encounter.enemyMoves.length - 1,
+          Math.floor(Math.max(0, enemyRoll) * encounter.enemyMoves.length),
+        )
+      ]
+      : null;
+    if (counter) {
+      const counterDamage = counter.damage;
+      updated = {
+        ...updated,
+        hp: Math.max(0, updated.hp! - counterDamage),
+        suspicion: Math.max(0, updated.suspicion + counter.suspicion),
+      };
+      log.push(`${encounter.name} answers: ${counter.label}.`);
+      if (counterDamage > 0) log.push(`You take ${counterDamage} damage.`);
+      if (counter.suspicion !== 0) {
+        log.push(
+          `Suspicion ${counter.suspicion > 0 ? "+" : ""}${counter.suspicion}.`,
+        );
+      }
+      if (updated.hp! <= 0 || updated.suspicion >= 100) {
+        status = "defeat";
+        log.push(encounter.defeatLine);
+      }
     }
   }
 
