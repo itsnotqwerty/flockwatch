@@ -403,7 +403,11 @@ playRouter.post("/", async (context) => {
 
   if (action === "signup" || action === "create_account") {
     const result = action === "signup"
-      ? await signUp(fields.email ?? "", fields.password ?? "", fields.name ?? "")
+      ? await signUp(
+        fields.email ?? "",
+        fields.password ?? "",
+        fields.name ?? "",
+      )
       : await createCharacterAccount(fields.name ?? "");
     context.response.type = "text/html";
     if (!result.ok || !result.session) {
@@ -470,7 +474,10 @@ playRouter.post("/", async (context) => {
     context.response.type = "text/html";
     if (!result.ok) {
       context.response.status = 400;
-      context.response.body = renderResetForm(fields.token ?? "", result.reason);
+      context.response.body = renderResetForm(
+        fields.token ?? "",
+        result.reason,
+      );
       return;
     }
     context.response.body = renderAccountGate(
@@ -1293,7 +1300,14 @@ ${postButton("home", "Melt into the crowd")}`,
         context.response.body = renderPage({
           title: encounter.name,
           body: `<h2>${escapeHtml(encounter.name)}</h2>
-${renderDialogueBlock(await loadArt(encounter.art), encounter.name)}
+${
+            renderDialogueBlock(
+              turn.state.quip
+                ? await renderDialogue(turn.state.quip, encounter.art)
+                : await loadArt(encounter.art),
+              encounter.name,
+            )
+          }
 <ul class="encounter-log">
 ${turn.state.log.map((l) => `<li>${escapeHtml(l)}</li>`).join("\n")}
 </ul>
@@ -1367,7 +1381,9 @@ ${postButton("home", "Back to the park")}`,
       ? scrapEntries
         .map(
           ([material, count]) =>
-            `<li><strong>${escapeHtml(material.replaceAll("_", " "))}</strong> × ${count}</li>`,
+            `<li><strong>${
+              escapeHtml(material.replaceAll("_", " "))
+            }</strong> × ${count}</li>`,
         )
         .join("\n")
       : `<li>No salvage on hand.</li>`;
@@ -2194,7 +2210,14 @@ ${resolution}
 <h3>⚠ ${
       escapeHtml(encounter.name)
     } — ${state.enemyHp}/${encounter.maxHp} hp</h3>
-${renderDialogueBlock(await loadArt(encounter.art), encounter.name)}
+${
+      renderDialogueBlock(
+        state.quip
+          ? await renderDialogue(state.quip, encounter.art)
+          : await loadArt(encounter.art),
+        encounter.name,
+      )
+    }
 <ul class="encounter-log">
 ${log}
 </ul>

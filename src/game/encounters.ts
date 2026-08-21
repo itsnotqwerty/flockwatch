@@ -24,7 +24,7 @@ export function pickQuip(encounter: Encounter, roll: number): string | null {
     encounter.quips.length - 1,
     Math.floor(Math.max(0, roll) * encounter.quips.length),
   );
-  return `${encounter.name}: "${encounter.quips[i]}"`;
+  return encounter.quips[i];
 }
 
 /**
@@ -74,7 +74,6 @@ export function startEncounter(
 ): EncounterState {
   const log = [`${encounter.name} blocks your path.`];
   const quip = pickQuip(encounter, roll);
-  if (quip) log.push(quip);
   return {
     encounterId: encounter.id,
     playerId: player.id,
@@ -83,6 +82,7 @@ export function startEncounter(
     status: "ongoing",
     phaseIndex: 0,
     log,
+    ...(quip ? { quip } : {}),
   };
 }
 
@@ -200,7 +200,14 @@ export function applyMove(
 
   if (status === "ongoing") {
     const quip = pickQuip(encounter, roll);
-    if (quip) log.push(quip);
+    if (quip) {
+      return {
+        state: { ...state, enemyHp, status, phaseIndex, log, quip },
+        player: updated,
+        phaseLine,
+        moveLabel: move.label,
+      };
+    }
   }
 
   return {

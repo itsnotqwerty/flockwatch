@@ -164,6 +164,8 @@ export interface EncounterState {
   /** Boss phase index already announced. */
   phaseIndex: number;
   log: string[];
+  /** Latest enemy bark, rendered through grillsay by the view layer. */
+  quip?: string;
 }
 
 // ── §4.4 Camera ─────────────────────────────────────────────────────────────
