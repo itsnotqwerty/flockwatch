@@ -383,7 +383,8 @@ ${interactions}
 ${localTravel}
 ${decrees}
 ${travelBoard}
-${postButton("log", "Review your assignments")}`,
+${postButton("log", "Review your assignments")}
+${postButton("inventory", "Inventory")}`,
   });
 });
 
@@ -1337,6 +1338,49 @@ ${postButton("home", "Continue")}`,
 <p>Funds: ${player.currency} credits</p>
 <ul class="quest-log">
 ${items}
+</ul>
+${postButton("home", "Back to the park")}`,
+    });
+    return;
+  }
+
+  if (action === "inventory") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const allItems = await getItems();
+    const carried = player.inventory
+      .map((id) => allItems.find((i) => i.id === id))
+      .filter((i) => i !== undefined);
+    const itemList = carried.length
+      ? carried
+        .map(
+          (i) =>
+            `<li><strong>${escapeHtml(i.name)}</strong> — ${
+              escapeHtml(i.description)
+            }${i.tradeable ? "" : " <em>(untradeable)</em>"}</li>`,
+        )
+        .join("\n")
+      : `<li>Nothing. The Agencies prefer it that way.</li>`;
+    const scrap = formatMaterials(player.scrap);
+    const intelEntries = Object.entries(player.intel);
+    const intel = intelEntries.length
+      ? intelEntries
+        .map(([r, n]) => `<li>${escapeHtml(r)}: ${n}</li>`)
+        .join("\n")
+      : `<li>No regional intelligence on file.</li>`;
+    context.response.type = "text/html";
+    context.response.body = renderPage({
+      title: "Inventory",
+      body: `<h2>Inventory</h2>
+<p>Funds: ${player.currency} credits</p>
+<h3>Items</h3>
+<ul class="quest-log">
+${itemList}
+</ul>
+<h3>Scrap</h3>
+<p>${scrap || "No salvage on hand."}</p>
+<h3>Intelligence</h3>
+<ul class="quest-log">
+${intel}
 </ul>
 ${postButton("home", "Back to the park")}`,
     });
