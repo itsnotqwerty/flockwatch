@@ -56,6 +56,16 @@
             "atStages": [
               4
             ]
+          },
+          {
+            "id": "q_cle_scrap_tally_s2",
+            "label": "Report the stamped tally",
+            "response": "Martinez grunts. 'Officially missing is the best kind of found. You learn fast, kid.'",
+            "next": null,
+            "advancesQuest": "q_cle_scrap_tally",
+            "atStages": [
+              2
+            ]
           }
         ]
       },

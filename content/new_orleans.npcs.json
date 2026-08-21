@@ -171,6 +171,16 @@
             "atStages": [
               1
             ]
+          },
+          {
+            "id": "q_gulf_buoy_ledger_s2",
+            "label": "Report the confirmed schedule",
+            "response": "LaRue coils a rope. 'Knew it. The water keeps better books than the port. You did good, hand.'",
+            "next": null,
+            "advancesQuest": "q_gulf_buoy_ledger",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -302,6 +312,16 @@
             "advancesQuest": "q_artho_circuit",
             "atStages": [
               1
+            ]
+          },
+          {
+            "id": "q_no_levee_receipts_s2",
+            "label": "Deliver the vouched reading",
+            "response": "Odette seals it in wax. 'Dry paper, wet truth. Now the inspection exists. That's more than the levee can say.'",
+            "next": null,
+            "advancesQuest": "q_no_levee_receipts",
+            "atStages": [
+              2
             ]
           }
         ]

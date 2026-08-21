@@ -341,6 +341,16 @@
             "atStages": [
               0
             ]
+          },
+          {
+            "id": "q_sv_moat_audit_s2",
+            "label": "Report the inflow to Brad",
+            "response": "Brad nods like a man adding a line item. 'Coolant. In my moat. That's a licensing opportunity. You're on the friends-of-the-moat list.'",
+            "next": null,
+            "advancesQuest": "q_sv_moat_audit",
+            "atStages": [
+              2
+            ]
           }
         ]
       },

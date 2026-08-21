@@ -81,6 +81,16 @@
             "atStages": [
               0
             ]
+          },
+          {
+            "id": "q_sea_ferry_manifest_s1",
+            "label": "Have Moss mark the real crossings",
+            "response": "Moss circles three. 'These are ferries. The rest are weather with a schedule. Don't ride the weather.'",
+            "next": null,
+            "advancesQuest": "q_sea_ferry_manifest",
+            "atStages": [
+              1
+            ]
           }
         ]
       },
@@ -160,6 +170,16 @@
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
               3
+            ]
+          },
+          {
+            "id": "q_pnw_trailhead_count_s2",
+            "label": "Report the verified count",
+            "response": "Priya logs it. 'Counters counting counters. At least now we know which ones to trust. Good work.'",
+            "next": null,
+            "advancesQuest": "q_pnw_trailhead_count",
+            "atStages": [
+              2
             ]
           }
         ]
@@ -312,6 +332,16 @@
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
               6
+            ]
+          },
+          {
+            "id": "q_sea_ferry_manifest_s2",
+            "label": "Return the marked manifest",
+            "response": "Mara files it. 'Three honest boats. That's a good year for the sound. You're useful, traveler.'",
+            "next": null,
+            "advancesQuest": "q_sea_ferry_manifest",
+            "atStages": [
+              2
             ]
           }
         ]

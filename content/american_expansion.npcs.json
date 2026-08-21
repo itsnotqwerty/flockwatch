@@ -124,6 +124,16 @@
             "atStages": [
               1
             ]
+          },
+          {
+            "id": "q_la_palm_firmware_s2",
+            "label": "Return the confirmed log",
+            "response": "Deacon pockets it. 'So the palms phone home on the port's dime. Officially decorative. Officially.'",
+            "next": null,
+            "advancesQuest": "q_la_palm_firmware",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -184,6 +194,16 @@
             "advancesQuest": "q_rapper_circuit",
             "atStages": [
               0
+            ]
+          },
+          {
+            "id": "q_la_dub_roster_s2",
+            "label": "Return the flagged roster",
+            "response": "Jules shuffles the cards. 'Clean list. Dirty list. One camera with cold feet. You're a natural, kid.'",
+            "next": null,
+            "advancesQuest": "q_la_dub_roster",
+            "atStages": [
+              2
             ]
           }
         ]
@@ -324,6 +344,16 @@
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
               0
+            ]
+          },
+          {
+            "id": "q_den_melt_log_s2",
+            "label": "Deliver the confirmed log",
+            "response": "Jun marks the trail map. 'Confirmed early. The trail counters knew first. They always do.'",
+            "next": null,
+            "advancesQuest": "q_den_melt_log",
+            "atStages": [
+              2
             ]
           }
         ]
@@ -513,6 +543,16 @@
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
               3
+            ]
+          },
+          {
+            "id": "q_abq_night_freight_s2",
+            "label": "Report the air route to Nico",
+            "response": "Nico kills the arc welder. 'By balloon. That's why the rails never balance. You just balanced my books, hand.'",
+            "next": null,
+            "advancesQuest": "q_abq_night_freight",
+            "atStages": [
+              2
             ]
           }
         ]
@@ -733,6 +773,26 @@
             "atStages": [
               1
             ]
+          },
+          {
+            "id": "q_chi_switch_shift_s2",
+            "label": "Report the phantom openings",
+            "response": "Omar lets the bridge settle. 'Phantom openings on Tuesdays. Infrastructure gets curious. Now it's documented curious.'",
+            "next": null,
+            "advancesQuest": "q_chi_switch_shift",
+            "atStages": [
+              2
+            ]
+          },
+          {
+            "id": "q_chi_lake_signal_s1",
+            "label": "Ask Omar which bridge relays the signal",
+            "response": "Omar doesn't look up from the gears. 'The one that opens for no boat. It repeats whatever the lake sends. Identified. Don't answer it.'",
+            "next": null,
+            "advancesQuest": "q_chi_lake_signal",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -793,6 +853,16 @@
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
               4
+            ]
+          },
+          {
+            "id": "q_chi_timeclock_ghosts_s2",
+            "label": "Deliver the traced roster",
+            "response": "Darnell files it under grievances. 'Ghost labor loading ghost freight. The union's got standing now. Thanks, steward.'",
+            "next": null,
+            "advancesQuest": "q_chi_timeclock_ghosts",
+            "atStages": [
+              2
             ]
           }
         ]
@@ -883,6 +953,16 @@
             "atStages": [
               2
             ]
+          },
+          {
+            "id": "q_bos_tide_log_s1",
+            "label": "Check the gauge against the archive",
+            "response": "Marcus lays the log beside a page dated next spring. 'Matches next year's April. The harbor's running ahead of the calendar. Verified.'",
+            "next": null,
+            "advancesQuest": "q_bos_tide_log",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -941,6 +1021,16 @@
             "response": "Three of us move money the cameras can't follow. Collect every countersign and the circuit slips you a marked-up prospectus. Read the margins. My initials are on it. Two more margin notes to collect.",
             "next": null,
             "grantsQuest": "q_financebro_circuit"
+          },
+          {
+            "id": "q_bos_platform_docket_s2",
+            "label": "Deliver the confirmed docket",
+            "response": "Priya stamps it. 'Proof of service. The platform may now legally exist on alternate Tuesdays. Counsel thanks you.'",
+            "next": null,
+            "advancesQuest": "q_bos_platform_docket",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -999,6 +1089,16 @@
             "response": "Finn O'Rourke signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
             "next": null,
             "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              2
+            ]
+          },
+          {
+            "id": "q_bos_recycling_minutes_s2",
+            "label": "Return the verified minutes",
+            "response": "Finn feeds them to the shredder, then stops. 'Habit. These ones we keep. Ethics, filed properly for once.'",
+            "next": null,
+            "advancesQuest": "q_bos_recycling_minutes",
             "atStages": [
               2
             ]
@@ -1132,6 +1232,16 @@
             "atStages": [
               1
             ]
+          },
+          {
+            "id": "q_mia_storm_board_s2",
+            "label": "Return the verified board",
+            "response": "Camila pins it up. 'Verified by the swamp itself. Tonight the route is the truth. Tomorrow it's whatever they say. That's radio.'",
+            "next": null,
+            "advancesQuest": "q_mia_storm_board",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -1210,6 +1320,16 @@
             "advancesQuest": "q_mia_shutter_permits",
             "atStages": [
               0
+            ]
+          },
+          {
+            "id": "q_mia_shutter_permits_s1",
+            "label": "Have Sawgrass confirm the shutter timeline",
+            "response": "Sawgrass nods at the treeline. 'Shutters rose when the water did. Before the warning. The swamp told them first. Confirmed.'",
+            "next": null,
+            "advancesQuest": "q_mia_shutter_permits",
+            "atStages": [
+              1
             ]
           }
         ]
@@ -1469,6 +1589,16 @@
             "atStages": [
               -1
             ]
+          },
+          {
+            "id": "q_la_palm_firmware_s0",
+            "label": "Have Nico confirm the update window",
+            "response": "Nico checks the crane log. '03:00, every Tuesday, the cranes blink first. Whatever updates those palms rides our quiet window. Confirmed.'",
+            "next": null,
+            "advancesQuest": "q_la_palm_firmware",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
@@ -1602,6 +1732,16 @@
             "response": "Every night a signal washes in off the lake, salt-free and encrypted. Omar tends the bridge that repeats it. Find out which one and I can finally schedule around it.",
             "next": null,
             "grantsQuest": "q_chi_lake_signal"
+          },
+          {
+            "id": "q_chi_lake_signal_s2",
+            "label": "Bring the relay id to Yvette",
+            "response": "Yvette writes it on the studio window. 'The haunted bridge. Now I can broadcast when it's not listening. You're booked as a friend of the station.'",
+            "next": null,
+            "advancesQuest": "q_chi_lake_signal",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -1650,6 +1790,16 @@
             "response": "The tide came in wrong twice this week. Wrong for this year, anyway. Marcus keeps records dated ahead of the water. Check my log against his.",
             "next": null,
             "grantsQuest": "q_bos_tide_log"
+          },
+          {
+            "id": "q_bos_tide_log_s2",
+            "label": "Bring the verified log to Leo",
+            "response": "Leo spits over the rail. 'Next year's tide, this year's fish. At least the fishing's good in the future. Thanks, hand.'",
+            "next": null,
+            "advancesQuest": "q_bos_tide_log",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -1701,6 +1851,16 @@
             "response": "Half these shutters went up before the storm was named. Somebody warned the neighborhood early. Sawgrass reads the water before the news does. Confirm the timeline.",
             "next": null,
             "grantsQuest": "q_mia_shutter_permits"
+          },
+          {
+            "id": "q_mia_shutter_permits_s2",
+            "label": "Deliver the confirmed count",
+            "response": "Lucía chalks it on the truck. 'Early warnings, officially impossible. The neighborhood knew. That's worth more than a permit.'",
+            "next": null,
+            "advancesQuest": "q_mia_shutter_permits",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
