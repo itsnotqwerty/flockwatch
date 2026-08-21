@@ -26,6 +26,7 @@ import {
 } from "../render/views.ts";
 import { getNpc } from "../state/content.ts";
 import {
+  advanceOpening,
   ensurePlayer,
   getPlayer,
   listPlayersAtLocation,
@@ -265,6 +266,31 @@ ${forms[view]}
   });
 }
 
+function renderOpening(player: Player): string {
+  if (player.openingStep === "letter") {
+    return renderPage({
+      title: "Notice of Civic Discontinuity",
+      body: `<section class="account-gate opening-panel">
+<p class="eyebrow">Bureau of Civic Continuity</p>
+<h2>Notice of Civic Discontinuity</h2>
+<p>To ${escapeHtml(player.name)}:</p>
+<p>The Bureau can find no continuous civic identity corresponding to your name. No valid chain connects your municipal, employment, tax, and surveillance records.</p>
+<p>Accordingly, you do not legally exist.</p>
+<p>Your movement is restricted to Cleveland. Report to Clerk Gusteau at the Lake Erie Freight Arcade and complete a Flock camera installation and recovery audit. Successful applicants receive temporary contractor credentials authorizing interregional travel.</p>
+${postButton("continue_opening", "Put the letter down")}
+</section>`,
+    });
+  }
+  return renderPage({
+    title: "Outside",
+    body: `<section class="account-gate opening-panel">
+<p>For the first time in quite a while, you step outside...</p>
+<p>The path leads into Cleveland Memorial Park. Pigeons shift along the power lines. The cameras do not.</p>
+${postButton("continue_opening", "Enter Cleveland Memorial Park")}
+</section>`,
+  });
+}
+
 function renderResetForm(token: string, error: string | null = null): string {
   return renderPage({
     title: "Password Reset",
@@ -356,6 +382,11 @@ playRouter.get("/", async (context) => {
     return;
   }
   let player = await touchPlayer(authenticated);
+  if (player.openingStep !== "complete") {
+    context.response.type = "text/html";
+    context.response.body = renderOpening(player);
+    return;
+  }
   const region = await getRegion(player.region);
   if (!region) {
     context.response.status = 500;
@@ -535,6 +566,16 @@ playRouter.post("/", async (context) => {
 
   if (!(await claimActionRequest(authenticated.id, fields.request_id))) {
     context.response.status = 303;
+    context.response.redirect("/");
+    return;
+  }
+
+  // The opening is an authoritative progression gate, not a skippable view.
+  // Until both panels have been acknowledged, reject every gameplay action.
+  if (authenticated.openingStep !== "complete") {
+    if (action === "continue_opening") {
+      await savePlayer(advanceOpening(authenticated));
+    }
     context.response.redirect("/");
     return;
   }

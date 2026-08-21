@@ -1,6 +1,7 @@
 import { assert, assertEquals } from "$assert";
 import { createMemoryStore } from "./store.ts";
 import {
+  advanceOpening,
   defaultPlayer,
   ensurePlayer,
   getPlayer,
@@ -62,6 +63,38 @@ Deno.test("player persistence", async () => {
   // ensurePlayer creates defaults on first sight.
   const fresh = await ensurePlayer("p2", "Citizen P2", store);
   assertEquals(fresh.currency, 25);
+  assertEquals(fresh.region, "cleveland");
+  assertEquals(fresh.location, "memorial_park_service_tunnel");
+  assertEquals(fresh.openingStep, "letter");
+});
+
+Deno.test("new-character opening advances letter → outside → Memorial Park", () => {
+  const created = defaultPlayer("opening", "Missing Citizen");
+  assertEquals(created.openingStep, "letter");
+  assertEquals(created.location, "memorial_park_service_tunnel");
+
+  const outside = advanceOpening(created);
+  assertEquals(outside.openingStep, "outside");
+
+  const entered = advanceOpening(outside);
+  assertEquals(entered.openingStep, "complete");
+  assertEquals(entered.region, "cleveland");
+  assertEquals(entered.location, "memorial_park_service_tunnel");
+  assertEquals(advanceOpening(entered), entered);
+});
+
+Deno.test("untouched pre-opening mill spawns migrate into the introduction", async () => {
+  const store = createMemoryStore();
+  const oldDefault = defaultPlayer("old-default", "Unintroduced Citizen");
+  const { openingStep: _, ...withoutMarker } = oldDefault;
+  await store.set(["players", oldDefault.id], {
+    ...withoutMarker,
+    location: "cuyahoga_rolling_mill",
+  });
+
+  const migrated = await getPlayer(oldDefault.id, store);
+  assertEquals(migrated?.openingStep, "letter");
+  assertEquals(migrated?.location, "memorial_park_service_tunnel");
 });
 
 Deno.test("legacy player regions migrate to city ids and a valid sublocation", async () => {
@@ -80,6 +113,7 @@ Deno.test("legacy player regions migrate to city ids and a valid sublocation", a
   assertEquals(migrated?.region, "cleveland");
   assertEquals(migrated?.location, "cuyahoga_rolling_mill");
   assertEquals(migrated?.completedLocationActions, []);
+  assertEquals(migrated?.openingStep, "complete");
 });
 
 Deno.test("region reseeding refreshes authored locations without resetting live stats", async () => {

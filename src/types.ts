@@ -436,6 +436,8 @@ export type IdentityResolution =
   | "assumed_control"
   | "remained_nonexistent";
 
+export type OpeningStep = "letter" | "outside" | "complete";
+
 export interface DialogueNode {
   id: string;
   /** NPC line rendered through grillsay on entering this node. */
@@ -471,6 +473,8 @@ export interface Player {
   /** Current travelable sublocation within `region`. */
   location: string;
   quests: PlayerQuest[];
+  /** New-character narrative sequence; legacy saves normalize to complete. */
+  openingStep?: OpeningStep;
   /** End-state selected when the national Continuity case is resolved. */
   identityResolution?: IdentityResolution;
   /** Persistent espionage flags from blown operations (spec §3.5). */

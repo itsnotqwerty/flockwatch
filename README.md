@@ -23,13 +23,15 @@ available/given after selecting the option that assigns it to you. Pay attention
 to what NPCs say — the deepstate rewards the observant and files away the rest.
 
 The main progression begins with **Provisional Existence**. New characters are
-confined to Cleveland until Clerk Gusteau's camera-installation competency test
-awards a temporary Flock contractor credential. That credential unlocks the
-other eleven cities and begins **The Discrepancy**, a national Continuity case
-whose objectives advance only through completed server-verified gameplay:
-fieldwork, crafting, camera work, market activity, combat, and the Boston fight
-against Regional Director Hale. The final return to Cleveland offers five
-permanent narrative dispositions for the player's identity record.
+first served a Bureau of Civic Continuity notice declaring that they do not
+legally exist, then step outside into Cleveland Memorial Park. They are confined
+to Cleveland until Clerk Gusteau's camera-installation competency test awards a
+temporary Flock contractor credential. That credential unlocks the other eleven
+cities and begins **The Discrepancy**, a national Continuity case whose
+objectives advance only through completed server-verified gameplay: fieldwork,
+crafting, camera work, market activity, combat, and the Boston fight against
+Regional Director Hale. The final return to Cleveland offers five permanent
+narrative dispositions for the player's identity record.
 
 ### Dialogue
 

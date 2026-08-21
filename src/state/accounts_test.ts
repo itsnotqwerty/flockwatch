@@ -39,6 +39,8 @@ Deno.test("accounts persist a character and reject duplicate names", async () =>
     (await getPlayerForSession(created.session!.token, store))?.name,
     "Citizen Jane",
   );
+  assertEquals(created.player?.openingStep, "letter");
+  assertEquals(created.player?.location, "memorial_park_service_tunnel");
   const duplicate = await createCharacterAccount("citizen jane", store);
   assert(!duplicate.ok);
 });

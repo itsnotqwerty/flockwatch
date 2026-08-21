@@ -25,13 +25,33 @@ const DEFAULT_LOCATIONS: Record<string, string> = {
   miami: "mia_little_havana_dispatch",
 };
 
+export const CLEVELAND_MEMORIAL_PARK = "memorial_park_service_tunnel";
+
+/**
+ * Detect an untouched character produced by the pre-opening default. These
+ * records have no opening marker and still carry the original mill spawn.
+ * Restricting this migration to exact starter state avoids replaying the
+ * opening for established legacy characters.
+ */
+function needsOpeningMigration(raw: Player): boolean {
+  return raw.openingStep === undefined && raw.region === "cleveland" &&
+    (raw.location === undefined || raw.location === "cuyahoga_rolling_mill") &&
+    raw.currency === 25 && (raw.inventory?.length ?? 0) === 0 &&
+    (raw.quests?.length ?? 0) === 0 && raw.suspicion === 0 &&
+    Object.values(raw.scrap ?? {}).every((amount) => !amount) &&
+    (raw.completedLocationActions?.length ?? 0) === 0;
+}
+
 function normalizePlayer(raw: Player): Player {
   const region = LEGACY_REGIONS[raw.region] ?? raw.region;
+  const migrateOpening = needsOpeningMigration(raw);
   return {
     ...raw,
     region,
-    location: raw.location ?? DEFAULT_LOCATIONS[region] ??
-      "cuyahoga_rolling_mill",
+    location: migrateOpening
+      ? CLEVELAND_MEMORIAL_PARK
+      : raw.location ?? DEFAULT_LOCATIONS[region] ?? "cuyahoga_rolling_mill",
+    openingStep: raw.openingStep ?? (migrateOpening ? "letter" : "complete"),
     flags: raw.flags ?? [],
     intel: raw.intel ?? {},
     restricted: raw.restricted ?? [],
@@ -51,8 +71,9 @@ export function defaultPlayer(id: string, name: string): Player {
     scrap: {},
     suspicion: 0,
     region: "cleveland",
-    location: "cuyahoga_rolling_mill",
+    location: CLEVELAND_MEMORIAL_PARK,
     quests: [],
+    openingStep: "letter",
     flags: [],
     intel: {},
     restricted: [],
@@ -60,6 +81,22 @@ export function defaultPlayer(id: string, name: string): Player {
     trustedPlayerIds: [],
     lastSeenAt: new Date().toISOString(),
   };
+}
+
+/** Advance the mandatory new-character opening by exactly one panel. */
+export function advanceOpening(player: Player): Player {
+  if (player.openingStep === "letter") {
+    return { ...player, openingStep: "outside" };
+  }
+  if (player.openingStep === "outside") {
+    return {
+      ...player,
+      openingStep: "complete",
+      region: "cleveland",
+      location: CLEVELAND_MEMORIAL_PARK,
+    };
+  }
+  return player;
 }
 
 export async function getPlayer(id: string, s?: Store): Promise<Player | null> {
