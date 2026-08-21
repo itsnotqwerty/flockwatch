@@ -348,7 +348,7 @@
     "name": "Regional Director Hale",
     "art": "glangley",
     "kind": "boss",
-    "regions": ["new_york_city"],
+    "regions": ["new_york_city", "boston"],
     "minFlockPresence": 0,
     "maxHp": 120,
     "moves": [
@@ -443,8 +443,12 @@
     "regions": [
       "cleveland",
       "atlanta",
+<<<<<<< HEAD
       "chicago",
       "boston"
+=======
+      "chicago"
+>>>>>>> 08084cf (Updated boss regions)
     ],
     "minFlockPresence": 0,
     "maxHp": 100,
