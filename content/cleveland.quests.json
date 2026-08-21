@@ -80,50 +80,46 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get \"Dietrich\" in Cleveland to countersign your census card."
-      },
-      {
-        "id": "s2",
         "objective": "Get \"Peaches\" in Atlanta to countersign."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get \"Saltine\" on the Gulf Coast to countersign."
       },
       {
-        "id": "s4",
+        "id": "s3",
         "objective": "Get \"Sable\" in New York City to countersign."
       },
       {
-        "id": "s5",
+        "id": "s4",
         "objective": "Get \"Moss\" in the Pacific Northwest to countersign."
       },
       {
-        "id": "s6",
+        "id": "s5",
         "objective": "Get \"Ping\" in Silicon Valley to countersign."
       },
       {
-        "id": "s7",
+        "id": "s6",
         "objective": "Get \"Milepost\" in Denver to countersign."
       },
       {
-        "id": "s8",
+        "id": "s7",
         "objective": "Get \"Ballast\" in Albuquerque to countersign."
       },
       {
-        "id": "s9",
+        "id": "s8",
         "objective": "Get \"Reel\" in Los Angeles to countersign."
       },
       {
-        "id": "s10",
+        "id": "s9",
         "objective": "Get \"Underpass\" in Chicago to countersign."
       },
       {
-        "id": "s11",
+        "id": "s10",
         "objective": "Get \"Chowder\" in Boston to countersign."
       },
       {
-        "id": "s12",
+        "id": "s11",
         "objective": "Get \"Sawgrass\" in Miami to countersign the completed card."
       }
     ],
@@ -308,34 +304,30 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Mateo Ruiz in Denver to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Lucía Torres in Miami to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Deacon Price in Los Angeles to countersign your card."
       },
       {
-        "id": "s4",
+        "id": "s3",
         "objective": "Get Inez Romero in Albuquerque to countersign your card."
       },
       {
-        "id": "s5",
+        "id": "s4",
         "objective": "Get Nico Yazzie in Albuquerque to countersign your card."
       },
       {
-        "id": "s6",
+        "id": "s5",
         "objective": "Get Darnell Price in Chicago to countersign your card."
       },
       {
-        "id": "s7",
+        "id": "s6",
         "objective": "Get Foreman Ray in Atlanta to countersign your card."
       },
       {
-        "id": "s8",
+        "id": "s7",
         "objective": "Get Mara Chen in Seattle to countersign your card."
       }
     ],
@@ -360,30 +352,26 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Nico Brooks in Los Angeles to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Elias Snow in Denver to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Leon Kowalski in Chicago to countersign your card."
       },
       {
-        "id": "s4",
+        "id": "s3",
         "objective": "Get Marcus Donnelly in Boston to countersign your card."
       },
       {
-        "id": "s5",
+        "id": "s4",
         "objective": "Get Clerk Miriam in Silicon Valley to countersign your card."
       },
       {
-        "id": "s6",
+        "id": "s5",
         "objective": "Get Clerk Gusteau in Cleveland to countersign your card."
       },
       {
-        "id": "s7",
+        "id": "s6",
         "objective": "Get Barista-Inspector Cole in Seattle to countersign your card."
       }
     ],
@@ -408,26 +396,22 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Groundskeeper Walt in Silicon Valley to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Jun Park in Denver to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Omar Bell in Chicago to countersign your card."
       },
       {
-        "id": "s4",
+        "id": "s3",
         "objective": "Get Finn O'Rourke in Boston to countersign your card."
       },
       {
-        "id": "s5",
+        "id": "s4",
         "objective": "Get Harbor Engineer Priya in Seattle to countersign your card."
       },
       {
-        "id": "s6",
+        "id": "s5",
         "objective": "Get Old Man Martinez in Cleveland to countersign your card."
       }
     ],
@@ -452,22 +436,18 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Boomer Earl in New Orleans to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Elena Chávez in Albuquerque to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Boomer Greg in Silicon Valley to countersign your card."
       },
       {
-        "id": "s4",
+        "id": "s3",
         "objective": "Get Boomer Hank in Atlanta to countersign your card."
       },
       {
-        "id": "s5",
+        "id": "s4",
         "objective": "Get Boomer Dave in Cleveland to countersign your card."
       }
     ],
@@ -492,18 +472,14 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Yvette King in Chicago to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Jules Static in Los Angeles to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Camila Reyes in Miami to countersign your card."
       },
       {
-        "id": "s4",
+        "id": "s3",
         "objective": "Get Lil Peep-Peep in Atlanta to countersign your card."
       }
     ],
@@ -528,14 +504,10 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Leo Baptiste in Boston to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Sol Navarro in Miami to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Fisherman LaRue in New Orleans to countersign your card."
       }
     ],
@@ -560,14 +532,10 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Marin Voss in New York City to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Marisol Vega in Los Angeles to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Odette Marchand in New Orleans to countersign your card."
       }
     ],
@@ -592,14 +560,10 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Priya Shah in Boston to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Brad Kellerman in Silicon Valley to countersign your card."
       },
       {
-        "id": "s3",
+        "id": "s2",
         "objective": "Get Chadwick \"Chad\" Brennan III in New York City to countersign your card."
       }
     ],
@@ -624,10 +588,6 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Get Vern in New Orleans to countersign your card."
-      },
-      {
-        "id": "s2",
         "objective": "Get Raymond in New York City to countersign your card."
       }
     ],

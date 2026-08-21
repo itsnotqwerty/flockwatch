@@ -68,7 +68,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              5
+              4
             ]
           }
         ]
@@ -167,7 +167,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              4
+              3
             ]
           }
         ]
@@ -211,7 +211,7 @@
             "next": null,
             "advancesQuest": "q_boomer_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -271,19 +271,9 @@
           {
             "id": "join_groundskeeper_circuit",
             "label": "Ask about the groundskeeper circuit",
-            "response": "Six of us mow around the things nobody explains. Visit every groundskeeper, get the countersigns, and the circuit cuts you a master key.",
+            "response": "Six of us mow around the things nobody explains. Visit every groundskeeper, get the countersigns, and the circuit cuts you a master key. My mark's on the card. Five more hatches to knock on.",
             "next": null,
             "grantsQuest": "q_groundskeeper_circuit"
-          },
-          {
-            "id": "groundskeeper_signoff_sv_groundskeeper_walt",
-            "label": "Present your circuit card for a countersign",
-            "response": "Groundskeeper Walt signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
-            "next": null,
-            "advancesQuest": "q_groundskeeper_circuit",
-            "atStages": [
-              0
-            ]
           }
         ]
       }
@@ -349,7 +339,7 @@
             "next": null,
             "advancesQuest": "q_financebro_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]

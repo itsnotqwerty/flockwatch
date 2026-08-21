@@ -61,7 +61,7 @@
             "next": null,
             "advancesQuest": "q_artho_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -122,7 +122,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -183,7 +183,7 @@
             "next": null,
             "advancesQuest": "q_rapper_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -262,7 +262,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -323,7 +323,7 @@
             "next": null,
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -382,7 +382,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              6
+              5
             ]
           }
         ]
@@ -451,7 +451,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              3
+              2
             ]
           }
         ]
@@ -512,7 +512,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              4
+              3
             ]
           }
         ]
@@ -571,7 +571,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              7
+              6
             ]
           },
           {
@@ -660,7 +660,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -731,7 +731,7 @@
             "next": null,
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -792,7 +792,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              5
+              4
             ]
           }
         ]
@@ -881,7 +881,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              3
+              2
             ]
           }
         ]
@@ -938,19 +938,9 @@
           {
             "id": "join_financebro_circuit",
             "label": "Ask about the finance circuit",
-            "response": "Three of us move money the cameras can't follow. Collect every countersign and the circuit slips you a marked-up prospectus. Read the margins.",
+            "response": "Three of us move money the cameras can't follow. Collect every countersign and the circuit slips you a marked-up prospectus. Read the margins. My initials are on it. Two more margin notes to collect.",
             "next": null,
             "grantsQuest": "q_financebro_circuit"
-          },
-          {
-            "id": "financebro_signoff_bos_priya",
-            "label": "Present your circuit card for a countersign",
-            "response": "Priya Shah initials in gel pen. 'Approved. Your account with the circuit is now... let's call it interest-bearing.'",
-            "next": null,
-            "advancesQuest": "q_financebro_circuit",
-            "atStages": [
-              0
-            ]
           }
         ]
       }
@@ -1010,7 +1000,7 @@
             "next": null,
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
-              3
+              2
             ]
           }
         ]
@@ -1079,7 +1069,7 @@
             "next": null,
             "advancesQuest": "q_fisherman_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -1140,7 +1130,7 @@
             "next": null,
             "advancesQuest": "q_rapper_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -1199,7 +1189,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              11
+              10
             ]
           },
           {
@@ -1278,7 +1268,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              10
+              9
             ]
           },
           {
@@ -1347,7 +1337,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              9
+              8
             ]
           },
           {
@@ -1416,7 +1406,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              8
+              7
             ]
           },
           {
@@ -1466,7 +1456,7 @@
           {
             "id": "join_clerk_circuit",
             "label": "Ask about the clerk circuit",
-            "response": "Seven desks, seven stamps, one form nobody admits exists. Collect every clerk's countersign and the circuit issues you a desk stamp of your own.",
+            "response": "Seven desks, seven stamps, one form nobody admits exists. Collect every clerk's countersign and the circuit issues you a desk stamp of your own. I've stamped my own line. The other six desks are yours to visit.",
             "next": null,
             "grantsQuest": "q_clerk_circuit"
           },
@@ -1477,7 +1467,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              0
+              -1
             ]
           }
         ]
@@ -1517,19 +1507,9 @@
           {
             "id": "join_foreman_circuit",
             "label": "Ask about the foreman circuit",
-            "response": "Eight of us keep the crews and the books. Get every foreman's countersign and the circuit owes you a punch card. Laminated. Union-made.",
+            "response": "Eight of us keep the crews and the books. Get every foreman's countersign and the circuit owes you a punch card. Laminated. Union-made. My countersign's on it already. The other seven are on you.",
             "next": null,
             "grantsQuest": "q_foreman_circuit"
-          },
-          {
-            "id": "foreman_signoff_den_mateo",
-            "label": "Present your circuit card for a countersign",
-            "response": "Mateo Ruiz countersigns your card. 'Counted on the circuit. Keep moving.'",
-            "next": null,
-            "advancesQuest": "q_foreman_circuit",
-            "atStages": [
-              0
-            ]
           }
         ]
       }
@@ -1572,7 +1552,7 @@
             "next": null,
             "advancesQuest": "q_boomer_circuit",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -1612,19 +1592,9 @@
           {
             "id": "join_rapper_circuit",
             "label": "Ask about the rapper circuit",
-            "response": "Four stations, four signals, one underground. Carry the track to every voice on the circuit, get the countersigns, and we cut you a demo.",
+            "response": "Four stations, four signals, one underground. Carry the track to every voice on the circuit, get the countersigns, and we cut you a demo. My verse is on it. Three more voices to collect.",
             "next": null,
             "grantsQuest": "q_rapper_circuit"
-          },
-          {
-            "id": "rapper_signoff_chi_yvette",
-            "label": "Present your circuit card for a countersign",
-            "response": "Yvette King countersigns your card. 'Counted on the circuit. Keep moving.'",
-            "next": null,
-            "advancesQuest": "q_rapper_circuit",
-            "atStages": [
-              0
-            ]
           },
           {
             "id": "ask_lake_signal",
@@ -1670,19 +1640,9 @@
           {
             "id": "join_fisherman_circuit",
             "label": "Ask about the fisherman circuit",
-            "response": "Three of us read the water for a living. Visit every fisherman, get the countersigns, and the circuit hands you the annotated tables.",
+            "response": "Three of us read the water for a living. Visit every fisherman, get the countersigns, and the circuit hands you the annotated tables. My salt pencil's already marked it. Two more harbors to go.",
             "next": null,
             "grantsQuest": "q_fisherman_circuit"
-          },
-          {
-            "id": "fisherman_signoff_bos_leo",
-            "label": "Present your circuit card for a countersign",
-            "response": "Leo Baptiste countersigns your card. 'Counted on the circuit. Keep moving.'",
-            "next": null,
-            "advancesQuest": "q_fisherman_circuit",
-            "atStages": [
-              0
-            ]
           },
           {
             "id": "ask_tide_log",
@@ -1732,7 +1692,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              1
+              0
             ]
           },
           {

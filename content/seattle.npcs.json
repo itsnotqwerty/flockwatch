@@ -69,7 +69,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              4
+              3
             ]
           },
           {
@@ -159,7 +159,7 @@
             "next": null,
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
-              4
+              3
             ]
           }
         ]
@@ -260,7 +260,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              6
+              5
             ]
           }
         ]
@@ -311,7 +311,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              7
+              6
             ]
           }
         ]

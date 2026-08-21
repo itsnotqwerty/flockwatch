@@ -54,7 +54,7 @@
             "next": null,
             "advancesQuest": "q_groundskeeper_circuit",
             "atStages": [
-              5
+              4
             ]
           }
         ]
@@ -164,7 +164,7 @@
             "next": null,
             "advancesQuest": "q_clerk_circuit",
             "atStages": [
-              5
+              4
             ]
           }
         ]
@@ -248,19 +248,9 @@
           {
             "id": "join_informant_census",
             "label": "Ask about the informant census",
-            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official. Mine's already on it — consider this conversation the first signature.",
             "next": null,
             "grantsQuest": "q_informant_census"
-          },
-          {
-            "id": "census_signoff_informant",
-            "label": "Present your census card for a countersign",
-            "response": "\"Dietrich\" reads it twice, signs once in pencil. \"The census never happened. You were never counted.\"",
-            "next": null,
-            "advancesQuest": "q_informant_census",
-            "atStages": [
-              0
-            ]
           }
         ]
       },
@@ -332,7 +322,7 @@
             "next": null,
             "advancesQuest": "q_boomer_circuit",
             "atStages": [
-              4
+              3
             ]
           }
         ]

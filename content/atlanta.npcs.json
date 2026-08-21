@@ -68,7 +68,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              1
+              0
             ]
           }
         ]
@@ -130,7 +130,7 @@
             "next": null,
             "advancesQuest": "q_boomer_circuit",
             "atStages": [
-              3
+              2
             ]
           }
         ]
@@ -191,7 +191,7 @@
             "next": null,
             "advancesQuest": "q_foreman_circuit",
             "atStages": [
-              6
+              5
             ]
           }
         ]
@@ -270,7 +270,7 @@
             "next": null,
             "advancesQuest": "q_rapper_circuit",
             "atStages": [
-              3
+              2
             ]
           }
         ]

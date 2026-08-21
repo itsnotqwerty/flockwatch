@@ -69,7 +69,7 @@
             "next": null,
             "advancesQuest": "q_informant_census",
             "atStages": [
-              2
+              1
             ]
           },
           {
@@ -169,7 +169,7 @@
             "next": null,
             "advancesQuest": "q_fisherman_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -215,19 +215,9 @@
           {
             "id": "join_schizo_circuit",
             "label": "Ask about the other circuit",
-            "response": "Two of us hear the real broadcast. Get both countersigns and the circuit lines you a hat. The lining matters. The lining is the whole point.",
+            "response": "Two of us hear the real broadcast. Get both countersigns and the circuit lines you a hat. The lining matters. The lining is the whole point. The pigeons already countersigned for me. One more listener to find.",
             "next": null,
             "grantsQuest": "q_schizo_circuit"
-          },
-          {
-            "id": "schizo_signoff_gulf_vern",
-            "label": "Present your circuit card for a countersign",
-            "response": "Vern signs in a cipher only the pigeons read. 'Heard you coming three blocks out. The hat knows you now. Wear it indoors.'",
-            "next": null,
-            "advancesQuest": "q_schizo_circuit",
-            "atStages": [
-              0
-            ]
           }
         ]
       },
@@ -311,7 +301,7 @@
             "next": null,
             "advancesQuest": "q_artho_circuit",
             "atStages": [
-              2
+              1
             ]
           }
         ]
@@ -375,19 +365,9 @@
           {
             "id": "join_boomer_circuit",
             "label": "Ask about the boomer circuit",
-            "response": "Five of us keep every receipt since the seventies. Get all five countersigns and the circuit binds you a binder. Weatherproof. Like us.",
+            "response": "Five of us keep every receipt since the seventies. Get all five countersigns and the circuit binds you a binder. Weatherproof. Like us. Signed mine in duplicate already. Four more binders to visit.",
             "next": null,
             "grantsQuest": "q_boomer_circuit"
-          },
-          {
-            "id": "boomer_signoff_gulf_boomer_earl",
-            "label": "Present your circuit card for a countersign",
-            "response": "Boomer Earl signs in duplicate and keeps the carbon. 'Documented. Filed. Framed, probably. You're one of us now, kid.'",
-            "next": null,
-            "advancesQuest": "q_boomer_circuit",
-            "atStages": [
-              0
-            ]
           }
         ]
       }
