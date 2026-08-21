@@ -221,7 +221,7 @@
   },
   {
     "id": "den_tasha",
-    "name": "Tasha Reed",
+    "name": "\"Milepost\"",
     "role": "Night Clerk, Colfax Mile Marker",
     "region": "denver",
     "art": "informant",
@@ -356,7 +356,7 @@
   },
   {
     "id": "abq_rosa",
-    "name": "Rosa Baca",
+    "name": "\"Ballast\"",
     "role": "Balloon Ground Crew, Sandia Shadow",
     "region": "albuquerque",
     "art": "informant",
@@ -745,7 +745,7 @@
   },
   {
     "id": "mia_teo",
-    "name": "Teo Green",
+    "name": "\"Sawgrass\"",
     "role": "Wetland Surveyor, Everglades Edge",
     "region": "miami",
     "art": "informant",
@@ -787,7 +787,7 @@
   },
   {
     "id": "bos_sal",
-    "name": "Sal Pagliuca",
+    "name": "\"Chowder\"",
     "role": "Unaffiliated, Harbor Fish Pier",
     "region": "boston",
     "art": "informant",
@@ -829,7 +829,7 @@
   },
   {
     "id": "chi_marlo",
-    "name": "Marlo Vance",
+    "name": "\"Underpass\"",
     "role": "Unaffiliated, Lower Wacker Underpass",
     "region": "chicago",
     "art": "informant",
@@ -871,7 +871,7 @@
   },
   {
     "id": "la_reyes",
-    "name": "Reyes Delgado",
+    "name": "\"Reel\"",
     "role": "Unaffiliated, Echo Park Lake",
     "region": "los_angeles",
     "art": "informant",
