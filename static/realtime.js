@@ -112,7 +112,6 @@
         if (
           event.actorId === playerId || event.data?.status === "heartbeat"
         ) return;
-        status.textContent = `Live update · ${event.type}`;
         if (event.type === "presence.changed") {
           refreshPresence().catch(() => {});
           return;

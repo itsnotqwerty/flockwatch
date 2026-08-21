@@ -19,7 +19,7 @@
         "label": "Salvage the idle line",
         "description": "Recover useful metal without becoming part of the inventory.",
         "kind": "activity",
-        "result": "A dead control cabinet yields wiring and a circuit board. The mill records the loss as efficiency.",
+        "result": "A dead control cabinet yields wiring and a circuit board. The mill records the loss as inter-department efficiency.",
         "effect": {
           "scrap": {
             "wiring": 2,
