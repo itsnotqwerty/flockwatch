@@ -14,6 +14,28 @@ import { addMaterials, formatMaterials } from "./materials.ts";
 /** Player field HP. Defeats happen at 0. */
 export const PLAYER_HP = 40;
 
+/** Current player HP; legacy saves without the field count as full. */
+export function playerHp(player: Player): number {
+  return player.hp ?? PLAYER_HP;
+}
+
+/** Cost of a hotel stay, which fully restores HP. Available in every city. */
+export const REST_COST = 30;
+
+/**
+ * Stay at a hotel: spend REST_COST credits to restore HP to full. Returns
+ * null when the player can't afford it or is already fully rested.
+ */
+export function restAtHotel(player: Player): Player | null {
+  if (player.currency < REST_COST) return null;
+  if (playerHp(player) >= PLAYER_HP) return null;
+  return {
+    ...player,
+    currency: player.currency - REST_COST,
+    hp: PLAYER_HP,
+  };
+}
+
 /**
  * Pick a random combat quip for an enemy. `roll` is 0–1 (injectable);
  * returns null when the encounter defines no quips.
@@ -112,6 +134,7 @@ export function applyMove(
 
   let updated: Player = {
     ...player,
+    hp: Math.max(0, playerHp(player) - move.selfDamage),
     suspicion: Math.max(
       0,
       player.suspicion +
@@ -183,10 +206,8 @@ export function applyMove(
         }
         : updated.intel,
     }, encounter.materialDrops);
-  } else if (
-    player.currency <= 0 && move.selfDamage > 0 && enemyHp > PLAYER_HP
-  ) {
-    // Attrition defeat: outmatched and out of options.
+  } else if (move.selfDamage > 0 && updated.hp! <= 0) {
+    // Attrition defeat: the player ran out of HP.
     status = "defeat";
     log.push(encounter.defeatLine);
   } else {

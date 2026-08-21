@@ -76,6 +76,10 @@ import {
 import { isRestricted, performEspionage } from "../game/espionage.ts";
 import {
   applyMove,
+  PLAYER_HP,
+  playerHp,
+  REST_COST,
+  restAtHotel,
   rollEncounter,
   startEncounter,
 } from "../game/encounters.ts";
@@ -371,7 +375,9 @@ playRouter.get("/", async (context) => {
       escapeHtml(player.id)
     }" data-region="${escapeHtml(player.region)}"><strong>${
       escapeHtml(player.name)
-    }</strong> · ${player.currency}cr · suspicion ${player.suspicion}${
+    }</strong> · ${player.currency}cr · hp ${
+      playerHp(player)
+    }/${PLAYER_HP} · suspicion ${player.suspicion}${
       postButton("logout", "End Session")
     }</div>
 <p class="eyebrow">${escapeHtml(region.name)}</p>
@@ -386,6 +392,11 @@ ${travelBoard}
 <div class="action-row">
 ${postButton("log", "Review your assignments")}
 ${postButton("inventory", "Inventory")}
+${
+      playerHp(player) < PLAYER_HP
+        ? postButton("rest", `Stay at a hotel (${REST_COST}cr)`)
+        : ""
+    }
 </div>`,
   });
 });
@@ -1311,6 +1322,7 @@ ${
 <ul class="encounter-log">
 ${turn.state.log.map((l) => `<li>${escapeHtml(l)}</li>`).join("\n")}
 </ul>
+<p>Your hp: ${playerHp(player)}/${PLAYER_HP}</p>
 ${
             turn.state.status === "ongoing"
               ? `<p>Composure holds. The exchange continues.</p>`
@@ -1321,6 +1333,14 @@ ${postButton("home", "Continue")}`,
         return;
       }
     }
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "rest") {
+    const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const rested = restAtHotel(player);
+    if (rested) await savePlayer(rested);
     context.response.redirect("/");
     return;
   }
@@ -2209,7 +2229,9 @@ ${resolution}
     return `<section class="encounter">
 <h3>⚠ ${
       escapeHtml(encounter.name)
-    } — ${state.enemyHp}/${encounter.maxHp} hp</h3>
+    } — ${state.enemyHp}/${encounter.maxHp} hp · you ${
+      playerHp(player)
+    }/${PLAYER_HP} hp</h3>
 ${
       renderDialogueBlock(
         state.quip

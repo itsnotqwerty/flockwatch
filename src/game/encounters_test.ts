@@ -2,6 +2,7 @@ import { assert, assertEquals } from "$assert";
 import {
   applyMove,
   eligibleEncounters,
+  restAtHotel,
   rollEncounter,
   startEncounter,
 } from "./encounters.ts";
@@ -183,4 +184,32 @@ Deno.test("random quips are picked on start and on ongoing turns", () => {
   const plain = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5)!;
   assertEquals(plain.state.quip, undefined);
   assertEquals(plain.state.log.length, 2);
+});
+
+Deno.test("self-damage lowers persistent hp; defeat at 0", () => {
+  const p = player({ hp: 8 });
+  const rough: Encounter = {
+    ...patrol,
+    moves: [
+      { id: "hit", label: "Hit", damage: 5, selfDamage: 6, suspicion: 0 },
+    ],
+  };
+  const t1 = applyMove(rough, startEncounter(rough, p), p, "hit")!;
+  assertEquals(t1.player.hp, 2);
+  assertEquals(t1.state.status, "ongoing");
+  const t2 = applyMove(rough, t1.state, t1.player, "hit")!;
+  assertEquals(t2.player.hp, 0);
+  assertEquals(t2.state.status, "defeat");
+});
+
+Deno.test("hotel rest costs 30cr and restores hp to full", () => {
+  const tired = player({ hp: 12, currency: 50 });
+  const rested = restAtHotel(tired)!;
+  assertEquals(rested.hp, 40);
+  assertEquals(rested.currency, 20);
+  // Refused when broke or already rested.
+  assertEquals(restAtHotel(player({ hp: 12, currency: 29 })), null);
+  assertEquals(restAtHotel(player({ hp: 40 })), null);
+  // Legacy saves without hp count as full.
+  assertEquals(restAtHotel(player({ currency: 100 })), null);
 });

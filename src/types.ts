@@ -423,6 +423,8 @@ export interface Player {
   inventory: string[]; // item ids
   scrap: Partial<Record<ScrapComponent, number>>;
   suspicion: number;
+  /** Field HP, damaged by encounter moves. Absent on legacy saves = full. */
+  hp?: number;
   region: string;
   /** Current travelable sublocation within `region`. */
   location: string;
