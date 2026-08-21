@@ -161,3 +161,26 @@ Deno.test("suspicion hitting the cap mid-fight is a defeat", () => {
   const turn = applyMove(patrol, startEncounter(patrol, p), p, "hit")!;
   assertEquals(turn.state.status, "defeat");
 });
+
+Deno.test("random quips appear on start and on ongoing turns", () => {
+  const quippy: Encounter = {
+    ...patrol,
+    quips: ["Quip A.", "Quip B.", "Quip C."],
+  };
+  const p = player();
+  // roll 0.9 selects index 2 of 3.
+  const state = startEncounter(quippy, p, 0.9);
+  assert(state.log.includes('Test Patrol: "Quip C."'));
+  const turn = applyMove(quippy, state, p, "hit", 0.0)!;
+  assert(turn.state.log.includes('Test Patrol: "Quip A."'));
+  // No quips on terminal turns (the earlier turn's quip stays in the log).
+  const kill = applyMove(quippy, turn.state, turn.player, "hit", 0.0)!;
+  assertEquals(kill.state.status, "victory");
+  assertEquals(
+    kill.state.log.filter((l) => l.includes("Quip A.")).length,
+    1,
+  );
+  // Encounters without quips log nothing extra.
+  const plain = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5)!;
+  assertEquals(plain.state.log.length, 2);
+});

@@ -53,6 +53,12 @@
     ],
     "victoryLine": "The auditor stamps your file SATISFACTORY and forgets you exist.",
     "defeatLine": "The audit concludes. You are carried away by the paperwork.",
+    "quips": [
+      "Your paperwork is already on file. It is disappointing.",
+      "Please hold still. The form requires it.",
+      "I have flagged your posture as evasive.",
+      "Compliance is its own reward. You will not be rewarded."
+    ],
     "payout": 12,
     "drops": [],
     "materialDrops": { "ballistic_fiber": 1, "chemical_reagent": 1 },
@@ -61,7 +67,7 @@
   {
     "id": "patrol_interceptor",
     "name": "Signal Interceptor Van",
-    "art": "foreman",
+    "art": "interceptor",
     "kind": "patrol",
     "regions": [
       "silicon_valley",
@@ -101,10 +107,137 @@
     ],
     "victoryLine": "The van's array goes dark. Somewhere, a dashboard fills with red.",
     "defeatLine": "Your signal is triangulated, catalogued, and monetized.",
+    "quips": [
+      "Your device just told on you.",
+      "Signal acquired. Privacy deprecated.",
+      "We heard that. We hear everything.",
+      "Your encryption is adorable."
+    ],
     "payout": 20,
     "drops": ["circuit_board_cache"],
     "materialDrops": { "circuit_board": 2, "power_cell": 1 },
     "clearsSuspicion": 0
+  },
+  {
+    "id": "patrol_schizo",
+    "name": "Porch Theorist",
+    "art": "schizo",
+    "kind": "patrol",
+    "regions": [
+      "cleveland",
+      "new_orleans",
+      "denver",
+      "albuquerque",
+      "atlanta",
+      "miami"
+    ],
+    "minFlockPresence": 0.2,
+    "maxHp": 28,
+    "moves": [
+      {
+        "id": "nod",
+        "label": "Nod along to the glyph rant",
+        "damage": 7,
+        "selfDamage": 0,
+        "suspicion": 1
+      },
+      {
+        "id": "outrave",
+        "label": "Out-conspiracy him (the cameras are birds)",
+        "damage": 13,
+        "selfDamage": 5,
+        "suspicion": 6
+      },
+      {
+        "id": "tinfoil",
+        "label": "Gift him your emergency tinfoil",
+        "damage": 16,
+        "selfDamage": 0,
+        "suspicion": -3,
+        "cost": 5
+      },
+      {
+        "id": "flee",
+        "label": "Back away slowly, maintaining eye contact",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 4,
+        "flees": true
+      }
+    ],
+    "victoryLine": "He declares you 'one of the unchipped' and salutes you with a garden gnome.",
+    "defeatLine": "He was right about one thing: they were watching. They took you away.",
+    "quips": [
+      "The birds aren't real, friend. Check the antennae.",
+      "My fillings pick up the Bureau's radio. It's mostly jazz.",
+      "You walked past camera nine twice. TWICE.",
+      "I haven't slept since the satellites got opinions."
+    ],
+    "payout": 9,
+    "drops": [],
+    "materialDrops": { "wiring": 1, "chemical_reagent": 1 },
+    "clearsSuspicion": 5
+  },
+  {
+    "id": "patrol_boomer",
+    "name": "Neighborhood Watch Captain",
+    "art": "boomer",
+    "kind": "patrol",
+    "regions": [
+      "seattle",
+      "atlanta",
+      "chicago",
+      "boston",
+      "denver",
+      "silicon_valley",
+      "new_york_city"
+    ],
+    "minFlockPresence": 0.25,
+    "maxHp": 30,
+    "moves": [
+      {
+        "id": "wave",
+        "label": "Wave like you mow your own lawn",
+        "damage": 6,
+        "selfDamage": 0,
+        "suspicion": 2
+      },
+      {
+        "id": "property_values",
+        "label": "Discuss property values at unsafe length",
+        "damage": 12,
+        "selfDamage": 4,
+        "suspicion": 3
+      },
+      {
+        "id": "casserole",
+        "label": "Deploy a goodwill casserole",
+        "damage": 15,
+        "selfDamage": 0,
+        "suspicion": -4,
+        "cost": 12
+      },
+      {
+        "id": "flee",
+        "label": "Pretend your ride is here",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 7,
+        "flees": true
+      }
+    ],
+    "victoryLine": "He decides you're good people and waves you through. His Ring camera is already uploading.",
+    "defeatLine": "He photographed your face, your shoes, and your 'attitude' for the Facebook group.",
+    "quips": [
+      "You don't look like you're from this cul-de-sac.",
+      "I report everything. It's called community.",
+      "Back in my day, surveillance was called being neighborly.",
+      "I've got three apps open about you right now."
+    ],
+    "payout": 14,
+    "drops": [],
+    "materialDrops": { "lens": 1, "housing": 1 },
+    "clearsSuspicion": 8
   },
   {
     "id": "boss_director_hale",
@@ -147,6 +280,12 @@
     ],
     "victoryLine": "Hale's career is formally concluded. The region breathes.",
     "defeatLine": "Hale thanks you for your cooperation. You will be hearing from the Bureau.",
+    "quips": [
+      "I have ended careers between sips of coffee.",
+      "You are a line item, citizen. A rounding error.",
+      "The Bureau thanks you for making this easy.",
+      "Every camera in this district knows your name."
+    ],
     "payout": 250,
     "drops": ["golden_horseshoe"],
     "materialDrops": {

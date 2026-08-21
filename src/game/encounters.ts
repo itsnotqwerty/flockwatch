@@ -15,6 +15,19 @@ import { addMaterials, formatMaterials } from "./materials.ts";
 export const PLAYER_HP = 40;
 
 /**
+ * Pick a random combat quip for an enemy. `roll` is 0–1 (injectable);
+ * returns null when the encounter defines no quips.
+ */
+export function pickQuip(encounter: Encounter, roll: number): string | null {
+  if (!encounter.quips || encounter.quips.length === 0) return null;
+  const i = Math.min(
+    encounter.quips.length - 1,
+    Math.floor(Math.max(0, roll) * encounter.quips.length),
+  );
+  return `${encounter.name}: "${encounter.quips[i]}"`;
+}
+
+/**
  * Which encounters can spawn in a region. Patrols gate on the region's Flock
  * presence (spec §3.4: high-coverage regions spawn patrol encounters); bosses
  * never gate. Restricted regions suppress all spawns for the flagged player.
@@ -53,11 +66,15 @@ export function rollEncounter(
   ];
 }
 
-/** Begin an encounter instance for a player. */
+/** Begin an encounter instance for a player. `roll` picks the opening quip. */
 export function startEncounter(
   encounter: Encounter,
   player: Player,
+  roll: number = Math.random(),
 ): EncounterState {
+  const log = [`${encounter.name} blocks your path.`];
+  const quip = pickQuip(encounter, roll);
+  if (quip) log.push(quip);
   return {
     encounterId: encounter.id,
     playerId: player.id,
@@ -65,7 +82,7 @@ export function startEncounter(
     enemyHp: encounter.maxHp,
     status: "ongoing",
     phaseIndex: 0,
-    log: [`${encounter.name} blocks your path.`],
+    log,
   };
 }
 
@@ -87,6 +104,7 @@ export function applyMove(
   state: EncounterState,
   player: Player,
   moveId: string,
+  roll: number = Math.random(),
 ): TurnResult | null {
   if (state.status !== "ongoing") return null;
   const move = encounter.moves.find((m) => m.id === moveId);
@@ -178,6 +196,11 @@ export function applyMove(
       status = "defeat";
       log.push(encounter.defeatLine);
     }
+  }
+
+  if (status === "ongoing") {
+    const quip = pickQuip(encounter, roll);
+    if (quip) log.push(quip);
   }
 
   return {

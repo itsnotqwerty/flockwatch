@@ -138,6 +138,8 @@ export interface Encounter {
   moves: EncounterMove[];
   victoryLine: string;
   defeatLine: string;
+  /** Randomized enemy barks shown during combat (spec §3.4 flavor). */
+  quips?: string[];
   /** Currency paid on victory. */
   payout: number;
   /** Items granted on victory. */

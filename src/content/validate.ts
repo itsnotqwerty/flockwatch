@@ -528,6 +528,13 @@ export function validateEncounters(
     if (!Array.isArray(raw.drops)) {
       issues.push({ file, message: at("drops must be an array") });
     }
+    if (
+      raw.quips !== undefined &&
+      (!Array.isArray(raw.quips) ||
+        raw.quips.some((q) => !requireString(q)))
+    ) {
+      issues.push({ file, message: at("quips must be an array of strings") });
+    }
     validateMaterialMap(
       raw.materialDrops,
       at("materialDrops"),
