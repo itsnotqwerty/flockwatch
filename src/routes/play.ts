@@ -14,6 +14,7 @@ import {
   resolveSelection,
 } from "../game/dialogue.ts";
 import { advanceStage, objectiveText, visibleQuests } from "../game/quests.ts";
+import { recordQuestEvent } from "../game/quest-events.ts";
 import { loadArt, renderDialogue } from "../render/grillsay.ts";
 import {
   renderDialogueBlock,
@@ -83,7 +84,12 @@ import {
   rollEncounter,
   startEncounter,
 } from "../game/encounters.ts";
-import { hasBureaucratsStamp, travel, travelCost } from "../game/travel.ts";
+import {
+  hasBureaucratsStamp,
+  hasTemporaryFlockCredential,
+  travel,
+  travelCost,
+} from "../game/travel.ts";
 import {
   performLocationAction,
   travelWithinRegion,
@@ -821,7 +827,13 @@ playRouter.post("/", async (context) => {
           ? turn.actor
           : await getPlayer(participantId);
         if (participant) {
-          await savePlayer(rewardCellOperation(participant, turn.state.region));
+          const rewarded = rewardCellOperation(participant, turn.state.region);
+          const progressed = recordQuestEvent(
+            rewarded,
+            await getQuests(),
+            { type: "cell.operation", region: turn.state.region },
+          ).player;
+          await savePlayer(progressed);
         }
       }
     }
@@ -927,7 +939,17 @@ playRouter.post("/", async (context) => {
           ? turn.actor
           : await getPlayer(participantId);
         if (participant) {
-          await savePlayer(rewardCellParticipant(participant, encounter));
+          const rewarded = rewardCellParticipant(participant, encounter);
+          const progressed = recordQuestEvent(
+            rewarded,
+            await getQuests(),
+            {
+              type: "boss.victory",
+              region: turn.state.region,
+              target: encounter.id,
+            },
+          ).player;
+          await savePlayer(progressed);
         }
       }
     } else {
@@ -1136,12 +1158,17 @@ playRouter.post("/", async (context) => {
         context.response.redirect("/");
         return;
       }
+      const progressed = recordQuestEvent(
+        result.player,
+        await getQuests(),
+        { type: "camera.install", region: player.region, target: camera.id },
+      ).player;
       await saveCamera(result.camera);
-      await savePlayer(result.player);
+      await savePlayer(progressed);
       if (region) {
         await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
       }
-      publishRegion("camera.changed", result.player, {
+      publishRegion("camera.changed", progressed, {
         cameraId: result.camera.id,
         status: result.camera.status,
       });
@@ -1159,12 +1186,17 @@ playRouter.post("/", async (context) => {
         context.response.redirect("/");
         return;
       }
+      const progressed = recordQuestEvent(
+        result.player,
+        await getQuests(),
+        { type: "camera.dismantle", region: player.region, target: camera.id },
+      ).player;
       await saveCamera(result.camera);
-      await savePlayer(result.player);
+      await savePlayer(progressed);
       if (region) {
         await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
       }
-      publishRegion("camera.changed", result.player, {
+      publishRegion("camera.changed", progressed, {
         cameraId: result.camera.id,
         status: result.camera.status,
       });
@@ -1189,7 +1221,14 @@ playRouter.post("/", async (context) => {
     const recipe = (await getRecipes()).find((r) => r.id === fields.recipe);
     if (recipe) {
       const result = craft(player, recipe);
-      if (result.crafted) await savePlayer(result.player);
+      if (result.crafted) {
+        const progressed = recordQuestEvent(
+          result.player,
+          await getQuests(),
+          { type: "craft", region: player.region, target: recipe.id },
+        ).player;
+        await savePlayer(progressed);
+      }
     }
     context.response.redirect("/");
     return;
@@ -1212,7 +1251,12 @@ playRouter.post("/", async (context) => {
       if (item) {
         const result = createListing(player, item, price);
         if (result.ok) {
-          await savePlayer(result.value.seller);
+          const progressed = recordQuestEvent(
+            result.value.seller,
+            await getQuests(),
+            { type: "market.trade", region: player.region, target: item.id },
+          ).player;
+          await savePlayer(progressed);
           await saveListing(result.value.listing);
           publishRegion("market.changed", result.value.seller, {
             action: "listed",
@@ -1231,7 +1275,16 @@ playRouter.post("/", async (context) => {
         const seller = await ensurePlayer(listing.sellerId, "Seller");
         const result = buyListing(player, seller, listing, decrees);
         if (result.ok) {
-          await savePlayer(result.value.buyer);
+          const progressed = recordQuestEvent(
+            result.value.buyer,
+            await getQuests(),
+            {
+              type: "market.trade",
+              region: player.region,
+              target: listing.itemId,
+            },
+          ).player;
+          await savePlayer(progressed);
           await savePlayer(result.value.seller);
           await deleteListing(listing.regionId, listing.id);
           await recordSale({ ...listing, price: result.value.paid });
@@ -1295,6 +1348,13 @@ playRouter.post("/", async (context) => {
       );
       if (outcome.ok) {
         player = outcome.player;
+        if (outcome.success) {
+          player = recordQuestEvent(
+            player,
+            await getQuests(),
+            { type: "espionage.success", region: player.region },
+          ).player;
+        }
         await savePlayer(player);
         context.response.type = "text/html";
         context.response.body = renderPage({
@@ -1388,6 +1448,19 @@ ${postButton("home", "Melt into the crowd")}`,
       );
       if (turn) {
         player = turn.player;
+        if (turn.state.status === "victory") {
+          player = recordQuestEvent(
+            player,
+            await getQuests(),
+            {
+              type: encounter.kind === "boss"
+                ? "boss.victory"
+                : "encounter.victory",
+              region: player.region,
+              target: encounter.id,
+            },
+          ).player;
+        }
         await savePlayer(player);
         if (turn.state.status === "ongoing") {
           await saveEncounter(turn.state);
@@ -1601,6 +1674,12 @@ ${postButton("home", "Back")}
 
     // Stage progression / turn-in for held quests.
     if (result.advancesQuest) {
+      if (result.option.setsIdentityResolution) {
+        player = {
+          ...player,
+          identityResolution: result.option.setsIdentityResolution,
+        };
+      }
       const adv = advanceStage(player, result.advancesQuest);
       player = adv.player;
       if (adv.turnedIn) {
@@ -2410,6 +2489,12 @@ ${bossRows ? `<ul class="boss-list">\n${bossRows}\n</ul>` : ""}
 
 /** Travel options to other regions (spec §3.0). */
 async function renderTravel(player: Player): Promise<string> {
+  if (!hasTemporaryFlockCredential(player)) {
+    return `<section class="travel travel-locked">
+<h3>Interregional Transit Withheld</h3>
+<p>Your available jurisdiction is Cleveland. Clerk Gusteau at the Lake Erie Freight Arcade can issue a temporary Flock contractor credential after a field competency check.</p>
+</section>`;
+  }
   const regions = (await getRegionContent()).filter((r) =>
     r.id !== player.region
   );
@@ -2436,8 +2521,11 @@ async function renderTravel(player: Player): Promise<string> {
   const transponderNote = player.inventory.includes("transit_transponder")
     ? `<p class="stamp-note">Your Ghost Transit Transponder reduces the remaining fare by 25%.</p>`
     : "";
+  const credentialNote =
+    `<p class="stamp-note">Your temporary Flock contractor credential authorizes interregional transit and halves fares.</p>`;
   return `<section class="travel">
 <h3>Elsewhere in the Union</h3>
+${credentialNote}
 ${stampNote}
 ${transponderNote}
 <ul class="travel-list">

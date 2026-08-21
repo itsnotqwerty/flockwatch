@@ -1,0 +1,124 @@
+[
+  {
+    "id": "q_provisional_existence",
+    "title": "Provisional Existence",
+    "hidden": true,
+    "trigger": {
+      "npc": "clerk",
+      "dialogueOption": "report_nonexistence"
+    },
+    "stages": [
+      {
+        "id": "contract_install",
+        "objective": "Install a contracted Flock camera in Cleveland.",
+        "requirement": {
+          "event": "camera.install",
+          "region": "cleveland"
+        }
+      },
+      {
+        "id": "audit_dismantle",
+        "objective": "Dismantle an active Flock camera in Cleveland and retain its serial plate.",
+        "requirement": {
+          "event": "camera.dismantle",
+          "region": "cleveland"
+        }
+      },
+      {
+        "id": "credential_issue",
+        "objective": "Return to Clerk Gusteau at the Lake Erie Freight Arcade for a temporary contractor credential."
+      }
+    ],
+    "rewards": {
+      "currency": 250,
+      "items": ["temporary_flock_credential"],
+      "materials": {
+        "wiring": 1
+      }
+    }
+  },
+  {
+    "id": "q_the_discrepancy",
+    "title": "The Discrepancy",
+    "hidden": true,
+    "trigger": {
+      "npc": "clerk",
+      "dialogueOption": "open_continuity_case"
+    },
+    "stages": [
+      {
+        "id": "new_orleans_trace",
+        "objective": "New Orleans: complete successful fieldwork to recover the first jurisdictional trace.",
+        "requirement": { "event": "espionage.success", "region": "new_orleans" }
+      },
+      {
+        "id": "seattle_artifact",
+        "objective": "Seattle: craft an artifact at a local workbench so the city can attest to your labor.",
+        "requirement": { "event": "craft", "region": "seattle" }
+      },
+      {
+        "id": "silicon_valley_blind_spot",
+        "objective": "Silicon Valley: dismantle a camera that has recorded your impossible identity.",
+        "requirement": {
+          "event": "camera.dismantle",
+          "region": "silicon_valley"
+        }
+      },
+      {
+        "id": "atlanta_valuation",
+        "objective": "Atlanta: place an item on the regional market to establish a taxable history.",
+        "requirement": { "event": "market.trade", "region": "atlanta" }
+      },
+      {
+        "id": "los_angeles_witness",
+        "objective": "Los Angeles: defeat a patrol so a hostile witness must record you.",
+        "requirement": { "event": "encounter.victory", "region": "los_angeles" }
+      },
+      {
+        "id": "denver_installation",
+        "objective": "Denver: install a camera under your contractor number.",
+        "requirement": { "event": "camera.install", "region": "denver" }
+      },
+      {
+        "id": "albuquerque_artifact",
+        "objective": "Albuquerque: craft a second physical proof of continuous work.",
+        "requirement": { "event": "craft", "region": "albuquerque" }
+      },
+      {
+        "id": "chicago_trace",
+        "objective": "Chicago: complete successful fieldwork and extract the routing index.",
+        "requirement": { "event": "espionage.success", "region": "chicago" }
+      },
+      {
+        "id": "boston_hale",
+        "objective": "Boston: defeat Regional Director Hale and seize his countersignature.",
+        "requirement": {
+          "event": "boss.victory",
+          "region": "boston",
+          "target": "boss_director_hale"
+        }
+      },
+      {
+        "id": "miami_witness",
+        "objective": "Miami: defeat a patrol and force the final field incident onto the books.",
+        "requirement": { "event": "encounter.victory", "region": "miami" }
+      },
+      {
+        "id": "new_york_valuation",
+        "objective": "New York City: place an item on the market to reconcile the national ledger.",
+        "requirement": { "event": "market.trade", "region": "new_york_city" }
+      },
+      {
+        "id": "disposition",
+        "objective": "Return to Clerk Gusteau in Cleveland and choose what the completed Continuity record should become."
+      }
+    ],
+    "rewards": {
+      "currency": 500,
+      "items": ["continuity_seal"],
+      "materials": {
+        "signal_crystal": 3
+      }
+    }
+  }
+]

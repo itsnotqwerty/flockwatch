@@ -201,5 +201,19 @@
     "description": "Schizo circuit standard. The lining is the difference. Reduces combat suspicion by 1.",
     "rarity": "uncommon",
     "tradeable": false
+  },
+  {
+    "id": "temporary_flock_credential",
+    "name": "Temporary Flock Contractor Credential",
+    "description": "A ninety-day badge whose expiration field is blank. Unlocks interregional transit and halves contractor fares.",
+    "rarity": "rare",
+    "tradeable": false
+  },
+  {
+    "id": "continuity_seal",
+    "name": "Continuity Case Seal",
+    "description": "Proof that twelve incompatible jurisdictions agreed you exist, or agreed not to ask why you do.",
+    "rarity": "contraband",
+    "tradeable": false
   }
 ]

@@ -99,7 +99,10 @@ and economy. Silicon Valley is the intentional non-city exception.
   situated.
 - Each sublocation exposes five or six authored interactions.
 - Regions are connected; interregional travel has a cost, while travel between
-  sublocations in the same city is free.
+  sublocations in the same city is free. New characters begin jurisdictionally
+  confined to Cleveland. Both the travel UI and the authoritative travel action
+  require the `temporary_flock_credential` item before any other region can be
+  entered.
 - Exactly one sublocation in each region contains its regional message board.
 
 #### Local Statistics
@@ -156,6 +159,10 @@ undiscovered ──(dialogue option selected)──▶ accepted ──▶ comple
 Requirements for implementation:
 
 - Every dialogue option must be able to carry an optional `questId` trigger.
+- A quest stage may carry a gameplay requirement. Camera, crafting, market,
+  espionage, encounter, boss, and cell-operation events are emitted only after
+  their server-side action succeeds; matching event, region, and optional target
+  advance the stage.
 - The quest log must distinguish `accepted`, `completed`, and `failed` quests;
   undiscovered quests are never listed.
 

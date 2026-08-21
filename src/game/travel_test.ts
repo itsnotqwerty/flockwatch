@@ -23,7 +23,7 @@ function player(over: Partial<Player> = {}): Player {
     id: "p1",
     name: "Citizen",
     currency: 100,
-    inventory: [],
+    inventory: ["temporary_flock_credential"],
     scrap: {},
     suspicion: 0,
     region: "cleveland",
@@ -46,11 +46,22 @@ Deno.test("travelCost scales with destination Flock presence", () => {
 
 Deno.test("travel moves the player and charges the cost", () => {
   const dest = region("new_orleans", 0.85);
-  const result = travel(player(), dest);
+  const traveler = player();
+  const result = travel(traveler, dest);
   assert(result.ok);
   assertEquals(result.player.region, "new_orleans");
   assertEquals(result.player.location, "new_orleans_center");
-  assertEquals(result.player.currency, 100 - travelCost(dest));
+  assertEquals(result.player.currency, 100 - travelCost(dest, traveler));
+});
+
+Deno.test("travel is locked until the contractor credential is earned", () => {
+  const result = travel(
+    player({ inventory: [] }),
+    region("new_orleans", 0.85),
+  );
+  assert(!result.ok);
+  assert(result.reason?.includes("temporary Flock contractor credential"));
+  assertEquals(result.player.region, "cleveland");
 });
 
 Deno.test("travel rejects staying put and insufficient funds", () => {
@@ -64,8 +75,10 @@ Deno.test("travel rejects staying put and insufficient funds", () => {
 
 Deno.test("Bureaucrat's Stamp halves travel cost", () => {
   const dest = region("new_orleans", 0.85);
-  const stamped = player({ inventory: ["bureaucrats_stamp"] });
-  assertEquals(travelCost(dest, stamped), Math.round(travelCost(dest) / 2));
+  const stamped = player({
+    inventory: ["temporary_flock_credential", "bureaucrats_stamp"],
+  });
+  assertEquals(travelCost(dest, stamped), Math.round(travelCost(dest) / 4));
   const result = travel(stamped, dest);
   assert(result.ok);
   assertEquals(result.player.currency, 100 - travelCost(dest, stamped));
@@ -73,16 +86,22 @@ Deno.test("Bureaucrat's Stamp halves travel cost", () => {
 
 Deno.test("transit transponder discounts travel and stacks with the stamp", () => {
   const dest = region("new_orleans", 0.85);
-  const transponder = player({ inventory: ["transit_transponder"] });
+  const transponder = player({
+    inventory: ["temporary_flock_credential", "transit_transponder"],
+  });
   assertEquals(
     travelCost(dest, transponder),
-    Math.round(travelCost(dest) * 0.75),
+    Math.round(travelCost(dest) * 0.5 * 0.75),
   );
   const stacked = player({
-    inventory: ["bureaucrats_stamp", "transit_transponder"],
+    inventory: [
+      "temporary_flock_credential",
+      "bureaucrats_stamp",
+      "transit_transponder",
+    ],
   });
   assertEquals(
     travelCost(dest, stacked),
-    Math.round(travelCost(dest) * 0.5 * 0.75),
+    Math.round(travelCost(dest) * 0.5 * 0.5 * 0.75),
   );
 });

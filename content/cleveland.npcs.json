@@ -109,6 +109,74 @@
         "line": "Window is closed. Window has always been closed. Take a number.",
         "options": [
           {
+            "id": "report_nonexistence",
+            "label": "Report that the system says you do not exist",
+            "response": "Then you cannot leave Cleveland. Prove you can do Flock's work: install one camera, remove one camera, and bring me the serial plate.",
+            "next": null,
+            "grantsQuest": "q_provisional_existence"
+          },
+          {
+            "id": "issue_temporary_credential",
+            "label": "Present the recovered camera serial plate",
+            "response": "You have demonstrated reversible employment. This badge makes you provisionally real in all twelve jurisdictions. Do not lose it.",
+            "next": null,
+            "advancesQuest": "q_provisional_existence",
+            "atStages": [2]
+          },
+          {
+            "id": "open_continuity_case",
+            "label": "Ask why the credential calls you provisional",
+            "response": "Every jurisdiction has a different record of you. Gather proof through their own systems. When all records agree, decide which truth survives.",
+            "next": null,
+            "grantsQuest": "q_the_discrepancy",
+            "requiresQuestCompleted": "q_provisional_existence"
+          },
+          {
+            "id": "resolve_certified",
+            "label": "Certify the official identity",
+            "response": "Stamped. You exist exactly as the network describes you. The doors open. The file closes around you.",
+            "next": null,
+            "advancesQuest": "q_the_discrepancy",
+            "atStages": [11],
+            "setsIdentityResolution": "certified"
+          },
+          {
+            "id": "resolve_published",
+            "label": "Publish the Continuity archive",
+            "response": "Copies leave every printer at once. Your discrepancy becomes evidence that everyone else's records can be rewritten too.",
+            "next": null,
+            "advancesQuest": "q_the_discrepancy",
+            "atStages": [11],
+            "setsIdentityResolution": "published"
+          },
+          {
+            "id": "resolve_deleted",
+            "label": "Delete the identity index",
+            "response": "The master index goes blank. Twelve cities keep their local memories, but no machine can assemble them into a person again.",
+            "next": null,
+            "advancesQuest": "q_the_discrepancy",
+            "atStages": [11],
+            "setsIdentityResolution": "index_deleted"
+          },
+          {
+            "id": "resolve_control",
+            "label": "Assume control of the index",
+            "response": "The clerk slides the administrator token across the counter. Every contradiction is now yours to approve or erase.",
+            "next": null,
+            "advancesQuest": "q_the_discrepancy",
+            "atStages": [11],
+            "setsIdentityResolution": "assumed_control"
+          },
+          {
+            "id": "resolve_nonexistent",
+            "label": "Remain officially nonexistent",
+            "response": "No signature. No deletion. The case remains open forever, and so do the spaces between every camera's frames.",
+            "next": null,
+            "advancesQuest": "q_the_discrepancy",
+            "atStages": [11],
+            "setsIdentityResolution": "remained_nonexistent"
+          },
+          {
             "id": "ask_form_27b",
             "label": "Ask about Form 27-B",
             "response": "Form 27-B is not distributed. It is collected. That is the entire procedure.",

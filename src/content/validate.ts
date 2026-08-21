@@ -141,8 +141,20 @@ interface DialogueNodeLike {
     advancesQuest?: string;
     requiresQuestCompleted?: string;
     atStages?: number[];
+    setsIdentityResolution?: string;
   }>;
 }
+
+const QUEST_EVENTS = new Set([
+  "camera.install",
+  "camera.dismantle",
+  "craft",
+  "market.trade",
+  "espionage.success",
+  "encounter.victory",
+  "boss.victory",
+  "cell.operation",
+]);
 
 export function validateQuests(data: unknown, file: string): ContentIssue[] {
   const issues: ContentIssue[] = [];
@@ -175,6 +187,25 @@ export function validateQuests(data: unknown, file: string): ContentIssue[] {
     }
     if (!Array.isArray(raw.stages) || raw.stages.length === 0) {
       issues.push({ file, message: at("stages must be a non-empty array") });
+    } else {
+      for (const [index, stage] of raw.stages.entries()) {
+        if (!requireString(stage.id) || !requireString(stage.objective)) {
+          issues.push({
+            file,
+            message: at(`stage ${index} requires id and objective`),
+          });
+        }
+        if (
+          stage.requirement &&
+          (!isObject(stage.requirement) ||
+            !QUEST_EVENTS.has(String(stage.requirement.event)))
+        ) {
+          issues.push({
+            file,
+            message: at(`stage ${index} has an invalid requirement event`),
+          });
+        }
+      }
     }
     if (
       !isObject(raw.rewards) || typeof raw.rewards.currency !== "number" ||
@@ -687,6 +718,33 @@ export function validateCrossReferences(
   const itemIds = new Set(items.map((item) => item.id));
   const locationIds = new Set(locations.map((location) => location.id));
   const regionsById = new Map(regions.map((region) => [region.id, region]));
+  for (const quest of quests) {
+    for (const [index, stage] of quest.stages.entries()) {
+      if (
+        stage.requirement?.region && !regionsById.has(stage.requirement.region)
+      ) {
+        issues.push({
+          file,
+          message:
+            `${quest.id}: stage ${index} references unknown region "${stage.requirement.region}"`,
+        });
+      }
+      if (
+        stage.requirement?.event === "boss.victory" &&
+        stage.requirement.target &&
+        !encounters.some((encounter) =>
+          encounter.id === stage.requirement!.target &&
+          encounter.kind === "boss"
+        )
+      ) {
+        issues.push({
+          file,
+          message:
+            `${quest.id}: stage ${index} references unknown boss "${stage.requirement.target}"`,
+        });
+      }
+    }
+  }
   for (const npc of npcs) {
     if (!regionsById.has(npc.region)) {
       issues.push({
@@ -823,6 +881,7 @@ export function validateCrossReferences(
       )
     );
     for (let stage = 0; stage < quest.stages.length; stage += 1) {
+      if (quest.stages[stage].requirement) continue;
       if (
         !advanceOptions.some((option) =>
           option.atStages === undefined || option.atStages.includes(stage)

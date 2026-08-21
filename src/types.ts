@@ -14,6 +14,32 @@ export interface QuestTrigger {
 export interface QuestStage {
   id: string;
   objective: string;
+  /** Optional authoritative gameplay action that completes this stage. */
+  requirement?: QuestEventRequirement;
+}
+
+export type QuestEventType =
+  | "camera.install"
+  | "camera.dismantle"
+  | "craft"
+  | "market.trade"
+  | "espionage.success"
+  | "encounter.victory"
+  | "boss.victory"
+  | "cell.operation";
+
+export interface QuestEventRequirement {
+  event: QuestEventType;
+  /** When present, the action must occur in this region. */
+  region?: string;
+  /** Optional recipe, encounter, or other action-specific id. */
+  target?: string;
+}
+
+export interface QuestEvent {
+  type: QuestEventType;
+  region: string;
+  target?: string;
 }
 
 export interface QuestRewards {
@@ -399,7 +425,16 @@ export interface DialogueOption {
    * option is available at any accepted stage.
    */
   atStages?: number[];
+  /** Records the player's disposition of the completed Continuity case. */
+  setsIdentityResolution?: IdentityResolution;
 }
+
+export type IdentityResolution =
+  | "certified"
+  | "published"
+  | "index_deleted"
+  | "assumed_control"
+  | "remained_nonexistent";
 
 export interface DialogueNode {
   id: string;
@@ -436,6 +471,8 @@ export interface Player {
   /** Current travelable sublocation within `region`. */
   location: string;
   quests: PlayerQuest[];
+  /** End-state selected when the national Continuity case is resolved. */
+  identityResolution?: IdentityResolution;
   /** Persistent espionage flags from blown operations (spec §3.5). */
   flags: EspionageFlag[];
   /** Dossier intel gathered through espionage, per region. */

@@ -22,6 +22,15 @@ hidden behind dialogue options that only reveal a quest having been
 available/given after selecting the option that assigns it to you. Pay attention
 to what NPCs say — the deepstate rewards the observant and files away the rest.
 
+The main progression begins with **Provisional Existence**. New characters are
+confined to Cleveland until Clerk Gusteau's camera-installation competency test
+awards a temporary Flock contractor credential. That credential unlocks the
+other eleven cities and begins **The Discrepancy**, a national Continuity case
+whose objectives advance only through completed server-verified gameplay:
+fieldwork, crafting, camera work, market activity, combat, and the Boston fight
+against Regional Director Hale. The final return to Cleveland offers five
+permanent narrative dispositions for the player's identity record.
+
 ### Dialogue
 
 In-game dialogue and character rendering is handled by an implementation of
@@ -92,6 +101,10 @@ cameras pays better wages but watches every move you make.
 
 Every city also has one public message board. Players can leave short local
 notices, trade warnings, or manufacture entirely new reasons to be investigated.
+
+Interregional transit is locked until the Cleveland onboarding quest awards a
+temporary Flock contractor credential. Local travel among Cleveland's three
+sublocations remains available throughout onboarding.
 
 ## Running the Server
 

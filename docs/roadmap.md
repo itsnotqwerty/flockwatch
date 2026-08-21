@@ -32,6 +32,10 @@ _(achieved)_
 - [x] Migrate dialogue/quest authoring from TS modules to JSON content files
       with schema validation (design §4)
 - [x] Quest stage progression and turn-in interactions
+- [x] Server-verified action objectives for camera work, crafting, markets,
+      espionage, encounters, bosses, and cell operations
+- [x] Main narrative progression: Cleveland credential onboarding, the
+      twelve-jurisdiction Discrepancy case, and five final identity resolutions
 
 ## Phase 2 — Cameras System (Core Loop)
 
@@ -73,6 +77,8 @@ achieved)_
 - [x] Per-region stats: coverage, unrest, prosperity, Flock presence, population
       mood
 - [x] Travel between regions with cost scaled by destination Flock presence
+- [x] Cleveland-only onboarding lock with a server-enforced temporary contractor
+      credential gate for interregional travel
 - [x] Region-scoped NPC rosters and camera ledgers
 - [x] Per-region market instances (listings, fees, and decree modifiers are
       per-region)

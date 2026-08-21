@@ -8,6 +8,11 @@ import { travelMultiplier } from "./item-effects.ts";
 
 /** Base cost to travel anywhere. */
 export const BASE_TRAVEL_COST = 20;
+export const TEMPORARY_FLOCK_CREDENTIAL = "temporary_flock_credential";
+
+export function hasTemporaryFlockCredential(player: Player): boolean {
+  return player.inventory.includes(TEMPORARY_FLOCK_CREDENTIAL);
+}
 
 /**
  * Bureaucrat's Stamp perk (spec §3.1 form-quest reward): official-looking
@@ -47,6 +52,14 @@ export function travel(
 ): TravelResult {
   if (player.region === destination.id) {
     return { ok: false, reason: "You are already there.", player };
+  }
+  if (!hasTemporaryFlockCredential(player)) {
+    return {
+      ok: false,
+      reason:
+        "Interregional transit requires a temporary Flock contractor credential.",
+      player,
+    };
   }
   const cost = travelCost(destination, player);
   if (player.currency < cost) {
