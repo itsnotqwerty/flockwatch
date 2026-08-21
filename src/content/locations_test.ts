@@ -110,3 +110,18 @@ Deno.test("Los Angeles patrol pool includes boomers and schizos", async () => {
   assert(losAngelesPatrolIds.includes("patrol_boomer"));
   assert(losAngelesPatrolIds.includes("patrol_schizo"));
 });
+
+Deno.test("Porch Theorist uses the established frantic schizo voice", async () => {
+  clearContentCache();
+  const { encounters } = await getContent();
+  const theorist = encounters.find((encounter) =>
+    encounter.id === "patrol_schizo"
+  )!;
+  assert(theorist.quips && theorist.quips.length >= 6);
+  assert(theorist.quips.every((quip) => quip.includes("!")));
+  assert(
+    theorist.quips.every((quip) => /\b[A-Z][A-Z0-9-]+\b/.test(quip)),
+  );
+  assert(theorist.victoryLine.includes("OFF-GRID!"));
+  assert(theorist.defeatLine.includes("PANOPTICON CACHE!"));
+});

@@ -196,7 +196,7 @@
       },
       {
         "id": "outrave",
-        "label": "Out-conspiracy him (the cameras are birds)",
+        "label": "Out-conspiracy him (the cameras are BIRDS)",
         "damage": 13,
         "selfDamage": 5,
         "suspicion": 6
@@ -221,36 +221,40 @@
     "enemyMoves": [
       {
         "id": "glyph_rant",
-        "label": "Unspool a glyph rant at you",
+        "label": "Transmit a glyph-rant checksum",
         "damage": 4,
         "suspicion": 0
       },
       {
         "id": "point_shout",
-        "label": "Point and shout 'FED'",
+        "label": "Point and scream 'FEDERAL REPEATER!'",
         "damage": 0,
         "suspicion": 9
       },
       {
         "id": "gnome_throw",
-        "label": "Throw the garden gnome",
+        "label": "Deploy a ceramic gnome payload",
         "damage": 6,
         "suspicion": 2
       },
       {
         "id": "follow_block",
-        "label": "Follow you down the block, narrating",
+        "label": "Mirror your gait signature down the block",
         "damage": 0,
         "suspicion": 6
       }
     ],
-    "victoryLine": "He declares you 'one of the unchipped' and salutes you with a garden gnome.",
-    "defeatLine": "He was right about one thing: they were watching. They took you away.",
+    "victoryLine": "WAIT! Your aura has NO DEVICE CERTIFICATE! YOU'RE OFF-GRID! OFF-GRID! Take the gnome—ceramic disrupts the QUANTUM MUNICIPAL HANDSHAKE!",
+    "defeatLine": "THEY GOT A LOCK! Your gait hash is in the PANOPTICON CACHE! RUN—NO, ZIGZAG! STRAIGHT LINES FEED THE PREDICTOR!",
     "quips": [
-      "The birds aren't real, friend. Check the antennae.",
-      "My fillings pick up the Bureau's radio. It's mostly jazz.",
-      "You walked past camera nine twice. TWICE.",
-      "I haven't slept since the satellites got opinions."
+      "THE PIGEONS ARE EDGE NODES! Every coo is a PACKET BURST! I heard one negotiate a TLS HANDSHAKE with the courthouse!",
+      "YOUR SHADOW JUST FAILED THE CHECKSUM! That's a SYNTHETIC SILHOUETTE! WHO ISSUED YOUR LEGS?!",
+      "FLOCK ISN'T RECORDING PLATES! It's compiling a MUNICIPAL SOUL HASH! YOUR DMV PHOTO IS THE SALT!",
+      "THE CLOUD ISN'T IN THE SKY! The sky is INSIDE THE CLOUD! NESTED ATMOSPHERIC VIRTUALIZATION! LOOK UP THE PATENT!",
+      "DON'T BLINK NEAR THE LIDAR! Eyelids are BIOMETRIC PACKET ACKNOWLEDGMENTS! BLINKING MEANS CONSENT!",
+      "THE 5G SMALL CELLS ARE BIG CELLS INSIDE OUT! NESTED CARCERAL TOPOLOGY! READ A WHITE PAPER!",
+      "YOUR PHONE'S AIRPLANE MODE HAS A RUNWAY! Every packet still TAKES OFF! I HEARD THE TOWER CLEAR IT!",
+      "THE COYOTES ARE MESH ROUTERS! They howl in BASE64! I DECODED ONE! IT SAID MY MIDDLE NAME!"
     ],
     "payout": 9,
     "drops": [],
