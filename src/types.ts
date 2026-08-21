@@ -292,6 +292,11 @@ export interface Account {
   id: string;
   playerId: string;
   createdAt: string;
+  /** Normalized (lowercase, trimmed) login email. Optional for legacy
+   *  character-only accounts created before email auth. */
+  email?: string;
+  /** Supabase Auth (auth.users) id backing this account, when migrated. */
+  authUserId?: string;
 }
 
 export interface PlayerSession {

@@ -106,9 +106,14 @@ import {
   deleteSession,
   expiredSessionCookie,
   getPlayerForSession,
+  logIn,
   MAX_CHARACTER_NAME_LENGTH,
+  MIN_PASSWORD_LENGTH,
+  requestPasswordReset,
+  resetPassword,
   sessionCookie,
   sessionTokenFromCookie,
+  signUp,
 } from "../state/accounts.ts";
 import {
   acceptCellInvite,
@@ -197,20 +202,105 @@ function authenticatedPlayer(headers: Headers): Promise<Player | null> {
   return token ? getPlayerForSession(token) : Promise.resolve(null);
 }
 
-function renderAccountGate(error: string | null = null): string {
-  return renderPage({
-    title: "Citizen Intake",
-    body: `<section class="account-gate">
-<h2>Citizen Intake</h2>
-<p>The Agencies require a persistent character before permitting access to the park.</p>
-${error ? `<p class="flag-note">${escapeHtml(error)}</p>` : ""}
-<form method="post" action="/">
-  <input type="hidden" name="a" value="create_account">
+function renderAccountGate(
+  error: string | null = null,
+  view: "login" | "signup" | "forgot" = "login",
+  notice: string | null = null,
+): string {
+  const messages = `${
+    error ? `<p class="flag-note">${escapeHtml(error)}</p>` : ""
+  }${notice ? `<p>${escapeHtml(notice)}</p>` : ""}`;
+  const forms: Record<string, string> = {
+    login: `<form method="post" action="/">
+  <input type="hidden" name="a" value="login">
+  <label for="login-email">Email</label>
+  <input id="login-email" name="email" type="email" required autocomplete="email">
+  <label for="login-password">Password</label>
+  <input id="login-password" name="password" type="password" required autocomplete="current-password">
+  <button type="submit" class="dialogue-option">Sign In</button>
+</form>
+<p><a href="/?gate=signup">File a new citizen</a> · <a href="/?gate=forgot">Lost your password?</a></p>`,
+    signup: `<form method="post" action="/">
+  <input type="hidden" name="a" value="signup">
+  <label for="signup-email">Email</label>
+  <input id="signup-email" name="email" type="email" required autocomplete="email">
+  <label for="signup-password">Password</label>
+  <input id="signup-password" name="password" type="password" minlength="${MIN_PASSWORD_LENGTH}" required autocomplete="new-password">
   <label for="character-name">Character name</label>
   <input id="character-name" name="name" minlength="2" maxlength="${MAX_CHARACTER_NAME_LENGTH}" required autocomplete="nickname">
   <button type="submit" class="dialogue-option">File Character</button>
 </form>
+<p><a href="/">Already on file? Sign in</a></p>`,
+    forgot: `<form method="post" action="/">
+  <input type="hidden" name="a" value="forgot_password">
+  <label for="forgot-email">Email</label>
+  <input id="forgot-email" name="email" type="email" required autocomplete="email">
+  <button type="submit" class="dialogue-option">Request Reset</button>
+</form>
+<p><a href="/">Back to sign in</a></p>`,
+  };
+  return renderPage({
+    title: "Citizen Intake",
+    body: `<section class="account-gate">
+<h2>Citizen Intake</h2>
+<p>The Agencies require a registered account before permitting access to the park.</p>
+${messages}
+${forms[view]}
 </section>`,
+  });
+}
+
+function renderResetForm(token: string, error: string | null = null): string {
+  return renderPage({
+    title: "Password Reset",
+    body: `<section class="account-gate">
+<h2>Password Reset</h2>
+${error ? `<p class="flag-note">${escapeHtml(error)}</p>` : ""}
+<form method="post" action="/">
+  <input type="hidden" name="a" value="reset_password">
+  <input type="hidden" name="token" value="${escapeHtml(token)}">
+  <label for="reset-password">New password</label>
+  <input id="reset-password" name="password" type="password" minlength="${MIN_PASSWORD_LENGTH}" required autocomplete="new-password">
+  <button type="submit" class="dialogue-option">Set Password</button>
+</form>
+</section>`,
+  });
+}
+
+/**
+ * Landing page for Supabase recovery links. GoTrue appends the access token
+ * in the URL hash (#access_token=...&type=recovery), which never reaches the
+ * server — this script lifts it into a form field and swaps the form in.
+ */
+function renderRecoveryLanding(): string {
+  return renderPage({
+    title: "Password Reset",
+    body: `<section class="account-gate">
+<h2>Password Reset</h2>
+<p id="recovery-status">Validating your reset link…</p>
+<form method="post" action="/" id="recovery-form" hidden>
+  <input type="hidden" name="a" value="reset_password">
+  <input type="hidden" name="token" id="recovery-token">
+  <label for="reset-password">New password</label>
+  <input id="reset-password" name="password" type="password" minlength="${MIN_PASSWORD_LENGTH}" required autocomplete="new-password">
+  <button type="submit" class="dialogue-option">Set Password</button>
+</form>
+</section>
+<script>
+(function () {
+  var params = new URLSearchParams(location.hash.slice(1));
+  var token = params.get("access_token");
+  var status = document.getElementById("recovery-status");
+  if (token && params.get("type") === "recovery") {
+    document.getElementById("recovery-token").value = token;
+    document.getElementById("recovery-form").hidden = false;
+    status.textContent = "Enter a new password.";
+    history.replaceState(null, "", "/?reset_token=pending");
+  } else {
+    status.textContent = "That reset link is invalid or expired.";
+  }
+})();
+</script>`,
   });
 }
 
@@ -236,8 +326,18 @@ ${postButton("home", "Return")}
 playRouter.get("/", async (context) => {
   const authenticated = await authenticatedPlayer(context.request.headers);
   if (!authenticated) {
+    const params = context.request.url.searchParams;
+    const resetToken = params.get("reset_token");
+    const gate = params.get("gate");
     context.response.type = "text/html";
-    context.response.body = renderAccountGate();
+    if (resetToken !== null) {
+      context.response.body = renderRecoveryLanding();
+    } else {
+      context.response.body = renderAccountGate(
+        null,
+        gate === "signup" || gate === "forgot" ? gate : "login",
+      );
+    }
     return;
   }
   let player = await touchPlayer(authenticated);
@@ -298,12 +398,17 @@ playRouter.post("/", async (context) => {
 
   const action = fields.a ?? "home";
 
-  if (action === "create_account") {
-    const result = await createCharacterAccount(fields.name ?? "");
+  if (action === "signup" || action === "create_account") {
+    const result = action === "signup"
+      ? await signUp(fields.email ?? "", fields.password ?? "", fields.name ?? "")
+      : await createCharacterAccount(fields.name ?? "");
     context.response.type = "text/html";
     if (!result.ok || !result.session) {
       context.response.status = 400;
-      context.response.body = renderAccountGate(result.reason);
+      context.response.body = renderAccountGate(
+        result.reason,
+        action === "signup" ? "signup" : "login",
+      );
       return;
     }
     context.response.headers.append(
@@ -317,6 +422,59 @@ playRouter.post("/", async (context) => {
       });
     }
     context.response.redirect("/");
+    return;
+  }
+
+  if (action === "login") {
+    const result = await logIn(fields.email ?? "", fields.password ?? "");
+    context.response.type = "text/html";
+    if (!result.ok || !result.session) {
+      context.response.status = 400;
+      context.response.body = renderAccountGate(result.reason, "login");
+      return;
+    }
+    context.response.headers.append(
+      "set-cookie",
+      sessionCookie(result.session.token),
+    );
+    if (result.player) {
+      publishRegion("presence.changed", result.player, {
+        name: result.player.name,
+        status: "joined",
+      });
+    }
+    context.response.redirect("/");
+    return;
+  }
+
+  if (action === "forgot_password") {
+    await requestPasswordReset(fields.email ?? "");
+    context.response.type = "text/html";
+    // Same response whether or not the email exists, to avoid enumeration.
+    context.response.body = renderAccountGate(
+      null,
+      "forgot",
+      "If that address is registered, a reset link is on its way.",
+    );
+    return;
+  }
+
+  if (action === "reset_password") {
+    const result = await resetPassword(
+      fields.token ?? "",
+      fields.password ?? "",
+    );
+    context.response.type = "text/html";
+    if (!result.ok) {
+      context.response.status = 400;
+      context.response.body = renderResetForm(fields.token ?? "", result.reason);
+      return;
+    }
+    context.response.body = renderAccountGate(
+      null,
+      "login",
+      "Password updated. Sign in with your new password.",
+    );
     return;
   }
 
