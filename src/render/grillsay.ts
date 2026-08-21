@@ -10,7 +10,7 @@ export const MAX_WIDTH = 40;
 const ART_DIR = new URL("../content/art/", import.meta.url);
 // Classic boomer fallback lives in the grillsay submodule.
 const FALLBACK_ART = new URL(
-  "../../tools/grillsay/art/boomer.txt",
+  "../content/art/boomer.txt",
   import.meta.url,
 );
 

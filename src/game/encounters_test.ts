@@ -6,7 +6,7 @@ import {
   rollEncounter,
   startEncounter,
 } from "./encounters.ts";
-import type { Encounter, Player, Region } from "../types.ts";
+import type { Encounter, Item, Player, Region } from "../types.ts";
 
 const patrol: Encounter = {
   id: "patrol_x",
@@ -244,6 +244,66 @@ Deno.test("enemy counters can finish the player", () => {
   const t = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5, 1.0)!;
   assertEquals(t.player.hp, 0);
   assertEquals(t.state.status, "defeat");
+});
+
+const tradeable: Item = {
+  id: "cutters",
+  name: "Cutters",
+  description: "",
+  rarity: "common",
+  tradeable: true,
+};
+const permanent: Item = { ...tradeable, id: "press_badge", tradeable: false };
+
+Deno.test("a wipe strips intel, suspicion, credits, scrap, and tradeable items", () => {
+  const p = player({
+    hp: 4,
+    currency: 250,
+    suspicion: 42,
+    intel: { cleveland: 3, seattle: 1 },
+    scrap: { lens: 2, wiring: 1 },
+    inventory: ["cutters", "press_badge"],
+  });
+  const t = applyMove(
+    patrol,
+    startEncounter(patrol, p),
+    p,
+    "hit",
+    0.5,
+    1.0,
+    [tradeable, permanent],
+  )!;
+  assertEquals(t.state.status, "defeat");
+  assertEquals(t.player.hp, 0);
+  assertEquals(t.player.currency, 0);
+  assertEquals(t.player.suspicion, 0);
+  assertEquals(t.player.intel, {});
+  assertEquals(t.player.scrap, {});
+  // Tradeable gear is gone; the permanent badge stays.
+  assertEquals(t.player.inventory, ["press_badge"]);
+});
+
+Deno.test("attrition defeats wipe the player too", () => {
+  const p = player({ hp: 6, currency: 90, intel: { cleveland: 2 } });
+  const rough: Encounter = {
+    ...patrol,
+    enemyMoves: [],
+    moves: [
+      { id: "hit", label: "Hit", damage: 5, selfDamage: 6, suspicion: 0 },
+    ],
+  };
+  const t = applyMove(rough, startEncounter(rough, p), p, "hit")!;
+  assertEquals(t.state.status, "defeat");
+  assertEquals(t.player.currency, 0);
+  assertEquals(t.player.intel, {});
+});
+
+Deno.test("suspicion-cap defeats are not wipes", () => {
+  const p = player({ hp: 40, suspicion: 99, currency: 50 });
+  const t = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5, 1.0)!;
+  assertEquals(t.state.status, "defeat");
+  assertEquals(t.player.currency, 50);
+  assert(t.player.suspicion >= 100);
 });
 
 Deno.test("hotel rest costs 30cr and restores hp to full", () => {

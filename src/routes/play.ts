@@ -1298,7 +1298,15 @@ ${postButton("home", "Melt into the crowd")}`,
       e.id === state?.encounterId
     );
     if (state && encounter) {
-      const turn = applyMove(encounter, state, player, fields.move ?? "");
+      const turn = applyMove(
+        encounter,
+        state,
+        player,
+        fields.move ?? "",
+        Math.random(),
+        Math.random(),
+        await getItems(),
+      );
       if (turn) {
         player = turn.player;
         await savePlayer(player);

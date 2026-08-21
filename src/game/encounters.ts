@@ -3,7 +3,13 @@
  * move choices; enemies include region-stat-gated patrols and multi-phase
  * bosses. All rendering stays in the view layer.
  */
-import type { Encounter, EncounterState, Player, Region } from "../types.ts";
+import type {
+  Encounter,
+  EncounterState,
+  Item,
+  Player,
+  Region,
+} from "../types.ts";
 import {
   combatDamageBonus,
   combatSuspicionReduction,
@@ -17,6 +23,29 @@ export const PLAYER_HP = 40;
 /** Current player HP; legacy saves without the field count as full. */
 export function playerHp(player: Player): number {
   return player.hp ?? PLAYER_HP;
+}
+
+/** Log line appended when a wipe strips the player's holdings. */
+export const WIPE_LINE =
+  "You come to in a doorway, pockets emptied. They took everything that wasn't nailed to you.";
+
+/**
+ * The consequences of a wipe (HP reaching 0): the player loses all intel,
+ * suspicion, credits, scrap, and every tradeable (non-permanent) item.
+ * Untradeable items are permanent and stay.
+ */
+export function applyWipe(player: Player, items: Item[]): Player {
+  const tradeable = new Set(
+    items.filter((item) => item.tradeable).map((item) => item.id),
+  );
+  return {
+    ...player,
+    currency: 0,
+    suspicion: 0,
+    intel: {},
+    scrap: {},
+    inventory: player.inventory.filter((id) => !tradeable.has(id)),
+  };
 }
 
 /** Cost of a hotel stay, which fully restores HP. Available in every city. */
@@ -128,6 +157,7 @@ export function applyMove(
   moveId: string,
   roll: number = Math.random(),
   enemyRoll: number = Math.random(),
+  items: Item[] = [],
 ): TurnResult | null {
   if (state.status !== "ongoing") return null;
   const move = encounter.moves.find((m) => m.id === moveId);
@@ -208,9 +238,11 @@ export function applyMove(
         : updated.intel,
     }, encounter.materialDrops);
   } else if (move.selfDamage > 0 && updated.hp! <= 0) {
-    // Attrition defeat: the player ran out of HP.
+    // Attrition defeat: the player ran out of HP and is wiped.
     status = "defeat";
     log.push(encounter.defeatLine);
+    updated = applyWipe(updated, items);
+    log.push(WIPE_LINE);
   } else {
     // Standing defeat: the patrol simply outlasts you at 0 "composure" — we
     // model composure as suspicion hitting the cap from move spam.
@@ -244,7 +276,12 @@ export function applyMove(
           `Suspicion ${counter.suspicion > 0 ? "+" : ""}${counter.suspicion}.`,
         );
       }
-      if (updated.hp! <= 0 || updated.suspicion >= 100) {
+      if (updated.hp! <= 0) {
+        status = "defeat";
+        log.push(encounter.defeatLine);
+        updated = applyWipe(updated, items);
+        log.push(WIPE_LINE);
+      } else if (updated.suspicion >= 100) {
         status = "defeat";
         log.push(encounter.defeatLine);
       }
