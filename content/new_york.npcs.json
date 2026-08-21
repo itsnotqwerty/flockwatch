@@ -23,7 +23,9 @@
             "response": "Everything exists in this city if you know where to look. One cover sheet, slightly pre-owned. The previous owner was a form. The form is fine.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "report_form_27b",
@@ -31,7 +33,7 @@
             "response": "27-B? Cute. In this city forms breed in filing cabinets. Yours already has three offspring in a basement on Chambers Street.",
             "next": null,
             "advancesQuest": "q_form_27b",
-            "atStages": [0, 1]
+            "grantsQuest": "q_form_27b"
           },
           {
             "id": "report_orientation",
@@ -104,7 +106,9 @@
             "response": "Anti-surveillance rap, gallery premiere, guaranteed press? I'm in. I'm so in. Signed. If it flops it's a tax write-off, if it charts it's a movement. Either way I win. That's called hedging.",
             "next": null,
             "advancesQuest": "q_rap_distro",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "leave",
@@ -164,7 +168,9 @@
             "response": "A tape about the cameras, premiered under the cameras? That's not a show, that's a mirror. I'll do it. But mirrors need frames — and frames need money. Wall Street money, ideally. Ironic money is the best money.",
             "next": null,
             "advancesQuest": "q_rap_distro",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "leave",
@@ -218,7 +224,9 @@
             "response": "HAD ONE! Kept the announcements out of my MOLARS! Full subsonic baffle, 40 decibels of PURE SILENCE! Traded it to a fisherman for FOURTEEN BATTERIES and a sandwich! THE SANDWICH WAS ALSO A BATTERY! CHECK THE GULF!",
             "next": null,
             "advancesQuest": "q_cyberhorse2",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "ask_foil",

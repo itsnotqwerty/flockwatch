@@ -24,7 +24,9 @@
             "response": "Things wash up on this dock. Paper washes up too. One cover sheet, salt-stained but valid. The tide provides.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "report_form_27b",
@@ -32,7 +34,7 @@
             "response": "Forms drift in with the tide. I make sure they drift back out. Consider it filed. Or not filed. Whichever is safer.",
             "next": null,
             "advancesQuest": "q_form_27b",
-            "atStages": [0, 1]
+            "grantsQuest": "q_form_27b"
           },
           {
             "id": "report_orientation",
@@ -106,7 +108,9 @@
             "response": "The platform man traded it to me, yeah. Silences honks. I tried it on a goose. Goose honked anyway, quieter, like it was embarrassed. Take it. The shrimp don't want it.",
             "next": null,
             "advancesQuest": "q_cyberhorse2",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "leave",

@@ -10,7 +10,9 @@
         "label": "Question the remaining shift",
         "description": "Someone still punches the clock here.",
         "kind": "npcs",
-        "npcIds": ["informant"]
+        "npcIds": [
+          "informant"
+        ]
       },
       {
         "id": "mill_salvage",
@@ -19,7 +21,11 @@
         "kind": "activity",
         "result": "A dead control cabinet yields wiring and a circuit board. The mill records the loss as efficiency.",
         "effect": {
-          "scrap": { "wiring": 2, "circuit_board": 1, "power_cell": 1 },
+          "scrap": {
+            "wiring": 2,
+            "circuit_board": 1,
+            "power_cell": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -55,7 +61,9 @@
         "label": "Approach the freight counter",
         "description": "Forms, rumors, and freight classifications are available.",
         "kind": "npcs",
-        "npcIds": ["clerk"]
+        "npcIds": [
+          "clerk"
+        ]
       },
       {
         "id": "cleveland_market",
@@ -75,7 +83,10 @@
         "description": "Look for cargo the Agencies mislabeled deliberately.",
         "kind": "activity",
         "result": "Three manifests disagree about the same sealed crate. The disagreement is useful.",
-        "effect": { "intel": 1, "suspicion": 1 },
+        "effect": {
+          "intel": 1,
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -84,7 +95,10 @@
         "description": "Pay someone who knows which checkpoints are decorative.",
         "kind": "activity",
         "result": "The courier accepts five credits and gives you a timetable printed before the route existed.",
-        "effect": { "currency": -5, "intel": 1 },
+        "effect": {
+          "currency": -5,
+          "intel": 1
+        },
         "once": true
       }
     ]
@@ -100,7 +114,11 @@
         "label": "Speak with the park regulars",
         "description": "The groundskeeper, the mascot, and the Cyberhorse are present.",
         "kind": "npcs",
-        "npcIds": ["groundskeeper", "boomer", "cyberhorse"]
+        "npcIds": [
+          "groundskeeper",
+          "boomer",
+          "cyberhorse"
+        ]
       },
       {
         "id": "count_pigeons",
@@ -108,7 +126,9 @@
         "description": "Count all of them, including the ones that do not eat.",
         "kind": "activity",
         "result": "The count changes whenever you write it down. You keep the least impossible number.",
-        "effect": { "intel": 1 },
+        "effect": {
+          "intel": 1
+        },
         "once": true
       },
       {
@@ -118,7 +138,10 @@
         "kind": "activity",
         "result": "You recover a wet lens and decide not to ask what it saw.",
         "effect": {
-          "scrap": { "lens": 1, "chemical_reagent": 1 },
+          "scrap": {
+            "lens": 1,
+            "chemical_reagent": 1
+          },
           "suspicion": 1
         },
         "once": true
@@ -140,7 +163,7 @@
   {
     "id": "sector_4_motor_pool",
     "regionId": "atlanta",
-    "name": "Sector 4 Motor Pool",
+    "name": "Flock HQ",
     "description": "White installation vans idle beneath a sign reading COMMUNITY PARTNERSHIP.",
     "interactions": [
       {
@@ -148,7 +171,10 @@
         "label": "Report to the motor-pool office",
         "description": "Foreman Ray and executive supervision are available.",
         "kind": "npcs",
-        "npcIds": ["atl_foreman_ray", "atl_garrett"]
+        "npcIds": [
+          "atl_foreman_ray",
+          "atl_garrett"
+        ]
       },
       {
         "id": "motor_pool_cameras",
@@ -170,7 +196,10 @@
         "result": "A permit sits beneath a coil of cable. Its signature predates the form.",
         "effect": {
           "item": "ladder_permit",
-          "scrap": { "ballistic_fiber": 1, "housing": 1 },
+          "scrap": {
+            "ballistic_fiber": 1,
+            "housing": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -194,7 +223,9 @@
         "label": "Visit Boomer Hank",
         "description": "He has notes from the last neighborhood-watch meeting.",
         "kind": "npcs",
-        "npcIds": ["atl_boomer_hank"]
+        "npcIds": [
+          "atl_boomer_hank"
+        ]
       },
       {
         "id": "atlanta_board",
@@ -208,7 +239,9 @@
         "description": "Sit visibly and become less interesting for a while.",
         "kind": "activity",
         "result": "The minutes list you as PRESENT, COOPERATIVE, and POORLY HYDRATED.",
-        "effect": { "suspicion": -5 },
+        "effect": {
+          "suspicion": -5
+        },
         "once": true
       },
       {
@@ -236,7 +269,10 @@
         "label": "Meet the rooftop contacts",
         "description": "Peaches and Lil Peep-Peep are comparing frequencies.",
         "kind": "npcs",
-        "npcIds": ["atl_peaches", "atl_lil_peep"]
+        "npcIds": [
+          "atl_peaches",
+          "atl_lil_peep"
+        ]
       },
       {
         "id": "hijack_display",
@@ -244,7 +280,10 @@
         "description": "Replace one approved sentence with another.",
         "kind": "activity",
         "result": "For eleven seconds, every sign reads THE BIRDS HAVE SUPERVISORS.",
-        "effect": { "intel": 1, "suspicion": 4 },
+        "effect": {
+          "intel": 1,
+          "suspicion": 4
+        },
         "once": true
       },
       {
@@ -278,7 +317,10 @@
         "label": "Speak beneath the outfall",
         "description": "Vern and Saltine both insist they arrived first.",
         "kind": "npcs",
-        "npcIds": ["gulf_vern", "gulf_saltine"]
+        "npcIds": [
+          "gulf_vern",
+          "gulf_saltine"
+        ]
       },
       {
         "id": "runoff_salvage",
@@ -327,7 +369,9 @@
         "label": "Speak with Odette Marchand",
         "description": "Her murals contain more serial numbers than saints.",
         "kind": "npcs",
-        "npcIds": ["gulf_odette"]
+        "npcIds": [
+          "gulf_odette"
+        ]
       },
       {
         "id": "new_orleans_board",
@@ -341,7 +385,10 @@
         "description": "Pay for the privilege of looking harmless.",
         "kind": "activity",
         "result": "A candle is lit in your name, then filed under an alias.",
-        "effect": { "currency": -3, "suspicion": -4 },
+        "effect": {
+          "currency": -3,
+          "suspicion": -4
+        },
         "once": true
       },
       {
@@ -356,7 +403,9 @@
         "description": "Trace recurring shapes that resemble camera routes.",
         "kind": "activity",
         "result": "The painted halos align with three unlisted relay sites.",
-        "effect": { "intel": 2 },
+        "effect": {
+          "intel": 2
+        },
         "once": true
       }
     ]
@@ -372,7 +421,10 @@
         "label": "Visit the residents",
         "description": "Boomer Earl and Fisherman LaRue are holding court.",
         "kind": "npcs",
-        "npcIds": ["gulf_boomer_earl", "gulf_larue"]
+        "npcIds": [
+          "gulf_boomer_earl",
+          "gulf_larue"
+        ]
       },
       {
         "id": "search_sheds",
@@ -380,7 +432,12 @@
         "description": "Look for marine hardware with terrestrial applications.",
         "kind": "activity",
         "result": "A corroded housing comes loose after only one tetanus-related thought.",
-        "effect": { "scrap": { "housing": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": {
+            "housing": 1
+          },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -395,7 +452,10 @@
         "description": "Eat publicly. Suspicious people rarely bring napkins.",
         "kind": "activity",
         "result": "You leave fed, documented, and temporarily ordinary.",
-        "effect": { "currency": -4, "suspicion": -6 },
+        "effect": {
+          "currency": -4,
+          "suspicion": -6
+        },
         "once": true
       },
       {
@@ -417,7 +477,10 @@
         "label": "Speak with the visitor-center staff",
         "description": "Cole and Mara can offer a stamp, a coffee, or an explanation.",
         "kind": "npcs",
-        "npcIds": ["pnw_cole", "pnw_mara"]
+        "npcIds": [
+          "pnw_cole",
+          "pnw_mara"
+        ]
       },
       {
         "id": "seattle_board",
@@ -431,7 +494,9 @@
         "description": "Present paperwork with confidence exceeding its validity.",
         "kind": "activity",
         "result": "Cole stamps the document without reading it. Professional courtesy is alive.",
-        "effect": { "suspicion": -2 },
+        "effect": {
+          "suspicion": -2
+        },
         "once": true
       },
       {
@@ -440,7 +505,9 @@
         "description": "Inspect objects the city has classified as unclaimed.",
         "kind": "activity",
         "result": "You claim a pair of binoculars last seen watching their owner.",
-        "effect": { "item": "binoculars" },
+        "effect": {
+          "item": "binoculars"
+        },
         "once": true
       },
       {
@@ -449,7 +516,10 @@
         "description": "The receipt certifies that you were somewhere ordinary.",
         "kind": "activity",
         "result": "The coffee is severe. Your paper trail is comforting.",
-        "effect": { "currency": -3, "suspicion": -3 },
+        "effect": {
+          "currency": -3,
+          "suspicion": -3
+        },
         "once": true
       }
     ]
@@ -465,7 +535,9 @@
         "label": "Consult Harbor Engineer Priya",
         "description": "She knows which pipes carry water and which carry data.",
         "kind": "npcs",
-        "npcIds": ["pnw_priya"]
+        "npcIds": [
+          "pnw_priya"
+        ]
       },
       {
         "id": "collection_grates",
@@ -474,7 +546,11 @@
         "kind": "activity",
         "result": "A grate yields wiring and a lens polished by municipal rain.",
         "effect": {
-          "scrap": { "wiring": 1, "lens": 1, "chemical_reagent": 1 },
+          "scrap": {
+            "wiring": 1,
+            "lens": 1,
+            "chemical_reagent": 1
+          },
           "suspicion": 1
         },
         "once": true
@@ -510,7 +586,9 @@
         "label": "Meet Moss",
         "description": "Courier work is available to people who did not ask.",
         "kind": "npcs",
-        "npcIds": ["pnw_moss"]
+        "npcIds": [
+          "pnw_moss"
+        ]
       },
       {
         "id": "freight_car_salvage",
@@ -519,7 +597,10 @@
         "kind": "activity",
         "result": "A crate marked MOSS CONTROL contains a useful circuit board.",
         "effect": {
-          "scrap": { "circuit_board": 1, "signal_crystal": 1 },
+          "scrap": {
+            "circuit_board": 1,
+            "signal_crystal": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -542,7 +623,9 @@
         "description": "Learn the inexpensive way out of Seattle.",
         "kind": "activity",
         "result": "Moss marks a route in disappearing ink. You memorize it before policy changes.",
-        "effect": { "intel": 1 },
+        "effect": {
+          "intel": 1
+        },
         "once": true
       }
     ]
@@ -558,7 +641,9 @@
         "label": "Approach Clerk Miriam",
         "description": "Request permits, denials, and denials of prior denials.",
         "kind": "npcs",
-        "npcIds": ["sv_clerk_miriam"]
+        "npcIds": [
+          "sv_clerk_miriam"
+        ]
       },
       {
         "id": "silicon_valley_board",
@@ -572,7 +657,9 @@
         "description": "Ask permission to place what is already there.",
         "kind": "activity",
         "result": "Your variance is approved retroactively and denied prospectively.",
-        "effect": { "intel": 1 },
+        "effect": {
+          "intel": 1
+        },
         "once": true
       },
       {
@@ -587,7 +674,9 @@
         "description": "Overwhelm your file with mutually exclusive compliance.",
         "kind": "activity",
         "result": "The system cannot classify you without admitting an error. It chooses delay.",
-        "effect": { "suspicion": -5 },
+        "effect": {
+          "suspicion": -5
+        },
         "once": true
       }
     ]
@@ -603,7 +692,10 @@
         "label": "Speak with the lobby regulars",
         "description": "Brad and Boomer Greg are between liquidity events.",
         "kind": "npcs",
-        "npcIds": ["sv_brad", "sv_boomer_greg"]
+        "npcIds": [
+          "sv_brad",
+          "sv_boomer_greg"
+        ]
       },
       {
         "id": "market_projections",
@@ -617,7 +709,10 @@
         "description": "Invest ten credits in a company with no present tense.",
         "kind": "activity",
         "result": "The position exits itself. You receive twelve credits and a founder's apology thread.",
-        "effect": { "currency": 2, "suspicion": 1 },
+        "effect": {
+          "currency": 2,
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -645,7 +740,10 @@
         "label": "Speak with the perimeter staff",
         "description": "Ping and Groundskeeper Walt know what the campus discards.",
         "kind": "npcs",
-        "npcIds": ["sv_ping", "sv_groundskeeper_walt"]
+        "npcIds": [
+          "sv_ping",
+          "sv_groundskeeper_walt"
+        ]
       },
       {
         "id": "e_waste_salvage",
@@ -694,7 +792,9 @@
         "label": "Speak with Raymond",
         "description": "He knows where lost objects go before Lost Property does.",
         "kind": "npcs",
-        "npcIds": ["nyc_raymond"]
+        "npcIds": [
+          "nyc_raymond"
+        ]
       },
       {
         "id": "search_benches",
@@ -703,7 +803,10 @@
         "kind": "activity",
         "result": "A lens rolls from beneath a bench. It is warm and recently interested.",
         "effect": {
-          "scrap": { "lens": 1, "ballistic_fiber": 1 },
+          "scrap": {
+            "lens": 1,
+            "ballistic_fiber": 1
+          },
           "suspicion": 1
         },
         "once": true
@@ -739,7 +842,10 @@
         "label": "Question the office regulars",
         "description": "Sable and Marin Voss are evaluating unclaimed culture.",
         "kind": "npcs",
-        "npcIds": ["nyc_sable", "nyc_marin"]
+        "npcIds": [
+          "nyc_sable",
+          "nyc_marin"
+        ]
       },
       {
         "id": "new_york_city_board",
@@ -759,7 +865,10 @@
         "description": "Describe an object vaguely enough to satisfy policy.",
         "kind": "activity",
         "result": "The clerk gives you a survey tripod and asks you to leave before ownership clarifies.",
-        "effect": { "item": "survey_tripod", "suspicion": 2 },
+        "effect": {
+          "item": "survey_tripod",
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -781,7 +890,9 @@
         "label": "Consult Chad Brennan",
         "description": "He prices surveillance as an emerging asset class.",
         "kind": "npcs",
-        "npcIds": ["nyc_chad"]
+        "npcIds": [
+          "nyc_chad"
+        ]
       },
       {
         "id": "midtown_cameras",
@@ -801,7 +912,10 @@
         "description": "Create one brief and expensive blind spot.",
         "kind": "activity",
         "result": "The relay misses seven seconds and files all seven as suspicious weather.",
-        "effect": { "suspicion": -3, "intel": 1 },
+        "effect": {
+          "suspicion": -3,
+          "intel": 1
+        },
         "once": true
       },
       {
@@ -823,7 +937,9 @@
         "label": "Find the signal mechanic",
         "description": "Deacon Price works behind a row of decorative antenna palms.",
         "kind": "npcs",
-        "npcIds": ["la_deacon"]
+        "npcIds": [
+          "la_deacon"
+        ]
       },
       {
         "id": "la_depot_salvage",
@@ -832,7 +948,11 @@
         "kind": "activity",
         "result": "The board surrenders wiring and a lens still focused on yesterday.",
         "effect": {
-          "scrap": { "wiring": 2, "lens": 1, "chemical_reagent": 1 },
+          "scrap": {
+            "wiring": 2,
+            "lens": 1,
+            "chemical_reagent": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -865,10 +985,13 @@
     "interactions": [
       {
         "id": "la_backlot_archivist",
-        "label": "Visit Marisol's archive",
-        "description": "Film canisters hold footage the city forgot to classify.",
+        "label": "Talk to the man feeding the ducks",
+        "description": "Reyes knows which props shoot back.",
         "kind": "npcs",
-        "npcIds": ["la_marisol"]
+        "npcIds": [
+          "la_marisol",
+          "la_reyes"
+        ]
       },
       {
         "id": "la_board",
@@ -888,7 +1011,10 @@
         "description": "Watch long enough to learn who edited the public record.",
         "kind": "activity",
         "result": "A single frame shows a relay route disguised as a continuity note.",
-        "effect": { "intel": 2, "suspicion": 2 },
+        "effect": {
+          "intel": 2,
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -908,9 +1034,12 @@
       {
         "id": "la_port_broadcaster",
         "label": "Meet the harbor broadcasters",
-        "description": "Jules and Nia trade reports between pirate and cargo frequencies.",
+        "description": "Jules and Nico trade reports between pirate and cargo frequencies.",
         "kind": "npcs",
-        "npcIds": ["la_jules", "la_nia"]
+        "npcIds": [
+          "la_jules",
+          "la_nia"
+        ]
       },
       {
         "id": "la_container_search",
@@ -919,7 +1048,10 @@
         "kind": "activity",
         "result": "A humming crate yields a circuit board and no customs explanation.",
         "effect": {
-          "scrap": { "circuit_board": 1, "power_cell": 1 },
+          "scrap": {
+            "circuit_board": 1,
+            "power_cell": 1
+          },
           "suspicion": 3
         },
         "once": true
@@ -952,10 +1084,12 @@
     "interactions": [
       {
         "id": "den_weather_technician",
-        "label": "Consult Eli Snow",
+        "label": "Consult Elias",
         "description": "He keeps the pressure records that were excluded for being impolite.",
         "kind": "npcs",
-        "npcIds": ["den_eli"]
+        "npcIds": [
+          "den_eli"
+        ]
       },
       {
         "id": "den_board",
@@ -975,7 +1109,9 @@
         "description": "Look for weather issued before its sensors came online.",
         "kind": "activity",
         "result": "Two maps share a storm signature and three classified footnotes.",
-        "effect": { "intel": 2 },
+        "effect": {
+          "intel": 2
+        },
         "once": true
       },
       {
@@ -997,7 +1133,10 @@
         "label": "Speak with the Colfax regulars",
         "description": "Tasha and Mateo keep separate ledgers on the avenue's traffic.",
         "kind": "npcs",
-        "npcIds": ["den_tasha", "den_mateo"]
+        "npcIds": [
+          "den_tasha",
+          "den_mateo"
+        ]
       },
       {
         "id": "den_motel_drawer",
@@ -1005,7 +1144,12 @@
         "description": "Look behind keys assigned to rooms that do not exist.",
         "kind": "activity",
         "result": "A false key tag conceals a coil of useful wiring.",
-        "effect": { "scrap": { "wiring": 2 }, "suspicion": 1 },
+        "effect": {
+          "scrap": {
+            "wiring": 2
+          },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -1014,7 +1158,10 @@
         "description": "A dated receipt makes your route look ordinary.",
         "kind": "activity",
         "result": "The coffee is endless. The official interest in you is briefly not.",
-        "effect": { "currency": -4, "suspicion": -5 },
+        "effect": {
+          "currency": -4,
+          "suspicion": -5
+        },
         "once": true
       },
       {
@@ -1042,7 +1189,9 @@
         "label": "Find Jun Park",
         "description": "The trail steward knows which counters count more than hikers.",
         "kind": "npcs",
-        "npcIds": ["den_jun"]
+        "npcIds": [
+          "den_jun"
+        ]
       },
       {
         "id": "den_uplink_bench",
@@ -1069,7 +1218,10 @@
         "kind": "activity",
         "result": "The counter contains a clean lens and a list of suspicious switchbacks.",
         "effect": {
-          "scrap": { "lens": 1, "signal_crystal": 1 },
+          "scrap": {
+            "lens": 1,
+            "signal_crystal": 1
+          },
           "intel": 1
         },
         "once": true
@@ -1087,7 +1239,9 @@
         "label": "Find Nico Yazzie",
         "description": "He repairs engines with unexplained cooling demands.",
         "kind": "npcs",
-        "npcIds": ["abq_nico"]
+        "npcIds": [
+          "abq_nico"
+        ]
       },
       {
         "id": "abq_market",
@@ -1102,7 +1256,10 @@
         "kind": "activity",
         "result": "A vent panel conceals wiring and a sun-baked circuit board.",
         "effect": {
-          "scrap": { "wiring": 1, "circuit_board": 1 },
+          "scrap": {
+            "wiring": 1,
+            "circuit_board": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -1132,7 +1289,10 @@
         "label": "Consult the frequency-shop operators",
         "description": "Inez and Elena repair signals no licensed receiver admits hearing.",
         "kind": "npcs",
-        "npcIds": ["abq_inez", "abq_elena"]
+        "npcIds": [
+          "abq_inez",
+          "abq_elena"
+        ]
       },
       {
         "id": "abq_board",
@@ -1147,7 +1307,10 @@
         "kind": "activity",
         "result": "The cell returns one useful circuit board and a repeating coordinate.",
         "effect": {
-          "scrap": { "circuit_board": 1, "power_cell": 1 },
+          "scrap": {
+            "circuit_board": 1,
+            "power_cell": 1
+          },
           "intel": 1
         },
         "once": true
@@ -1177,7 +1340,9 @@
         "label": "Join Rosa Baca's ground crew",
         "description": "She knows which balloons drift and which maintain position.",
         "kind": "npcs",
-        "npcIds": ["abq_rosa"]
+        "npcIds": [
+          "abq_rosa"
+        ]
       },
       {
         "id": "abq_tether_salvage",
@@ -1185,7 +1350,13 @@
         "description": "Recover components from a balloon that descended without landing.",
         "kind": "activity",
         "result": "The tether housing contains a polished lens and no lift gas.",
-        "effect": { "scrap": { "housing": 1, "lens": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": {
+            "housing": 1,
+            "lens": 1
+          },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -1216,10 +1387,13 @@
     "interactions": [
       {
         "id": "chi_dispatcher",
-        "label": "Report to Lena Kowalski",
-        "description": "She routes freight through streets daylight does not supervise.",
+        "label": "Meet a contact beneath the pillars",
+        "description": "Marlo trades in freight that never surfaces.",
         "kind": "npcs",
-        "npcIds": ["chi_lena"]
+        "npcIds": [
+          "chi_lena",
+          "chi_marlo"
+        ]
       },
       {
         "id": "chi_board",
@@ -1245,7 +1419,10 @@
         "description": "Find the freight that arrived before it shipped.",
         "kind": "activity",
         "result": "A duplicate route number reveals one useful piece of local intel.",
-        "effect": { "intel": 1, "suspicion": 1 },
+        "effect": {
+          "intel": 1,
+          "suspicion": 1
+        },
         "once": true
       }
     ]
@@ -1261,7 +1438,10 @@
         "label": "Speak with the switchhouse regulars",
         "description": "Omar and Yvette track bridges, vessels, and lakefront radio traffic.",
         "kind": "npcs",
-        "npcIds": ["chi_omar", "chi_yvette"]
+        "npcIds": [
+          "chi_omar",
+          "chi_yvette"
+        ]
       },
       {
         "id": "chi_bridge_cameras",
@@ -1276,7 +1456,11 @@
         "kind": "activity",
         "result": "The cabinet yields a housing and wiring labeled RIVER, OLD DIRECTION.",
         "effect": {
-          "scrap": { "housing": 1, "wiring": 1, "ballistic_fiber": 1 }
+          "scrap": {
+            "housing": 1,
+            "wiring": 1,
+            "ballistic_fiber": 1
+          }
         },
         "once": true
       },
@@ -1305,7 +1489,9 @@
         "label": "Meet Darnell Price",
         "description": "The union steward keeps records for workers and ghosts alike.",
         "kind": "npcs",
-        "npcIds": ["chi_darnell"]
+        "npcIds": [
+          "chi_darnell"
+        ]
       },
       {
         "id": "chi_punch_clock",
@@ -1313,7 +1499,9 @@
         "description": "Create a harmless record of authorized labor.",
         "kind": "activity",
         "result": "The clock accepts your card and briefly classifies you as employed.",
-        "effect": { "suspicion": -4 },
+        "effect": {
+          "suspicion": -4
+        },
         "once": true
       },
       {
@@ -1344,10 +1532,14 @@
     "interactions": [
       {
         "id": "bos_archivist",
-        "label": "Consult the harbor archivists",
-        "description": "Mae and Leo compare future-dated records with the harbor catch.",
+        "label": "Buy a lobster roll from Sal",
+        "description": "Sal hears what the harbor forgets to file.",
         "kind": "npcs",
-        "npcIds": ["bos_mae", "bos_leo"]
+        "npcIds": [
+          "bos_mae",
+          "bos_leo",
+          "bos_sal"
+        ]
       },
       {
         "id": "bos_board",
@@ -1367,7 +1559,10 @@
         "description": "Read tomorrow's paperwork before policy catches up.",
         "kind": "activity",
         "result": "A carbon copy names a relay office hidden beneath a historic plaque.",
-        "effect": { "intel": 2, "suspicion": 2 },
+        "effect": {
+          "intel": 2,
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -1389,7 +1584,9 @@
         "label": "Ask Priya Shah for guidance",
         "description": "She represents a platform in litigation against the city.",
         "kind": "npcs",
-        "npcIds": ["bos_priya"]
+        "npcIds": [
+          "bos_priya"
+        ]
       },
       {
         "id": "bos_lost_property",
@@ -1397,7 +1594,12 @@
         "description": "Recover what commuters lost at a stop they deny using.",
         "kind": "activity",
         "result": "A loose panel yields a lens and a transfer valid nowhere.",
-        "effect": { "scrap": { "lens": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": {
+            "lens": 1
+          },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -1431,7 +1633,9 @@
         "label": "Speak with Finn O'Rourke",
         "description": "The custodian reviews what peer review discards.",
         "kind": "npcs",
-        "npcIds": ["bos_finn"]
+        "npcIds": [
+          "bos_finn"
+        ]
       },
       {
         "id": "bos_review_intercept",
@@ -1446,7 +1650,10 @@
         "kind": "activity",
         "result": "A shredded memo still contains one intact circuit board.",
         "effect": {
-          "scrap": { "circuit_board": 1, "chemical_reagent": 1 },
+          "scrap": {
+            "circuit_board": 1,
+            "chemical_reagent": 1
+          },
           "intel": 1
         },
         "once": true
@@ -1476,7 +1683,10 @@
         "label": "Visit the neighborhood dispatchers",
         "description": "Camila and Lucía broadcast routes the official alerts omit.",
         "kind": "npcs",
-        "npcIds": ["mia_camila", "mia_lucia"]
+        "npcIds": [
+          "mia_camila",
+          "mia_lucia"
+        ]
       },
       {
         "id": "mia_board",
@@ -1496,7 +1706,10 @@
         "description": "Acquire energy and an ordinary receipt.",
         "kind": "activity",
         "result": "The coffee resets your pulse and softens the official interest in it.",
-        "effect": { "currency": -3, "suspicion": -4 },
+        "effect": {
+          "currency": -3,
+          "suspicion": -4
+        },
         "once": true
       },
       {
@@ -1518,7 +1731,9 @@
         "label": "Report to Sol Navarro",
         "description": "He compares customs declarations with what the tide actually delivered.",
         "kind": "npcs",
-        "npcIds": ["mia_sol"]
+        "npcIds": [
+          "mia_sol"
+        ]
       },
       {
         "id": "mia_port_cameras",
@@ -1539,7 +1754,11 @@
         "kind": "activity",
         "result": "A sealed case holds wiring and a surprisingly dry housing.",
         "effect": {
-          "scrap": { "wiring": 1, "housing": 1, "ballistic_fiber": 1 },
+          "scrap": {
+            "wiring": 1,
+            "housing": 1,
+            "ballistic_fiber": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -1563,7 +1782,9 @@
         "label": "Find Teo Green",
         "description": "He surveys sensors that count water, wildlife, and hesitation.",
         "kind": "npcs",
-        "npcIds": ["mia_teo"]
+        "npcIds": [
+          "mia_teo"
+        ]
       },
       {
         "id": "mia_sensor_salvage",
@@ -1572,7 +1793,11 @@
         "kind": "activity",
         "result": "Mud releases a lens and one length of waterproof wiring.",
         "effect": {
-          "scrap": { "lens": 1, "wiring": 1, "chemical_reagent": 1 },
+          "scrap": {
+            "lens": 1,
+            "wiring": 1,
+            "chemical_reagent": 1
+          },
           "suspicion": 1
         },
         "once": true

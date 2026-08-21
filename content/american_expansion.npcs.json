@@ -21,18 +21,22 @@
           {
             "id": "hand_sunwire",
             "label": "Deliver Inez's solar cipher",
-            "response": "These frames are not sun damage. They are instructions written in glare. Mae in Boston will know the checksum.",
+            "response": "These frames are not sun damage. They are instructions written in glare. Marcus in Boston will know the checksum.",
             "next": null,
             "advancesQuest": "q_abq_sunwire",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "scan_common_record",
             "label": "Show her the watermarked record",
-            "response": "The watermark resolves under old studio lamps. Mae's page names a camera office that officially opens next year.",
+            "response": "The watermark resolves under old studio lamps. Marcuss page names a camera office that officially opens next year.",
             "next": null,
             "advancesQuest": "q_bos_common_record",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "close_continental_cut",
@@ -40,7 +44,9 @@
             "response": "Coast to mountains to lake and back. That is a national release, whether they approve it or not.",
             "next": null,
             "advancesQuest": "q_la_continental_cut",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "ask_backlot",
@@ -122,7 +128,7 @@
   },
   {
     "id": "den_eli",
-    "name": "Eli Snow",
+    "name": "Elias Snow",
     "role": "Weather Records Technician, Union Hall",
     "region": "denver",
     "art": "clerk",
@@ -142,18 +148,22 @@
           {
             "id": "weatherproof_cut",
             "label": "Deliver Marisol's master reel",
-            "response": "I sealed it against snow, dust, and official curiosity. Lena in Chicago has the freight band to broadcast it.",
+            "response": "I sealed it against snow, dust, and official curiosity. Leon in Chicago has the freight band to broadcast it.",
             "next": null,
             "advancesQuest": "q_la_continental_cut",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "test_freight_seal",
-            "label": "Altitude-test Mae's copied seal",
+            "label": "Altitude-test Marcuss copied seal",
             "response": "The ink expands above five thousand feet. It reveals a Chicago routing number beneath the colonial date.",
             "next": null,
             "advancesQuest": "q_chi_freight_ghost",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "close_weather_chain",
@@ -161,7 +171,9 @@
             "response": "Same pressure signature, two thousand miles apart. The weather is sharing an account.",
             "next": null,
             "advancesQuest": "q_den_weather_chain",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "ask_snow",
@@ -220,6 +232,14 @@
         "line": "Colfax runs long enough to outlast most alibis.",
         "options": [
           {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Night clerk rule: every form crossing this desk after 2 a.m. gets logged as 'miscellaneous.' Yours is logged. Under what? Exactly.",
+            "next": null,
+            "grantsQuest": "q_form_27b",
+            "advancesQuest": "q_form_27b"
+          },
+          {
             "id": "ask_motels",
             "label": "Ask about the motel ledgers",
             "response": "Every room is vacant and every key is warm. Tourism is recovering strangely.",
@@ -262,19 +282,23 @@
           },
           {
             "id": "calibrate_weather",
-            "label": "Deliver Eli's pressure ledger",
+            "label": "Deliver Eliass pressure ledger",
             "response": "The desert reading matches a storm surge. Sol in Miami keeps the coastal half of this impossible weather.",
             "next": null,
             "advancesQuest": "q_den_weather_chain",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "restore_tide_ledger",
             "label": "Dry and restore Sol's tide ledger",
-            "response": "Salt hid a rail coordinate in the margins. Lena in Chicago can match it to inland freight.",
+            "response": "Salt hid a rail coordinate in the margins. Leon in Chicago can match it to inland freight.",
             "next": null,
             "advancesQuest": "q_mia_tide_ledger",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "close_sunwire",
@@ -282,7 +306,9 @@
             "response": "The signal crossed both coasts and came home older than when it left. That is proof enough for me.",
             "next": null,
             "advancesQuest": "q_abq_sunwire",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "ask_shop",
@@ -341,6 +367,14 @@
         "line": "Balloons drift. Surveillance platforms maintain an approved scenic altitude.",
         "options": [
           {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Paper goes up with the envelopes all the time. Manifest says 'ballast.' Your form is at four hundred feet now, officially nowhere. It's handled.",
+            "next": null,
+            "grantsQuest": "q_form_27b",
+            "advancesQuest": "q_form_27b"
+          },
+          {
             "id": "ask_balloons",
             "label": "Ask which balloons are real",
             "response": "The real ones wave back. The others rotate exactly twelve degrees per minute.",
@@ -364,7 +398,7 @@
   },
   {
     "id": "chi_lena",
-    "name": "Lena Kowalski",
+    "name": "Leon Kowalski",
     "role": "Freight Dispatcher, Lower Wacker",
     "region": "chicago",
     "art": "clerk",
@@ -377,7 +411,7 @@
           {
             "id": "ask_freight_ghost",
             "label": "Ask about the train with no arrival",
-            "response": "Its seal appears in Boston records two centuries early. Mae has the archive. Denver can test the ink.",
+            "response": "Its seal appears in Boston records two centuries early. Marcus has the archive. Denver can test the ink.",
             "next": null,
             "grantsQuest": "q_chi_freight_ghost"
           },
@@ -387,7 +421,9 @@
             "response": "The freight band carried it east in eleven seconds. Here is the ledger before the network denies hearing it.",
             "next": null,
             "advancesQuest": "q_la_continental_cut",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "match_tide_coordinates",
@@ -395,7 +431,9 @@
             "response": "They belong to a container that left Miami wet and reached Chicago before it departed.",
             "next": null,
             "advancesQuest": "q_mia_tide_ledger",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "close_freight_ghost",
@@ -403,7 +441,9 @@
             "response": "Now the ghost has a routing number. That makes it somebody's budget problem.",
             "next": null,
             "advancesQuest": "q_chi_freight_ghost",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "ask_lower_level",
@@ -485,7 +525,7 @@
   },
   {
     "id": "bos_mae",
-    "name": "Mae Donnelly",
+    "name": "Marcus Donnelly",
     "role": "Municipal Archivist, Boston Harbor",
     "region": "boston",
     "art": "clerk",
@@ -508,7 +548,9 @@
             "response": "It appears on a harbor manifest from 1791. Take this copy to Denver; altitude separates old ink from new lies.",
             "next": null,
             "advancesQuest": "q_chi_freight_ghost",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "checksum_sunwire",
@@ -516,7 +558,9 @@
             "response": "The checksum predates the solar panel by eighty years. Inez deserves the impossible original.",
             "next": null,
             "advancesQuest": "q_abq_sunwire",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "close_common_record",
@@ -524,7 +568,9 @@
             "response": "Excellent. The archive now contains proof, a duplicate, and a denial in triplicate.",
             "next": null,
             "advancesQuest": "q_bos_common_record",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "ask_archive",
@@ -626,18 +672,22 @@
           {
             "id": "compare_weather",
             "label": "Deliver Inez's desert calibration",
-            "response": "It matches our hurricane sensor exactly. Take this comparison back to Eli before the next forecast changes history.",
+            "response": "It matches our hurricane sensor exactly. Take this comparison back to Elias before the next forecast changes history.",
             "next": null,
             "advancesQuest": "q_den_weather_chain",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "read_common_record",
-            "label": "Inspect Mae's watermarked page",
+            "label": "Inspect Marcuss watermarked page",
             "response": "Ultraviolet light reveals a Los Angeles film code. Marisol Vega will know which studio printed it.",
             "next": null,
             "advancesQuest": "q_bos_common_record",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "close_tide_ledger",
@@ -645,7 +695,9 @@
             "response": "So the tide reaches Chicago now. Good. I was worried geography still meant something.",
             "next": null,
             "advancesQuest": "q_mia_tide_ledger",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "ask_port",
@@ -704,6 +756,14 @@
         "line": "The sawgrass does not need cameras. It remembers where you stepped.",
         "options": [
           {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Forms sink out here. Peat keeps them better than any cabinet. Yours is filed with the water. The water asks nothing.",
+            "next": null,
+            "grantsQuest": "q_form_27b",
+            "advancesQuest": "q_form_27b"
+          },
+          {
             "id": "ask_sensors",
             "label": "Ask about the wetland sensors",
             "response": "Half measure water. Half measure people looking at the water.",
@@ -719,6 +779,132 @@
             "id": "leave",
             "label": "Back away from the waterline",
             "response": "Slowly. The alligators are not agents, but they do accept tips.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bos_sal",
+    "name": "Sal Pagliuca",
+    "role": "Unaffiliated, Harbor Fish Pier",
+    "region": "boston",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Buy a lobster roll or buy a secret. The line is the same length.",
+        "options": [
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Paper in this town gets notarized before it gets written. Yours? It was never written. I know a drawer in the Custom House. Consider it filed.",
+            "next": null,
+            "grantsQuest": "q_form_27b",
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "ask_harbor",
+            "label": "Ask what comes in with the catch",
+            "response": "Fish, mostly. Also manifests for cargo that never docked. The gulls get first read.",
+            "next": null
+          },
+          {
+            "id": "ask_tea",
+            "label": "Ask about the harbor water",
+            "response": "Still tastes like tea and treason. The buoys are wired. Swim casual.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Head back to the archive",
+            "response": "We never spoke. The pier has no memory and excellent posture.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chi_marlo",
+    "name": "Marlo Vance",
+    "role": "Unaffiliated, Lower Wacker Underpass",
+    "region": "chicago",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Walk and talk. The pillars down here have ears, but they're union ears. They only work scheduled hours.",
+        "options": [
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "27-B? Freight without paperwork moves under this city every night. Your form rides the next one out. No manifest. No questions. Done.",
+            "next": null,
+            "grantsQuest": "q_form_27b",
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "ask_under",
+            "label": "Ask how deep the underpass goes",
+            "response": "Three levels of road, one of river, and one of things the city denies paving over.",
+            "next": null
+          },
+          {
+            "id": "ask_trains",
+            "label": "Ask about the midnight freight",
+            "response": "Cars with no logos and cooled cargo. Weather machines, they say. They say it wrong on purpose.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Climb back to street level",
+            "response": "You were never below. The stairs are a rumor. Remember that.",
+            "next": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "la_reyes",
+    "name": "Reyes Delgado",
+    "role": "Unaffiliated, Echo Park Lake",
+    "region": "los_angeles",
+    "art": "informant",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Feed the ducks or hear the truth. The ducks charge less.",
+        "options": [
+          {
+            "id": "report_form_27b",
+            "label": "Mention the Form 27-B you are definitely not filling in",
+            "response": "Forms in this town get optioned before they're signed. Yours stays off the record. I know a grip who loses things professionally. Consider it lost.",
+            "next": null,
+            "grantsQuest": "q_form_27b",
+            "advancesQuest": "q_form_27b"
+          },
+          {
+            "id": "ask_lake",
+            "label": "Ask what the lake hides",
+            "response": "A prop submarine, three shopping carts, and a camera that only films other cameras.",
+            "next": null
+          },
+          {
+            "id": "ask_studios",
+            "label": "Ask which studio watches the park",
+            "response": "All of them. It's the one location shoot nobody permits and everybody lights.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Walk the shore",
+            "response": "Stay in frame. It's safer when they think you're background.",
             "next": null
           }
         ]

@@ -23,7 +23,9 @@
             "response": "A paper cover sheet? Retro. I found one in Building 7's recycle queue. Downloading it to paper now. Do not ask what else was in the queue.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "report_form_27b",
@@ -31,7 +33,7 @@
             "response": "A paper form? Here? That's adorable. I've already queued it for archival. By mentioning it, you filed it.",
             "next": null,
             "advancesQuest": "q_form_27b",
-            "atStages": [0, 1]
+            "grantsQuest": "q_form_27b"
           },
           {
             "id": "report_orientation",
@@ -95,7 +97,7 @@
           {
             "id": "ask_form_27b",
             "label": "Ask about Form 27-B",
-            "response": "27-B is handled by the Bureau in Cleveland. The Lake Erie Freight Arcade. This desk only handles zoning, retroactive appointments, and despair.",
+            "response": "27-B is handled by the Bureau. The Bureau is everywhere. The Bureau is also me, on Wednesdays. Take this. Read nothing into it.",
             "next": null
           },
           {
@@ -104,7 +106,30 @@
             "response": "A paper 12-F! Scanning... valid. Missing: one routing cover sheet. The cover sheet department is deprecated. Seek an unofficial channel. This desk denies saying that.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "process_form_27b",
+            "label": "Submit the form for review",
+            "response": "Processing... complete. Outstanding requirement: one (1) agent signature. Note: agent signatures are mythical. This is noted in the notes.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [
+              0,
+              1
+            ]
+          },
+          {
+            "id": "turn_in_form_27b",
+            "label": "Present the signed Form 27-B",
+            "response": "A genuine agent signature. I will stop asking how. The Bureau recognizes you. Take the stamp. It halves the paperwork of existence itself.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [
+              3
+            ]
           },
           {
             "id": "ask_forms",
@@ -186,7 +211,9 @@
             "response": "Ray's timesheets? Sure. The campus compost log doubles as an HR archive. Dug 'em out. They need an official stamp or HQ pretends paper isn't real. Good luck.",
             "next": null,
             "advancesQuest": "q_foreman_wages",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
           },
           {
             "id": "leave",

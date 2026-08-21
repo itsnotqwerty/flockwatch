@@ -19,7 +19,7 @@
     "id": "q_form_27b",
     "title": "A Matter of Form",
     "hidden": true,
-    "trigger": { "npc": "clerk", "dialogueOption": "ask_form_27b" },
+    "trigger": { "npc": "informant", "dialogueOption": "report_form_27b" },
     "stages": [
       { "id": "s1", "objective": "Locate a blank Form 27-B." },
       {
@@ -28,9 +28,9 @@
       },
       {
         "id": "s3",
-        "objective": "Have it signed by a Flock agent. A real signature, on a form that does not exist."
+        "objective": "Have it signed by Garrett Langley, founder of Flock, in Atlanta. A real signature, on a form that does not exist."
       },
-      { "id": "s4", "objective": "Return it to Clerk Gusteau at the Freight Arcade in Cleveland." }
+      { "id": "s4", "objective": "Return it to any clerk for collection." }
     ],
     "rewards": {
       "currency": 35,

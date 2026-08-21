@@ -74,8 +74,8 @@
           {
             "id": "ask_form_27b",
             "label": "Ask about Form 27-B",
-            "response": "Form 27-B is a Cleveland matter. The Lake Erie Freight Arcade handles all 27-B traffic. Take the train.",
-            "next": null
+            "response": "Form 27-B is not distributed. It is collected. That is the entire procedure.",
+            "next": "form"
           },
           {
             "id": "process_form_12f",
@@ -83,7 +83,30 @@
             "response": "A 12-F? Lawn ownership. Straightforward. It requires a routing cover sheet. The cover sheet office was abolished in 1997. Inquire... informally.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [0]
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "process_form_27b",
+            "label": "Submit the form for review",
+            "response": "Review complete. It requires the founder's own signature. Garrett Langley signs nothing he didn't write, and he wrote this. He is in Atlanta. Good luck.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [
+              0,
+              1
+            ]
+          },
+          {
+            "id": "turn_in_form_27b",
+            "label": "Present the signed Form 27-B",
+            "response": "A signature. On a 27-B. In all my years at the counter — here. The Bureau recognizes you now. The stamp never runs dry.",
+            "next": null,
+            "advancesQuest": "q_form_27b",
+            "atStages": [
+              3
+            ]
           },
           {
             "id": "ask_number",
@@ -95,6 +118,24 @@
             "id": "leave",
             "label": "Leave the Bureau",
             "response": "Your visit has been logged. Have a compliant day.",
+            "next": null
+          }
+        ]
+      },
+      {
+        "id": "form",
+        "line": "Everyone asks about 27-B eventually. The Forms know. The Forms always know.",
+        "options": [
+          {
+            "id": "ask_where",
+            "label": "Ask where to find one",
+            "response": "Find one? Citizen, one does not find a 27-B. One is chosen by it.",
+            "next": null
+          },
+          {
+            "id": "leave_form",
+            "label": "Pretend you never asked",
+            "response": "Asked what? Exactly. You learn quickly.",
             "next": null
           }
         ]
@@ -126,7 +167,9 @@
             "response": "Cover sheets, huh. The office is gone but the paper survives. I know a drawer. It's yours. This never happened, obviously.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "report_form_27b",
@@ -134,7 +177,7 @@
             "response": "You didn't get that from me. The Forms move through people like me. Consider it moved.",
             "next": null,
             "advancesQuest": "q_form_27b",
-            "atStages": [0, 1]
+            "grantsQuest": "q_form_27b"
           },
           {
             "id": "report_orientation",
@@ -208,7 +251,9 @@
             "response": "Processed, stamped, and everything! You see this? THIS is customer service. Here — take my spare cushion. Finest floral print money could buy in 1987.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "leave",
@@ -253,7 +298,9 @@
             "response": "THE DAMPENER. The geese are silenced. Their honks are now muffled and legally actionable. Take this horseshoe. It is gold. It is NOT gold. Do not tell the geese which.",
             "next": null,
             "advancesQuest": "q_cyberhorse2",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "squint",

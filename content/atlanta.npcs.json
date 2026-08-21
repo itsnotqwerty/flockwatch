@@ -23,7 +23,9 @@
             "response": "Cover sheets run through HQ like sweet tea. I can skim one off the top. They print ten for every form. Waste is a feature.",
             "next": null,
             "advancesQuest": "q_boomer_errand",
-            "atStages": [1]
+            "atStages": [
+              1
+            ]
           },
           {
             "id": "report_form_27b",
@@ -31,7 +33,7 @@
             "response": "Paper moves through this city like humidity. Give it time. It's already somewhere it needs to be.",
             "next": null,
             "advancesQuest": "q_form_27b",
-            "atStages": [0, 1]
+            "grantsQuest": "q_form_27b"
           },
           {
             "id": "report_orientation",
@@ -111,7 +113,7 @@
   {
     "id": "atl_foreman_ray",
     "name": "Foreman Ray",
-    "role": "Flock Installation Crew, Sector 4 Motor Pool",
+    "role": "Flock Installation Crew, Flock HQ",
     "region": "atlanta",
     "art": "foreman",
     "start": "start",
@@ -145,7 +147,9 @@
             "response": "Stamped, official, and everything! You see this? THIS is paperwork done right. Twenty years I begged payroll; you did it in a week. Here's your cut. And the vest — you've earned the vest.",
             "next": null,
             "advancesQuest": "q_foreman_wages",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "leave",
@@ -212,7 +216,9 @@
             "response": "A gallery AND a backer? The tape drops citywide, camera-serial track and all. Here's your finder's fee, and the first pressing. Number zero. That's the one they can't surveil.",
             "next": null,
             "advancesQuest": "q_rap_distro",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "leave",
@@ -245,7 +251,7 @@
   {
     "id": "atl_garrett",
     "name": "Mr. Garrett Langley",
-    "role": "Founder & CEO, Flock — Sector 4 Motor Pool",
+    "role": "Founder & CEO, Flock — Flock HQ",
     "region": "atlanta",
     "art": "glangley",
     "start": "start",
@@ -274,11 +280,13 @@
           },
           {
             "id": "get_signature",
-            "label": "Request an agent's signature on a form",
-            "response": "A 27-B! I haven't seen one since orientation. Agents don't sign forms, friend — but I like your initiative. There. A signature that says nothing, on a form that doesn't exist. Frame it.",
+            "label": "Ask Garrett Langley to sign Form 27-B",
+            "response": "A 27-B. I wrote the first draft of that form to see who would obey it. Nobody at Flock signs anything — except me, and only because I founded the company. There. A signature that says nothing, from the man who owns the nothing.",
             "next": null,
             "advancesQuest": "q_form_27b",
-            "atStages": [2]
+            "atStages": [
+              2
+            ]
           },
           {
             "id": "leave",

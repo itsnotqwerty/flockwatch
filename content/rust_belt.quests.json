@@ -12,6 +12,28 @@
     "rewards": { "currency": 50, "items": ["binoculars"] }
   },
   {
+    "id": "q_form_27b",
+    "title": "A Matter of Form",
+    "hidden": true,
+    "trigger": { "npc": "informant", "dialogueOption": "report_form_27b" },
+    "stages": [
+      { "id": "s1", "objective": "Locate a blank Form 27-B." },
+      {
+        "id": "s2",
+        "objective": "Do not fill it in. Under any circumstances."
+      },
+      {
+        "id": "s3",
+        "objective": "Have it signed by Garrett Langley, founder of Flock, in Atlanta. A real signature, on a form that does not exist."
+      },
+      { "id": "s4", "objective": "Return it to any clerk for collection." }
+    ],
+    "rewards": {
+      "currency": 35,
+      "items": ["form_27b_blank", "bureaucrats_stamp"]
+    }
+  },
+  {
     "id": "q_flock_orientation",
     "title": "Orientation (Voluntary)",
     "hidden": true,

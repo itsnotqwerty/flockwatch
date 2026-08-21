@@ -10,11 +10,11 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Carry Marisol's master reel over the mountains to Eli Snow at Denver's Union Weather Hall."
+        "objective": "Carry Marisol's master reel over the mountains to Elias at Denver's Union Weather Hall."
       },
       {
         "id": "s2",
-        "objective": "Take Eli's weatherproof copy to Lena Kowalski beneath Lower Wacker Drive in Chicago."
+        "objective": "Take Eliass weatherproof copy to Leon beneath Lower Wacker Drive in Chicago."
       },
       {
         "id": "s3",
@@ -38,7 +38,7 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Bring Eli's pressure ledger south to Inez Romero at Albuquerque's Old Town Frequency Shop."
+        "objective": "Bring Eliass pressure ledger south to Inez Romero at Albuquerque's Old Town Frequency Shop."
       },
       {
         "id": "s2",
@@ -46,7 +46,7 @@
       },
       {
         "id": "s3",
-        "objective": "Return Sol's hurricane comparison to Eli Snow in Denver."
+        "objective": "Return Sol's hurricane comparison to Elias in Denver."
       }
     ],
     "rewards": {
@@ -70,11 +70,11 @@
       },
       {
         "id": "s2",
-        "objective": "Carry Marisol's decoded frame to Mae Donnelly at the Boston Harbor Archive."
+        "objective": "Carry Marisol's decoded frame to Marcus at the Boston Harbor Archive."
       },
       {
         "id": "s3",
-        "objective": "Return Mae's archival checksum to Inez in Albuquerque."
+        "objective": "Return Marcuss archival checksum to Inez in Albuquerque."
       }
     ],
     "rewards": {
@@ -94,15 +94,15 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Ask Mae Donnelly at the Boston Harbor Archive why Chicago freight appears in colonial manifests."
+        "objective": "Ask Marcus at the Boston Harbor Archive why Chicago freight appears in colonial manifests."
       },
       {
         "id": "s2",
-        "objective": "Take Mae's copied seal to Eli Snow at Denver's Union Weather Hall for altitude testing."
+        "objective": "Take Marcuss copied seal to Elias at Denver's Union Weather Hall for altitude testing."
       },
       {
         "id": "s3",
-        "objective": "Return the verified seal to Lena beneath Lower Wacker Drive in Chicago."
+        "objective": "Return the verified seal to Leon beneath Lower Wacker Drive in Chicago."
       }
     ],
     "rewards": {
@@ -122,7 +122,7 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Bring Mae's watermarked page to Sol Navarro at Miami's Port Causeway Exchange."
+        "objective": "Bring Marcuss watermarked page to Sol Navarro at Miami's Port Causeway Exchange."
       },
       {
         "id": "s2",
@@ -130,7 +130,7 @@
       },
       {
         "id": "s3",
-        "objective": "Return Marisol's film scan to Mae at the Boston Harbor Archive."
+        "objective": "Return Marisol's film scan to Marcus at the Boston Harbor Archive."
       }
     ],
     "rewards": {
@@ -154,11 +154,11 @@
       },
       {
         "id": "s2",
-        "objective": "Bring Inez's restored coordinates to Lena Kowalski beneath Lower Wacker Drive in Chicago."
+        "objective": "Bring Inez's restored coordinates to Leon beneath Lower Wacker Drive in Chicago."
       },
       {
         "id": "s3",
-        "objective": "Return Lena's inland shipping match to Sol at the Miami Port Causeway Exchange."
+        "objective": "Return Leons inland shipping match to Sol at the Miami Port Causeway Exchange."
       }
     ],
     "rewards": {
