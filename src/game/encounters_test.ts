@@ -4,6 +4,7 @@ import {
   eligibleEncounters,
   restAtHotel,
   rollEncounter,
+  selectPatrolEncounter,
   startEncounter,
 } from "./encounters.ts";
 import type { Encounter, Item, Player, Region } from "../types.ts";
@@ -118,6 +119,22 @@ Deno.test("restricted players get no encounters", () => {
 Deno.test("rollEncounter returns null below the spawn chance", () => {
   assertEquals(rollEncounter([patrol], region(0.4), player(), 0.99), null);
   assert(rollEncounter([patrol], region(0.6), player(), 0.0) !== null);
+});
+
+Deno.test("explicit patrol searches always select an eligible enemy", () => {
+  const second = { ...patrol, id: "patrol_y" };
+  assertEquals(
+    selectPatrolEncounter([patrol, second], region(0.6), player(), 0)?.id,
+    "patrol_x",
+  );
+  assertEquals(
+    selectPatrolEncounter([patrol, second], region(0.6), player(), 0.99)?.id,
+    "patrol_y",
+  );
+  assertEquals(
+    selectPatrolEncounter([patrol], region(0.2), player(), 0),
+    null,
+  );
 });
 
 Deno.test("moves damage the enemy; victory pays out and clears suspicion", () => {

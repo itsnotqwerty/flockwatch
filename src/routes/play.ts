@@ -84,7 +84,7 @@ import {
   playerHp,
   REST_COST,
   restAtHotel,
-  rollEncounter,
+  selectPatrolEncounter,
   startEncounter,
 } from "../game/encounters.ts";
 import {
@@ -1461,13 +1461,23 @@ ${postButton("home", "Melt into the crowd")}`,
       locationSupports(player, location, "encounter") &&
       !(await getEncounter(player.id))
     ) {
-      const rolled = rollEncounter(
+      const patrol = selectPatrolEncounter(
         await getEncounters(),
         region,
         player,
         Math.random(),
       );
-      if (rolled) await saveEncounter(startEncounter(rolled, player));
+      if (patrol) {
+        await saveEncounter(startEncounter(patrol, player));
+      } else {
+        respondWithNotice(
+          context.response,
+          "Perimeter Quiet",
+          "No eligible patrol is operating in this region right now.",
+          false,
+        );
+        return;
+      }
     }
     context.response.redirect("/");
     return;
@@ -2527,6 +2537,8 @@ ${moves}
 </ul>
 </section>`;
   }
+  const location = await getLocation(player.location);
+  if (!locationSupports(player, location, "encounter")) return "";
   const bosses = (await getEncounters()).filter(
     (e) =>
       e.kind === "boss" && e.regions.includes(player.region) &&
@@ -2561,7 +2573,7 @@ ${
 <h3>Trouble</h3>
 <form method="post" action="/">
   <input type="hidden" name="a" value="encounter_start">
-  <button type="submit" class="link-button">Walk the perimeter (risk a patrol)</button>
+  <button type="submit" class="link-button">Walk the perimeter (draw a patrol)</button>
 </form>
 ${bossRows ? `<ul class="boss-list">\n${bossRows}\n</ul>` : ""}
 </section>`;

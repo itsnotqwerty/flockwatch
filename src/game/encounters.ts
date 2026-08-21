@@ -120,6 +120,27 @@ export function rollEncounter(
   ];
 }
 
+/**
+ * Select an eligible patrol for an explicit player search. Unlike passive
+ * encounter rolls, clicking the encounter action guarantees a confrontation
+ * whenever the region has at least one eligible patrol.
+ */
+export function selectPatrolEncounter(
+  encounters: Encounter[],
+  region: Region,
+  player: Player,
+  roll: number,
+): Encounter | null {
+  const eligible = eligibleEncounters(encounters, region, player)
+    .filter((encounter) => encounter.kind === "patrol");
+  if (eligible.length === 0) return null;
+  const index = Math.min(
+    eligible.length - 1,
+    Math.floor(Math.max(0, roll) * eligible.length),
+  );
+  return eligible[index];
+}
+
 /** Begin an encounter instance for a player. `roll` picks the opening quip. */
 export function startEncounter(
   encounter: Encounter,

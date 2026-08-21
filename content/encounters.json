@@ -181,6 +181,7 @@
       "denver",
       "albuquerque",
       "atlanta",
+      "los_angeles",
       "miami"
     ],
     "minFlockPresence": 0.2,
@@ -268,6 +269,7 @@
       "boston",
       "denver",
       "silicon_valley",
+      "los_angeles",
       "new_york_city"
     ],
     "minFlockPresence": 0.25,

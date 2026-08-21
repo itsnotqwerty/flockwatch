@@ -98,3 +98,15 @@ Deno.test("crafting materials are useful and supplied by every game loop", async
   const itemIds = new Set(items.map((item) => item.id));
   assert(recipes.every((recipe) => itemIds.has(recipe.result)));
 });
+
+Deno.test("Los Angeles patrol pool includes boomers and schizos", async () => {
+  clearContentCache();
+  const { encounters } = await getContent();
+  const losAngelesPatrolIds = encounters
+    .filter((encounter) =>
+      encounter.kind === "patrol" && encounter.regions.includes("los_angeles")
+    )
+    .map((encounter) => encounter.id);
+  assert(losAngelesPatrolIds.includes("patrol_boomer"));
+  assert(losAngelesPatrolIds.includes("patrol_schizo"));
+});

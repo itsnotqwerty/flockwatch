@@ -71,7 +71,7 @@
       },
       {
         "id": "los_angeles_witness",
-        "objective": "Los Angeles: defeat a patrol so a hostile witness must record you.",
+        "objective": "Los Angeles: draw and defeat a patrol at Union Signal Depot or San Pedro Skyline so a hostile witness must record you.",
         "requirement": { "event": "encounter.victory", "region": "los_angeles" }
       },
       {
