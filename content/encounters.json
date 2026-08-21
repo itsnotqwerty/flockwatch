@@ -443,12 +443,7 @@
     "regions": [
       "cleveland",
       "atlanta",
-<<<<<<< HEAD
-      "chicago",
-      "boston"
-=======
       "chicago"
->>>>>>> 08084cf (Updated boss regions)
     ],
     "minFlockPresence": 0,
     "maxHp": 100,
