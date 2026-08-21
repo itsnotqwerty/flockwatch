@@ -100,6 +100,15 @@ if [[ "$USE_SERVICE" -eq 1 ]]; then
     --exclude node_modules --exclude .git --exclude '.env*' \
     "$SRC_DIR/" "$APP_DIR/"
 
+  # Environment config: rsync excludes .env* so secrets never enter git or get
+  # clobbered on redeploy; install .env only when the server lacks one.
+  if [[ ! -f "$APP_DIR/.env" && -f "$SRC_DIR/.env" ]]; then
+    log "installing .env"
+    install -m 600 -o flockwatch "$SRC_DIR/.env" "$APP_DIR/.env"
+  elif [[ ! -f "$APP_DIR/.env" ]]; then
+    warn "no .env found (checked $SRC_DIR/.env); Supabase persistence and auth are disabled until you add $APP_DIR/.env"
+  fi
+
   mkdir -p "$DATA_DIR"
 
   id -u flockwatch >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin flockwatch
@@ -207,3 +216,5 @@ else
 fi
 [[ "$TLS_MODE" == "selfsigned" ]] && echo "  Note:   self-signed cert — expect a browser warning"
 echo
+
+systemctl restart flockwatch

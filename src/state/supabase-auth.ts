@@ -27,11 +27,10 @@ export function installAuthFetchStub(stub: FetchLike | null): void {
   fetchStub = stub;
 }
 
-function baseUrl(): string {
+function baseUrl(): string | null {
   const url = Deno.env.get("SUPABASE_URL") ??
     (fetchStub ? "https://auth.stub" : null);
-  if (!url) throw new Error("SUPABASE_URL is required for auth");
-  return `${url}/auth/v1`;
+  return url ? `${url}/auth/v1` : null;
 }
 
 function anonKey(): string {
@@ -47,15 +46,26 @@ async function call(
   // deno-lint-ignore no-explicit-any
 ): Promise<{ status: number; data: any }> {
   const f = fetchStub ?? fetch;
-  const res = await f(`${baseUrl()}${path}`, {
-    method: init.method ?? (init.body === undefined ? "GET" : "POST"),
-    headers: {
-      "apikey": init.key ?? anonKey(),
-      "Authorization": `Bearer ${init.token ?? init.key ?? anonKey()}`,
-      "Content-Type": "application/json",
-    },
-    body: init.body === undefined ? undefined : JSON.stringify(init.body),
-  });
+  const base = baseUrl();
+  if (!base) {
+    console.error("auth request failed: SUPABASE_URL is not configured");
+    return { status: 0, data: null };
+  }
+  let res: Response;
+  try {
+    res = await f(`${base}${path}`, {
+      method: init.method ?? (init.body === undefined ? "GET" : "POST"),
+      headers: {
+        "apikey": init.key ?? anonKey(),
+        "Authorization": `Bearer ${init.token ?? init.key ?? anonKey()}`,
+        "Content-Type": "application/json",
+      },
+      body: init.body === undefined ? undefined : JSON.stringify(init.body),
+    });
+  } catch (e) {
+    console.error("auth request failed:", e);
+    return { status: 0, data: null };
+  }
   const text = await res.text();
   let data = null;
   try {
@@ -82,6 +92,9 @@ export async function authSignUp(
   password: string,
 ): Promise<{ user: AuthUser | null; error: string | null }> {
   const { status, data } = await call("/signup", { body: { email, password } });
+  if (status === 0) {
+    return { user: null, error: "Account services are unavailable. Try again shortly." };
+  }
   if (status >= 400) {
     return { user: null, error: data?.msg ?? data?.error_description ?? "Signup failed." };
   }
@@ -101,6 +114,9 @@ export async function authLogIn(
   const { status, data } = await call("/token?grant_type=password", {
     body: { email, password },
   });
+  if (status === 0) {
+    return { tokens: null, error: "Account services are unavailable. Try again shortly." };
+  }
   if (status >= 400) {
     return { tokens: null, error: "Invalid email or password." };
   }
@@ -123,6 +139,9 @@ export async function authUpdatePassword(
     token: accessToken,
     body: { password },
   });
+  if (status === 0) {
+    return { ok: false, error: "Account services are unavailable. Try again shortly." };
+  }
   if (status >= 400) {
     return {
       ok: false,

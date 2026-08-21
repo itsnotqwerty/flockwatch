@@ -14,6 +14,8 @@ Environment=HOST=127.0.0.1
 Environment=DENO_DIR=__APP_DIR__/.deno_cache
 # Persist Deno KV (SQLite) to disk inside the app dir so ReadWritePaths covers it.
 Environment=DENO_KV_PATH=__APP_DIR__/data/flockwatch.kv
+# Optional Supabase + auth config. Missing file is fine (local KV fallback).
+EnvironmentFile=-__APP_DIR__/.env
 # Scoped permissions matching the `start` task, plus read+write on the KV data dir
 # (KV reads its own SQLite file, so ./data must be in both lists).
 ExecStart=__DENO_BIN__ run --allow-read=./static,./tools,./src,./content,./data --allow-write=./data --allow-net --allow-env --unstable-kv main.ts
