@@ -227,6 +227,32 @@ footer a:hover {
   border-bottom-color: var(--stamp);
 }
 
+.donate-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+footer a.donate {
+  display: inline-block;
+  background: #f7931a;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: none;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+footer a.donate:hover {
+  background: #e0830f;
+  color: #fff;
+  border-bottom: none;
+}
+
 h2 {
   font-weight: 600;
   border-bottom: 1px solid var(--line);

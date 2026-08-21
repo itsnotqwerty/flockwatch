@@ -51,6 +51,7 @@ ${protectedBody}
 </main>
 <footer>
   <p>© 2026 Samuel Roux · <a href="https://github.com/itsnotqwerty/flockwatch">View the code</a></p>
+  <p class="donate-line">Cool Freakin' Games is funded entirely by donations <a class="donate" href="bitcoin:bc1qsxmj8euqjqqze36kweglg4kut30f95gygmhyz3">&#8383; Donate Bitcoin</a></p>
 </footer>
 <script src="/interactivity.js" defer></script>
 <script src="/realtime.js" defer></script>
