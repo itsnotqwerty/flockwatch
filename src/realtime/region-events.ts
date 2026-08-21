@@ -22,6 +22,32 @@ export interface RegionEvent {
 
 export type RegionEventListener = (event: RegionEvent) => void;
 
+// Console logging with ANSI colors: green = routine, yellow = noteworthy,
+// red = adversarial. Honors NO_COLOR and non-TTY output (e.g. systemd).
+const COLOR = { green: "\x1b[32m", yellow: "\x1b[33m", red: "\x1b[31m", reset: "\x1b[0m" };
+const EVENT_STATUS: Record<RegionEventType, keyof typeof COLOR> = {
+  "presence.changed": "green",
+  "social.changed": "green",
+  "region.stats": "green",
+  "message.posted": "yellow",
+  "market.changed": "yellow",
+  "camera.changed": "yellow",
+  "cell.encounter": "red",
+  "cell.operation": "red",
+};
+
+export function logRegionEvent(event: RegionEvent): void {
+  const useColor = !Deno.env.get("NO_COLOR") && Deno.stdout.isTerminal();
+  const status = EVENT_STATUS[event.type] ?? "green";
+  const label = event.type;
+  const line = `${event.occurredAt} [${event.region}] ${label}` +
+    (event.actorId ? ` actor=${event.actorId}` : "") +
+    (event.location ? ` @${event.location}` : "");
+  console.log(
+    useColor ? `${COLOR[status]}${line}${COLOR.reset}` : line,
+  );
+}
+
 export class RegionEventBus {
   readonly #channels = new Map<string, Set<RegionEventListener>>();
 
@@ -45,6 +71,7 @@ export class RegionEventBus {
       id: event.id ?? crypto.randomUUID(),
       occurredAt: event.occurredAt ?? new Date().toISOString(),
     };
+    logRegionEvent(published);
     for (const listener of this.#channels.get(event.region) ?? []) {
       try {
         listener(published);
