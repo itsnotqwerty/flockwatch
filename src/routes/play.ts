@@ -1383,7 +1383,7 @@ ${postButton("home", "Continue")}`,
 <ul class="quest-log">
 ${items}
 </ul>
-${postButton("home", "Back to the park")}`,
+${postButton("home", "Back")}`,
     });
     return;
   }
@@ -1459,7 +1459,7 @@ ${scrapList}
 ${intelTable}
 </section>
 <div class="action-row">
-${postButton("home", "Back to the park")}
+${postButton("home", "Back")}
 </div>`,
     });
     return;
