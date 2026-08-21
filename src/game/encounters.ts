@@ -41,6 +41,9 @@ export function applyWipe(player: Player, items: Item[]): Player {
   return {
     ...player,
     currency: 0,
+    // A wipe must not leave a penniless character permanently unable to heal.
+    // They wake battered, but able to re-enter the camera/work economy.
+    hp: Math.ceil(PLAYER_HP / 4),
     suspicion: 0,
     intel: {},
     scrap: {},
@@ -162,6 +165,7 @@ export function applyMove(
   if (state.status !== "ongoing") return null;
   const move = encounter.moves.find((m) => m.id === moveId);
   if (!move) return null;
+  if ((move.cost ?? 0) > player.currency) return null;
 
   let updated: Player = {
     ...player,

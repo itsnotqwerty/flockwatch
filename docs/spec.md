@@ -92,7 +92,8 @@ and economy. Silicon Valley is the intentional non-city exception.
 #### Region Structure
 
 - The available regions are Cleveland, New Orleans, Seattle, Atlanta, New York
-  City, and Silicon Valley.
+  City, Silicon Valley, Los Angeles, Denver, Albuquerque, Chicago, Boston, and
+  Miami.
 - Each region contains two or three travelable **sublocations** where NPCs,
   quests, markets, message boards, workbenches, encounters, and camera sites are
   situated.

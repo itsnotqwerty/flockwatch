@@ -1,7 +1,5 @@
 import { assertEquals } from "$assert";
-import {
-  eventSuspicionReduction,
-} from "./item-effects.ts";
+import { eventSuspicionReduction } from "./item-effects.ts";
 import { performEspionage } from "./espionage.ts";
 import type { Player, Region } from "../types.ts";
 

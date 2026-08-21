@@ -21,6 +21,7 @@ export const MIN_PASSWORD_LENGTH = 8;
 const accountKey = (id: string) => ["accounts", id];
 const accountByEmailKey = (email: string) => ["account_emails", email];
 const sessionKey = (token: string) => ["sessions", token];
+export const SESSION_TTL_MS = 30 * 24 * 60 * 60_000;
 
 export function normalizeCharacterName(input: string): string | null {
   const name = input.replaceAll(/\s+/g, " ").trim();
@@ -113,12 +114,15 @@ async function createSession(
   accountId: string,
   store: Store,
 ): Promise<PlayerSession> {
+  const token = crypto.randomUUID();
+  const now = Date.now();
   const session: PlayerSession = {
-    token: crypto.randomUUID(),
+    token,
     accountId,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(now).toISOString(),
+    expiresAt: new Date(now + SESSION_TTL_MS).toISOString(),
   };
-  await store.set(sessionKey(session.token), session);
+  await store.setIfAbsent(sessionKey(token), session, SESSION_TTL_MS);
   return session;
 }
 
@@ -161,7 +165,9 @@ export async function signUp(
   const email = normalizeEmail(emailInput);
   if (!email) return fail("A valid email address is required.");
   if (password.length < MIN_PASSWORD_LENGTH) {
-    return fail(`Passwords must be at least ${MIN_PASSWORD_LENGTH} characters.`);
+    return fail(
+      `Passwords must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+    );
   }
   const name = normalizeCharacterName(requestedName);
   if (!name) {
@@ -315,6 +321,13 @@ export async function getPlayerForSession(
   const store = s ?? await openStore();
   const session = await store.get<PlayerSession>(sessionKey(token));
   if (!session) return null;
+  const expiresAt = session.expiresAt
+    ? Date.parse(session.expiresAt)
+    : Date.parse(session.createdAt) + SESSION_TTL_MS;
+  if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
+    await store.delete(sessionKey(token));
+    return null;
+  }
   const account = await store.get<Account>(accountKey(session.accountId));
   return account ? getPlayer(account.playerId, store) : null;
 }

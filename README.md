@@ -25,9 +25,10 @@ to what NPCs say — the deepstate rewards the observant and files away the rest
 ### Dialogue
 
 In-game dialogue and character rendering is handled by an implementation of
-[`grillsay`](https://github.com/itsnotqwerty/grillsay), a `cowsay`-style engine in which every
-character is delivered with the gravitas of a man guarding his lawn. Dialogue
-lines are word-wrapped into speech bubbles above the character art.
+[`grillsay`](https://github.com/itsnotqwerty/grillsay), a `cowsay`-style engine
+in which every character is delivered with the gravitas of a man guarding his
+lawn. Dialogue lines are word-wrapped into speech bubbles above the character
+art.
 
 ### Economy & Market
 
@@ -82,12 +83,12 @@ existing installation, render the new template and reload nginx with
 
 ### A Nation Under Watch
 
-The world of FlockWatch is organized around watched cities: Cleveland, New
-Orleans, Seattle, Atlanta, New York City, and the deliberate regional exception
-of Silicon Valley. Each has travelable sublocations, local statistics,
-surveillance coverage, and its own economy. Scrap that's worthless in one city
-may be gold in the next; a city drowning in cameras pays better wages but
-watches every move you make.
+The world of FlockWatch is organized around twelve watched cities: Cleveland,
+New Orleans, Seattle, Atlanta, New York City, Silicon Valley, Los Angeles,
+Denver, Albuquerque, Chicago, Boston, and Miami. Each has travelable
+sublocations, local statistics, surveillance coverage, and its own economy.
+Scrap that's worthless in one city may be gold in the next; a city drowning in
+cameras pays better wages but watches every move you make.
 
 Every city also has one public message board. Players can leave short local
 notices, trade warnings, or manufacture entirely new reasons to be investigated.
@@ -105,16 +106,16 @@ Then open [http://localhost:8000](http://localhost:8000).
 
 ### Persistence
 
-Game state is stored in Supabase (Postgres) when configured, with Deno KV as
-the local fallback. To use Supabase:
+Game state is stored in Supabase (Postgres) when configured, with Deno KV as the
+local fallback. To use Supabase:
 
 1. Create a project at [supabase.com](https://supabase.com) and run
    [supabase/schema.sql](supabase/schema.sql) in the SQL editor.
 2. Copy [.env.example](.env.example) to `.env` and set `SUPABASE_URL` and
    `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE_SECRET_KEY`).
 3. To move existing KV data over, run `deno task migrate-to-supabase` with the
-   same environment set. Note that sessions are copied without their expiry, so
-   players may need to log in again.
+   same environment set. Existing sessions retain their recorded expiry; legacy
+   sessions without one expire 30 days after creation.
 
 ## Documentation
 

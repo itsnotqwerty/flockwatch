@@ -87,7 +87,12 @@ Deno.test("signup creates an email account and rejects duplicates", async () => 
 Deno.test("login verifies the password and opens a session", async () => {
   resetAuthStub();
   const store = createMemoryStore();
-  await signUp("jane@example.com", "correct horse battery", "Citizen Jane", store);
+  await signUp(
+    "jane@example.com",
+    "correct horse battery",
+    "Citizen Jane",
+    store,
+  );
 
   const bad = await logIn("jane@example.com", "wrong password", store);
   assert(!bad.ok);

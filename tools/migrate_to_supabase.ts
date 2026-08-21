@@ -21,7 +21,9 @@ if (!supabaseUrl || !serviceKey) {
   Deno.exit(1);
 }
 
-const kv = await Deno.openKv(Deno.args[0] ?? Deno.env.get("DENO_KV_PATH") ?? undefined);
+const kv = await Deno.openKv(
+  Deno.args[0] ?? Deno.env.get("DENO_KV_PATH") ?? undefined,
+);
 
 const BATCH = 100;
 let batch: Array<{ k: string; v: unknown }> = [];
@@ -49,7 +51,9 @@ async function flush(): Promise<void> {
 for await (const entry of kv.list({ prefix: [] })) {
   const key = entry.key.map((part) => {
     if (typeof part !== "string") {
-      console.error(`non-string key segment in ${JSON.stringify(entry.key)} — skipping`);
+      console.error(
+        `non-string key segment in ${JSON.stringify(entry.key)} — skipping`,
+      );
       return null;
     }
     return part;

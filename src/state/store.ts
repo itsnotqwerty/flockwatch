@@ -19,21 +19,43 @@ export interface Store {
 
 /** In-memory store for tests and offline development. */
 export function createMemoryStore(): Store {
-  const map = new Map<string, unknown>();
-  const encode = (key: string[]) => key.join("");
+  const map = new Map<
+    string,
+    { key: string[]; value: unknown; expiresAt: number | null }
+  >();
+  const encode = (key: string[]) => encodeKey(key);
+  const liveEntry = (encoded: string) => {
+    const entry = map.get(encoded);
+    if (
+      entry?.expiresAt !== null && entry?.expiresAt !== undefined &&
+      entry.expiresAt <= Date.now()
+    ) {
+      map.delete(encoded);
+      return undefined;
+    }
+    return entry;
+  };
   return {
     get<T>(key: string[]): Promise<T | null> {
-      const v = map.get(encode(key));
-      return Promise.resolve(v === undefined ? null : (v as T));
+      const entry = liveEntry(encode(key));
+      return Promise.resolve(entry === undefined ? null : (entry.value as T));
     },
     set<T>(key: string[], value: T): Promise<void> {
-      map.set(encode(key), value);
+      map.set(encode(key), { key: [...key], value, expiresAt: null });
       return Promise.resolve();
     },
-    setIfAbsent<T>(key: string[], value: T): Promise<boolean> {
+    setIfAbsent<T>(
+      key: string[],
+      value: T,
+      expireIn?: number,
+    ): Promise<boolean> {
       const encoded = encode(key);
-      if (map.has(encoded)) return Promise.resolve(false);
-      map.set(encoded, value);
+      if (liveEntry(encoded)) return Promise.resolve(false);
+      map.set(encoded, {
+        key: [...key],
+        value,
+        expiresAt: expireIn === undefined ? null : Date.now() + expireIn,
+      });
       return Promise.resolve(true);
     },
     delete(key: string[]): Promise<void> {
@@ -41,11 +63,14 @@ export function createMemoryStore(): Store {
       return Promise.resolve();
     },
     list<T>(prefix: string[]): Promise<Array<{ key: string[]; value: T }>> {
-      const p = encode(prefix);
       const out: Array<{ key: string[]; value: T }> = [];
-      for (const [k, v] of map) {
-        if (k.startsWith(p)) {
-          out.push({ key: k.split(""), value: v as T });
+      for (const encoded of [...map.keys()]) {
+        const entry = liveEntry(encoded);
+        if (
+          entry &&
+          prefix.every((segment, index) => entry.key[index] === segment)
+        ) {
+          out.push({ key: [...entry.key], value: entry.value as T });
         }
       }
       return Promise.resolve(out);
@@ -104,9 +129,7 @@ let store: Store | null = null;
  */
 export const encodeKey = (key: string[]): string => JSON.stringify(key);
 export const encodePrefix = (prefix: string[]): string =>
-  prefix.length === 0
-    ? "["
-    : JSON.stringify(prefix).replace(/\]$/, ",");
+  prefix.length === 0 ? "[" : JSON.stringify(prefix).replace(/\]$/, ",");
 
 interface SupabaseStoreOptions {
   url: string;

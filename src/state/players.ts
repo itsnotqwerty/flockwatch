@@ -17,6 +17,12 @@ const DEFAULT_LOCATIONS: Record<string, string> = {
   seattle: "municipal_visitor_center",
   silicon_valley: "office_of_zoning_compliance",
   new_york_city: "subway_platform_b",
+  los_angeles: "la_union_signal_depot",
+  denver: "den_union_weather_hall",
+  albuquerque: "abq_rail_yards",
+  chicago: "chi_lower_wacker_dispatch",
+  boston: "bos_harbor_archive",
+  miami: "mia_little_havana_dispatch",
 };
 
 function normalizePlayer(raw: Player): Player {

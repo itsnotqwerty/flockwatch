@@ -1,5 +1,5 @@
 import { assert, assertEquals } from "$assert";
-import { encodeKey, encodePrefix } from "./store.ts";
+import { createMemoryStore, encodeKey, encodePrefix } from "./store.ts";
 
 Deno.test("encodeKey round-trips through JSON", () => {
   const key = ["market", "cleveland", "listing_1"];
@@ -18,4 +18,31 @@ Deno.test("encodePrefix matches children of the prefix", () => {
 
 Deno.test("encodePrefix of empty prefix matches everything", () => {
   assertEquals(encodePrefix([]), "[");
+});
+
+Deno.test("memory keys preserve segment boundaries", async () => {
+  const store = createMemoryStore();
+  await store.set(["ab", "c"], 1);
+  await store.set(["a", "bc"], 2);
+  assertEquals(await store.get(["ab", "c"]), 1);
+  assertEquals(await store.get(["a", "bc"]), 2);
+  assertEquals(await store.list<number>(["ab"]), [{
+    key: ["ab", "c"],
+    value: 1,
+  }]);
+});
+
+Deno.test("memory setIfAbsent honors expiry", async () => {
+  const originalNow = Date.now;
+  let now = 1_000;
+  Date.now = () => now;
+  try {
+    const store = createMemoryStore();
+    assert(await store.setIfAbsent(["lock"], true, 50));
+    assertEquals(await store.setIfAbsent(["lock"], true, 50), false);
+    now = 1_051;
+    assert(await store.setIfAbsent(["lock"], true, 50));
+  } finally {
+    Date.now = originalNow;
+  }
 });

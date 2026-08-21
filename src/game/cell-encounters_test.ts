@@ -91,3 +91,62 @@ Deno.test("a cell relay strengthens cooperative attacks", () => {
   const turn = applyCellMove(boss, state, operator, "hit", 1)!;
   assertEquals(turn.state.enemyHp, 7); // 10 base + 3 from the relay
 });
+
+Deno.test("cell turns alternate while another participant can act", () => {
+  const state = startCellEncounter(
+    boss,
+    cell,
+    [player("p1"), player("p2")],
+    0,
+  )!;
+  const first = applyCellMove(boss, state, player("p1"), "hit", 1)!;
+  const repeated = applyCellMove(boss, first.state, first.actor, "hit", 2)!;
+  assertEquals(
+    repeated.reason,
+    "Another active cell member must take the next turn.",
+  );
+  assertEquals(repeated.state.enemyHp, first.state.enemyHp);
+});
+
+Deno.test("cell bosses damage and can defeat participants", () => {
+  const dangerous: Encounter = {
+    ...boss,
+    maxHp: 100,
+    enemyMoves: [{
+      id: "counter",
+      label: "Issue a terminal finding",
+      damage: 20,
+      selfDamage: 0,
+      suspicion: 0,
+    }],
+  };
+  const firstPlayer = player("p1", { hp: 5, currency: 50 });
+  const secondPlayer = player("p2", { hp: 5 });
+  const state = startCellEncounter(
+    dangerous,
+    cell,
+    [firstPlayer, secondPlayer],
+    0,
+  )!;
+  const first = applyCellMove(
+    dangerous,
+    state,
+    firstPlayer,
+    "hit",
+    1,
+    0,
+  )!;
+  assert(first.state.defeatedIds?.includes("p1"));
+  assertEquals(first.actor.hp, 10);
+  assertEquals(first.actor.currency, 0);
+
+  const second = applyCellMove(
+    dangerous,
+    first.state,
+    secondPlayer,
+    "hit",
+    2,
+    0,
+  )!;
+  assertEquals(second.state.status, "defeat");
+});

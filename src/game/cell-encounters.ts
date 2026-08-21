@@ -1,4 +1,11 @@
-import type { Cell, CellEncounterState, Encounter, Player } from "../types.ts";
+import type {
+  Cell,
+  CellEncounterState,
+  Encounter,
+  Item,
+  Player,
+} from "../types.ts";
+import { applyWipe, playerHp } from "./encounters.ts";
 import {
   combatDamageBonus,
   combatSuspicionReduction,
@@ -31,6 +38,7 @@ export function startCellEncounter(
     status: "ongoing",
     phaseIndex: 0,
     participantIds: participants.map((player) => player.id),
+    defeatedIds: [],
     log: [`${cell.name} confronts ${encounter.name} as a cell.`],
     startedAt: timestamp,
     updatedAt: timestamp,
@@ -50,12 +58,27 @@ export function applyCellMove(
   actor: Player,
   moveId: string,
   now = Date.now(),
+  enemyRoll = Math.random(),
+  items: Item[] = [],
 ): CellTurnResult | null {
   if (state.status !== "ongoing" || !state.participantIds.includes(actor.id)) {
     return null;
   }
   if (actor.region !== state.region || actor.location !== state.location) {
     return null;
+  }
+  const defeatedIds = state.defeatedIds ?? [];
+  if (defeatedIds.includes(actor.id)) return null;
+  const otherActive = state.participantIds.some((id) =>
+    id !== actor.id && !defeatedIds.includes(id)
+  );
+  if (otherActive && state.lastActorId === actor.id) {
+    return {
+      state,
+      actor,
+      victory: false,
+      reason: "Another active cell member must take the next turn.",
+    };
   }
   const move = encounter.moves.find((candidate) => candidate.id === moveId);
   if (!move) return null;
@@ -67,9 +90,10 @@ export function applyCellMove(
       reason: "You cannot afford that move.",
     };
   }
-  const updatedActor: Player = {
+  let updatedActor: Player = {
     ...actor,
     currency: actor.currency - (move.cost ?? 0),
+    hp: Math.max(0, playerHp(actor) - move.selfDamage),
     suspicion: Math.max(
       0,
       Math.min(
@@ -95,6 +119,7 @@ export function applyCellMove(
         ...state,
         participantIds,
         status: participantIds.length === 0 ? "defeat" : "ongoing",
+        lastActorId: actor.id,
         log,
         updatedAt: new Date(now).toISOString(),
       },
@@ -126,13 +151,52 @@ export function applyCellMove(
     log.push(
       `Recovered materials: ${formatMaterials(encounter.materialDrops)}.`,
     );
+  } else {
+    const counter = encounter.enemyMoves.length > 0
+      ? encounter.enemyMoves[
+        Math.min(
+          encounter.enemyMoves.length - 1,
+          Math.floor(Math.max(0, enemyRoll) * encounter.enemyMoves.length),
+        )
+      ]
+      : null;
+    if (counter) {
+      updatedActor = {
+        ...updatedActor,
+        hp: Math.max(0, playerHp(updatedActor) - counter.damage),
+        suspicion: Math.max(
+          0,
+          Math.min(100, updatedActor.suspicion + counter.suspicion),
+        ),
+      };
+      log.push(`${encounter.name} answers ${actor.name}: ${counter.label}.`);
+      if (counter.damage > 0) {
+        log.push(`${actor.name} takes ${counter.damage} damage.`);
+      }
+    }
   }
+  const actorDefeated = !victory && playerHp(updatedActor) <= 0;
+  const nextDefeatedIds = actorDefeated && !defeatedIds.includes(actor.id)
+    ? [...defeatedIds, actor.id]
+    : defeatedIds;
+  if (actorDefeated) {
+    updatedActor = applyWipe(updatedActor, items);
+    log.push(
+      `${actor.name} is removed from the operation and wakes elsewhere.`,
+    );
+  }
+  const allDefeated = state.participantIds.every((id) =>
+    nextDefeatedIds.includes(id)
+  );
+  if (allDefeated) log.push(encounter.defeatLine);
   return {
     state: {
       ...state,
       enemyHp,
-      status: victory ? "victory" : "ongoing",
+      status: victory ? "victory" : allDefeated ? "defeat" : "ongoing",
       phaseIndex,
+      defeatedIds: nextDefeatedIds,
+      lastActorId: actor.id,
       log,
       updatedAt: new Date(now).toISOString(),
     },

@@ -139,6 +139,8 @@ interface DialogueNodeLike {
     next: string | null;
     grantsQuest?: string;
     advancesQuest?: string;
+    requiresQuestCompleted?: string;
+    atStages?: number[];
   }>;
 }
 
@@ -589,6 +591,27 @@ export function validateCrossReferences(
 ): ContentIssue[] {
   const issues: ContentIssue[] = [];
   const questIds = new Set(quests.map((q) => q.id));
+  const duplicateIds = <T>(
+    values: T[],
+    id: (value: T) => string,
+    kind: string,
+  ) => {
+    const seen = new Set<string>();
+    for (const value of values) {
+      const valueId = id(value);
+      if (seen.has(valueId)) {
+        issues.push({ file, message: `${kind}: duplicate id "${valueId}"` });
+      }
+      seen.add(valueId);
+    }
+  };
+  duplicateIds(npcs, (value) => value.id, "npc");
+  duplicateIds(quests, (value) => value.id, "quest");
+  duplicateIds(regions, (value) => value.id, "region");
+  duplicateIds(locations, (value) => value.id, "location");
+  duplicateIds(items, (value) => value.id, "item");
+  duplicateIds(recipes, (value) => value.id, "recipe");
+  duplicateIds(encounters, (value) => value.id, "encounter");
 
   for (const quest of quests) {
     const npc = npcs.find((n) => n.id === quest.trigger.npc);
@@ -618,11 +641,41 @@ export function validateCrossReferences(
   for (const npc of npcs) {
     for (const node of npc.nodes) {
       for (const opt of node.options) {
-        for (const ref of [opt.grantsQuest, opt.advancesQuest]) {
+        for (
+          const ref of [
+            opt.grantsQuest,
+            opt.advancesQuest,
+            opt.requiresQuestCompleted,
+          ]
+        ) {
           if (ref && !questIds.has(ref)) {
             issues.push({
               file,
               message: `${npc.id}.${node.id}.${opt.id}: unknown quest "${ref}"`,
+            });
+          }
+        }
+        if (opt.atStages !== undefined) {
+          const quest = quests.find((candidate) =>
+            candidate.id === opt.advancesQuest
+          );
+          if (!opt.advancesQuest || !quest) {
+            issues.push({
+              file,
+              message:
+                `${npc.id}.${node.id}.${opt.id}: atStages requires a valid advancesQuest`,
+            });
+          } else if (
+            !Array.isArray(opt.atStages) || opt.atStages.length === 0 ||
+            opt.atStages.some((stage) =>
+              !Number.isInteger(stage) || stage < 0 ||
+              stage >= quest.stages.length
+            )
+          ) {
+            issues.push({
+              file,
+              message:
+                `${npc.id}.${node.id}.${opt.id}: atStages must reference valid stages of "${quest.id}"`,
             });
           }
         }
@@ -634,6 +687,26 @@ export function validateCrossReferences(
   const itemIds = new Set(items.map((item) => item.id));
   const locationIds = new Set(locations.map((location) => location.id));
   const regionsById = new Map(regions.map((region) => [region.id, region]));
+  for (const npc of npcs) {
+    if (!regionsById.has(npc.region)) {
+      issues.push({
+        file,
+        message: `${npc.id}: unknown region "${npc.region}"`,
+      });
+    }
+    const placed = locations.some((location) =>
+      location.regionId === npc.region &&
+      location.interactions.some((interaction) =>
+        interaction.npcIds?.includes(npc.id)
+      )
+    );
+    if (!placed) {
+      issues.push({
+        file,
+        message: `${npc.id}: NPC is not placed in its region`,
+      });
+    }
+  }
   for (const region of regions) {
     if (region.locations.length < 2 || region.locations.length > 3) {
       issues.push({
@@ -669,6 +742,24 @@ export function validateCrossReferences(
           `${region.id}: requires exactly one regional message board; found ${boardCount}`,
       });
     }
+    if (
+      !encounters.some((encounter) => encounter.regions.includes(region.id))
+    ) {
+      issues.push({
+        file,
+        message: `${region.id}: no encounter content is available`,
+      });
+    }
+    if (
+      !encounters.some((encounter) =>
+        encounter.kind === "boss" && encounter.regions.includes(region.id)
+      )
+    ) {
+      issues.push({
+        file,
+        message: `${region.id}: no boss encounter is available`,
+      });
+    }
   }
   for (const location of locations) {
     if (!regionsById.has(location.regionId)) {
@@ -678,6 +769,12 @@ export function validateCrossReferences(
       });
     }
     if (!locationIds.has(location.id)) continue;
+    if (!regionsById.get(location.regionId)?.locations.includes(location.id)) {
+      issues.push({
+        file,
+        message: `${location.id}: not listed by region "${location.regionId}"`,
+      });
+    }
     for (const interaction of location.interactions) {
       for (const npcId of interaction.npcIds ?? []) {
         if (!npcIds.has(npcId)) {
@@ -701,11 +798,40 @@ export function validateCrossReferences(
     }
   }
   for (const encounter of encounters) {
+    for (const regionId of encounter.regions) {
+      if (!regionsById.has(regionId)) {
+        issues.push({
+          file,
+          message: `${encounter.id}: unknown region "${regionId}"`,
+        });
+      }
+    }
     for (const itemId of encounter.drops) {
       if (!itemIds.has(itemId)) {
         issues.push({
           file,
           message: `${encounter.id}: drop item "${itemId}" not found`,
+        });
+      }
+    }
+  }
+
+  for (const quest of quests) {
+    const advanceOptions = npcs.flatMap((npc) =>
+      npc.nodes.flatMap((node) =>
+        node.options.filter((option) => option.advancesQuest === quest.id)
+      )
+    );
+    for (let stage = 0; stage < quest.stages.length; stage += 1) {
+      if (
+        !advanceOptions.some((option) =>
+          option.atStages === undefined || option.atStages.includes(stage)
+        )
+      ) {
+        issues.push({
+          file,
+          message:
+            `${quest.id}: stage ${stage} has no reachable advance option`,
         });
       }
     }

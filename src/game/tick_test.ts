@@ -50,3 +50,16 @@ Deno.test("tick ignores cameras from other regions", () => {
   const out = tickRegion(region(), foreign);
   assertEquals(out.stats.coverage, 0);
 });
+
+Deno.test("tick changes are bounded and derive population mood", () => {
+  const watched = [cam("active"), cam("active"), cam("active")];
+  const out = tickRegion(
+    region({ coverage: 0, unrest: 0.8, prosperity: 0.2, flockPresence: 0.2 }),
+    watched,
+  );
+  assertEquals(out.stats.coverage, 1);
+  assertEquals(out.stats.flockPresence, 0.21);
+  assertEquals(out.stats.unrest, 0.79);
+  assertEquals(out.stats.prosperity, 0.205);
+  assertEquals(out.stats.populationMood, "defiant");
+});

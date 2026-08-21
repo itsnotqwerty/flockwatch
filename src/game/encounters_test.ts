@@ -221,7 +221,7 @@ Deno.test("self-damage lowers persistent hp; defeat at 0", () => {
   assertEquals(t1.player.hp, 2);
   assertEquals(t1.state.status, "ongoing");
   const t2 = applyMove(rough, t1.state, t1.player, "hit")!;
-  assertEquals(t2.player.hp, 0);
+  assertEquals(t2.player.hp, 10);
   assertEquals(t2.state.status, "defeat");
 });
 
@@ -242,7 +242,7 @@ Deno.test("surviving enemies counter-attack with a random move", () => {
 Deno.test("enemy counters can finish the player", () => {
   const p = player({ hp: 4 });
   const t = applyMove(patrol, startEncounter(patrol, p), p, "hit", 0.5, 1.0)!;
-  assertEquals(t.player.hp, 0);
+  assertEquals(t.player.hp, 10);
   assertEquals(t.state.status, "defeat");
 });
 
@@ -274,7 +274,7 @@ Deno.test("a wipe strips intel, suspicion, credits, scrap, and tradeable items",
     [tradeable, permanent],
   )!;
   assertEquals(t.state.status, "defeat");
-  assertEquals(t.player.hp, 0);
+  assertEquals(t.player.hp, 10);
   assertEquals(t.player.currency, 0);
   assertEquals(t.player.suspicion, 0);
   assertEquals(t.player.intel, {});
@@ -296,6 +296,26 @@ Deno.test("attrition defeats wipe the player too", () => {
   assertEquals(t.state.status, "defeat");
   assertEquals(t.player.currency, 0);
   assertEquals(t.player.intel, {});
+  assertEquals(t.player.hp, 10);
+});
+
+Deno.test("moves cannot spend credits the player does not have", () => {
+  const costly: Encounter = {
+    ...patrol,
+    moves: [{
+      id: "bribe",
+      label: "Offer a bribe",
+      damage: 10,
+      selfDamage: 0,
+      suspicion: -2,
+      cost: 20,
+    }],
+  };
+  const broke = player({ currency: 19 });
+  assertEquals(
+    applyMove(costly, startEncounter(costly, broke), broke, "bribe"),
+    null,
+  );
 });
 
 Deno.test("suspicion-cap defeats are not wipes", () => {

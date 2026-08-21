@@ -12,11 +12,9 @@ import type {
 import { decreedPrice } from "./decrees.ts";
 import { marketFeeRate } from "./espionage.ts";
 
-let listingCounter = 0;
-
-/** Reset the id counter (tests). */
+/** Retained for source compatibility with older tests and integrations. */
 export function resetListingCounter(): void {
-  listingCounter = 0;
+  // Listing ids are UUID-backed so process restarts cannot overwrite stock.
 }
 
 export interface MarketResult<T> {
@@ -56,9 +54,8 @@ export function createListing(
       value: { seller, listing: null as unknown as MarketListing },
     };
   }
-  listingCounter += 1;
   const listing: MarketListing = {
-    id: `lst_${listingCounter}`,
+    id: `lst_${crypto.randomUUID()}`,
     sellerId: seller.id,
     itemId: item.id,
     regionId: seller.region,

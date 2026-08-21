@@ -434,5 +434,283 @@
         "line": "Hale activates the redundancy protocols. The room gets colder."
       }
     ]
+  },
+  {
+    "id": "boss_commissioner_voss",
+    "name": "Interstate Commissioner Voss",
+    "art": "foreman",
+    "kind": "boss",
+    "regions": [
+      "cleveland",
+      "atlanta",
+      "chicago",
+      "boston"
+    ],
+    "minFlockPresence": 0,
+    "maxHp": 100,
+    "moves": [
+      {
+        "id": "audit_chain",
+        "label": "Expose the subcontractor chain",
+        "damage": 14,
+        "selfDamage": 4,
+        "suspicion": 3
+      },
+      {
+        "id": "union_record",
+        "label": "Enter the union record",
+        "damage": 20,
+        "selfDamage": 8,
+        "suspicion": 6
+      },
+      {
+        "id": "power_cut",
+        "label": "Cut power to the hearing room",
+        "damage": 8,
+        "selfDamage": 1,
+        "suspicion": -3
+      },
+      {
+        "id": "flee",
+        "label": "Request a safety recess (flee)",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 10,
+        "flees": true
+      }
+    ],
+    "enemyMoves": [
+      {
+        "id": "work_order",
+        "label": "Issue a compulsory work order",
+        "damage": 7,
+        "suspicion": 3
+      },
+      {
+        "id": "jurisdiction",
+        "label": "Expand his own jurisdiction",
+        "damage": 2,
+        "suspicion": 9
+      },
+      {
+        "id": "lockout",
+        "label": "Order an administrative lockout",
+        "damage": 10,
+        "suspicion": 4
+      }
+    ],
+    "victoryLine": "Voss loses the interstate contract and three ceremonial hard hats.",
+    "defeatLine": "Voss files you under preventable workplace incidents.",
+    "quips": [
+      "Every city signed the same waiver.",
+      "Your objection is outside the scope of work.",
+      "I own the contractor who owns your contractor.",
+      "The cameras are a workplace benefit."
+    ],
+    "payout": 180,
+    "drops": [
+      "orange_vest"
+    ],
+    "materialDrops": {
+      "ballistic_fiber": 2,
+      "circuit_board": 2,
+      "housing": 2
+    },
+    "clearsSuspicion": 30,
+    "phases": [
+      {
+        "at": 0.66,
+        "line": "Voss calls an unannounced change order. The exits are renumbered."
+      },
+      {
+        "at": 0.33,
+        "line": "The commissioner puts on the white hard hat. Management has entered the field."
+      }
+    ]
+  },
+  {
+    "id": "boss_director_pelican",
+    "name": "Coastal Director Pelican",
+    "art": "shrimpcaster",
+    "kind": "boss",
+    "regions": [
+      "new_orleans",
+      "albuquerque",
+      "miami"
+    ],
+    "minFlockPresence": 0,
+    "maxHp": 95,
+    "moves": [
+      {
+        "id": "tide_receipts",
+        "label": "Present the tide receipts",
+        "damage": 13,
+        "selfDamage": 3,
+        "suspicion": 3
+      },
+      {
+        "id": "open_frequency",
+        "label": "Broadcast on the open frequency",
+        "damage": 19,
+        "selfDamage": 7,
+        "suspicion": 7
+      },
+      {
+        "id": "misroute_storm",
+        "label": "Misroute the storm telemetry",
+        "damage": 7,
+        "selfDamage": 0,
+        "suspicion": -3
+      },
+      {
+        "id": "flee",
+        "label": "Evacuate inland (flee)",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 9,
+        "flees": true
+      }
+    ],
+    "enemyMoves": [
+      {
+        "id": "surge_map",
+        "label": "Redraw the surge map around you",
+        "damage": 6,
+        "suspicion": 5
+      },
+      {
+        "id": "buoy_ping",
+        "label": "Fire a classified buoy ping",
+        "damage": 9,
+        "suspicion": 2
+      },
+      {
+        "id": "insurance_void",
+        "label": "Void your flood insurance",
+        "damage": 1,
+        "suspicion": 10
+      }
+    ],
+    "victoryLine": "Pelican's coastal dossier washes ashore with every signature legible.",
+    "defeatLine": "Pelican marks your coordinates and lets the weather finish the interview.",
+    "quips": [
+      "The water reports directly to me.",
+      "Every buoy is an informant.",
+      "Your evacuation route has been deprecated.",
+      "The forecast says compliance."
+    ],
+    "payout": 170,
+    "drops": [
+      "survey_tripod"
+    ],
+    "materialDrops": {
+      "chemical_reagent": 2,
+      "signal_crystal": 2,
+      "power_cell": 1
+    },
+    "clearsSuspicion": 28,
+    "phases": [
+      {
+        "at": 0.66,
+        "line": "Pelican opens the emergency floodgates. There is no water, but everyone gets wet."
+      },
+      {
+        "at": 0.33,
+        "line": "A weather satellite turns to face the hearing. Pelican smiles."
+      }
+    ]
+  },
+  {
+    "id": "boss_platform_oracle",
+    "name": "Platform Oracle K-9",
+    "art": "cyberhorse",
+    "kind": "boss",
+    "regions": [
+      "seattle",
+      "silicon_valley",
+      "los_angeles",
+      "denver"
+    ],
+    "minFlockPresence": 0,
+    "maxHp": 110,
+    "moves": [
+      {
+        "id": "poison_dataset",
+        "label": "Submit a poisoned dataset",
+        "damage": 15,
+        "selfDamage": 4,
+        "suspicion": 4
+      },
+      {
+        "id": "leak_weights",
+        "label": "Leak the surveillance weights",
+        "damage": 21,
+        "selfDamage": 9,
+        "suspicion": 8
+      },
+      {
+        "id": "rate_limit",
+        "label": "Invoke the municipal rate limit",
+        "damage": 6,
+        "selfDamage": 0,
+        "suspicion": -4
+      },
+      {
+        "id": "flee",
+        "label": "Close the laptop without ejecting (flee)",
+        "damage": 0,
+        "selfDamage": 0,
+        "suspicion": 11,
+        "flees": true
+      }
+    ],
+    "enemyMoves": [
+      {
+        "id": "shadow_ban",
+        "label": "Shadow-ban your legal identity",
+        "damage": 5,
+        "suspicion": 7
+      },
+      {
+        "id": "surge_price",
+        "label": "Apply dynamic enforcement pricing",
+        "damage": 9,
+        "suspicion": 3
+      },
+      {
+        "id": "model_update",
+        "label": "Deploy a hostile model update",
+        "damage": 11,
+        "suspicion": 4
+      }
+    ],
+    "victoryLine": "K-9 predicts its own shutdown with 99.8% confidence and complies.",
+    "defeatLine": "K-9 classifies you as churn and optimizes you out of the district.",
+    "quips": [
+      "You accepted the terms by entering the city.",
+      "Your appeal reduced confidence by zero percent.",
+      "I predicted this objection three releases ago.",
+      "Human review is currently unavailable."
+    ],
+    "payout": 200,
+    "drops": [
+      "signal_jammer"
+    ],
+    "materialDrops": {
+      "circuit_board": 2,
+      "signal_crystal": 2,
+      "power_cell": 2
+    },
+    "clearsSuspicion": 35,
+    "phases": [
+      {
+        "at": 0.66,
+        "line": "K-9 forks the hearing into sixteen simultaneous appeals."
+      },
+      {
+        "at": 0.33,
+        "line": "The Oracle sheds its friendly interface. The horse icon stops blinking."
+      }
+    ]
   }
 ]

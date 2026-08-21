@@ -81,7 +81,12 @@ export function resolveSelection(
   quests: Quest[],
 ): SelectionResult | null {
   const node = getNode(npc, nodeId);
-  const option = node?.options.find((o) => o.id === optionId);
+  if (!node) return null;
+  // Visibility gates are authority, not presentation. Re-check them here so
+  // a hand-crafted POST cannot accept a locked follow-up or skip quest stages.
+  const option = availableOptions(npc, nodeId, player).find((o) =>
+    o.id === optionId
+  );
   if (!option) return null;
 
   const grantedQuest = option.grantsQuest

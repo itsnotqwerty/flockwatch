@@ -8,10 +8,11 @@ import { seedRegions } from "./src/state/regions.ts";
 import {
   camerasInRegion,
   listCameras,
+  saveCamera,
   seedCameras,
 } from "./src/state/cameras.ts";
 import { listRegions, saveRegion } from "./src/state/regions.ts";
-import { makeContract } from "./src/game/cameras.ts";
+import { makeContract, renewCameraContract } from "./src/game/cameras.ts";
 import { tickAllRegions } from "./src/game/tick.ts";
 import { saveDecree } from "./src/state/decrees.ts";
 import { getContent } from "./src/content/index.ts";
@@ -71,6 +72,15 @@ async function tick(): Promise<void> {
   for (const region of updated) {
     await saveRegion(region);
     regionEvents.publish({ type: "region.stats", region: region.id });
+    const renewed = renewCameraContract(cams, region.id);
+    if (renewed) {
+      await saveCamera(renewed);
+      regionEvents.publish({
+        type: "camera.changed",
+        region: region.id,
+        data: { cameraId: renewed.id, status: renewed.status },
+      });
+    }
   }
 }
 const TICK_MS = Number(Deno.env.get("TICK_MS") ?? 60_000);

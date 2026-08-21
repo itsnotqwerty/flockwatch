@@ -88,6 +88,7 @@ import {
   performLocationAction,
   travelWithinRegion,
 } from "../game/locations.ts";
+import { locationSupports } from "../game/access.ts";
 import {
   getEncounters,
   getItems,
@@ -105,6 +106,10 @@ import {
 } from "../state/message-board.ts";
 import { moderateMessagePost } from "../state/message-moderation.ts";
 import { claimActionRequest } from "../state/action-requests.ts";
+import {
+  claimWorldAction,
+  releaseWorldAction,
+} from "../state/world-actions.ts";
 import {
   createCharacterAccount,
   deleteSession,
@@ -887,13 +892,30 @@ playRouter.post("/", async (context) => {
       candidate.id === state?.encounterId
     );
     const turn = state && encounter
-      ? applyCellMove(encounter, state, player, fields.move ?? "")
+      ? applyCellMove(
+        encounter,
+        state,
+        player,
+        fields.move ?? "",
+        Date.now(),
+        Math.random(),
+        await getItems(),
+      )
       : null;
     if (!turn || !cell || !encounter) {
       respondWithNotice(
         context.response,
         "Move Rejected",
         "No active cell encounter accepts that move.",
+        false,
+      );
+      return;
+    }
+    if (turn.reason) {
+      respondWithNotice(
+        context.response,
+        "Move Rejected",
+        turn.reason,
         false,
       );
       return;
@@ -933,10 +955,12 @@ playRouter.post("/", async (context) => {
   // ── Sublocations (city-scale travel and interactions) ────────────────
   if (action === "local_travel") {
     const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const soloEncounter = await getEncounter(player.id);
     const cell = await getCellForPlayer(player.id);
     const operation = cell ? await getCellEncounter(cell.id) : null;
     const fieldOperation = cell ? await getCellOperation(cell.id) : null;
     if (
+      soloEncounter?.status === "ongoing" ||
       (operation?.status === "ongoing" &&
         operation.participantIds.includes(player.id)) ||
       (fieldOperation?.status === "ongoing" &&
@@ -945,7 +969,9 @@ playRouter.post("/", async (context) => {
       respondWithNotice(
         context.response,
         "Travel Rejected",
-        "You are committed to an active cell operation.",
+        soloEncounter?.status === "ongoing"
+          ? "You cannot leave during an active encounter. Flee or finish it."
+          : "You are committed to an active cell operation.",
         false,
       );
       return;
@@ -1037,10 +1063,12 @@ playRouter.post("/", async (context) => {
   // ── Travel (spec §3.0) ────────────────────────────────────────────────
   if (action === "travel") {
     const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const soloEncounter = await getEncounter(player.id);
     const cell = await getCellForPlayer(player.id);
     const operation = cell ? await getCellEncounter(cell.id) : null;
     const fieldOperation = cell ? await getCellOperation(cell.id) : null;
     if (
+      soloEncounter?.status === "ongoing" ||
       (operation?.status === "ongoing" &&
         operation.participantIds.includes(player.id)) ||
       (fieldOperation?.status === "ongoing" &&
@@ -1049,7 +1077,9 @@ playRouter.post("/", async (context) => {
       respondWithNotice(
         context.response,
         "Travel Rejected",
-        "You are committed to an active cell operation.",
+        soloEncounter?.status === "ongoing"
+          ? "You cannot leave during an active encounter. Flee or finish it."
+          : "You are committed to an active cell operation.",
         false,
       );
       return;
@@ -1079,9 +1109,13 @@ playRouter.post("/", async (context) => {
   if (action === "install" || action === "dismantle") {
     const camera = await getCameraById(fields.cam ?? "");
     const player = await ensurePlayer(authenticated.id, authenticated.name);
-    if (!camera) {
+    const location = await getLocation(player.location);
+    if (
+      !camera || camera.region !== player.region ||
+      !locationSupports(player, location, "cameras")
+    ) {
       context.response.status = 404;
-      context.response.body = "No such camera. It was never there.";
+      context.response.body = "That camera is not available here.";
       return;
     }
     const region = await getRegion(camera.region);
@@ -1095,17 +1129,22 @@ playRouter.post("/", async (context) => {
         region?.cameraCooldowns,
         wageMultiplier,
       );
+      if (
+        result.camera.status === camera.status ||
+        !(await claimWorldAction("camera_install", camera.id))
+      ) {
+        context.response.redirect("/");
+        return;
+      }
       await saveCamera(result.camera);
       await savePlayer(result.player);
       if (region) {
         await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
       }
-      if (result.camera.status !== camera.status) {
-        publishRegion("camera.changed", result.player, {
-          cameraId: result.camera.id,
-          status: result.camera.status,
-        });
-      }
+      publishRegion("camera.changed", result.player, {
+        cameraId: result.camera.id,
+        status: result.camera.status,
+      });
     } else {
       const result = dismantleCamera(
         camera,
@@ -1113,17 +1152,22 @@ playRouter.post("/", async (context) => {
         region?.cameraCooldowns,
         coverage,
       );
+      if (
+        result.camera.status === camera.status ||
+        !(await claimWorldAction("camera_dismantle", camera.id))
+      ) {
+        context.response.redirect("/");
+        return;
+      }
       await saveCamera(result.camera);
       await savePlayer(result.player);
       if (region) {
         await saveRegion({ ...region, cameraCooldowns: result.cooldowns });
       }
-      if (result.camera.status !== camera.status) {
-        publishRegion("camera.changed", result.player, {
-          cameraId: result.camera.id,
-          status: result.camera.status,
-        });
-      }
+      publishRegion("camera.changed", result.player, {
+        cameraId: result.camera.id,
+        status: result.camera.status,
+      });
     }
     context.response.redirect("/");
     return;
@@ -1154,6 +1198,13 @@ playRouter.post("/", async (context) => {
   // ── Market (spec §3.3) ────────────────────────────────────────────────
   if (action === "sell" || action === "buy" || action === "cancel") {
     const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const location = await getLocation(player.location);
+    if (!locationSupports(player, location, "market")) {
+      context.response.status = 403;
+      context.response.body =
+        "Market transactions require a local market board.";
+      return;
+    }
     const decrees = await activeDecrees(player.region);
     if (action === "sell") {
       const item = (await getItems()).find((i) => i.id === fields.item);
@@ -1172,6 +1223,11 @@ playRouter.post("/", async (context) => {
     } else if (action === "buy") {
       const listing = await getListing(player.region, fields.lst ?? "");
       if (listing) {
+        const claimed = await claimWorldAction("market_buy", listing.id);
+        if (!claimed) {
+          context.response.redirect("/");
+          return;
+        }
         const seller = await ensurePlayer(listing.sellerId, "Seller");
         const result = buyListing(player, seller, listing, decrees);
         if (result.ok) {
@@ -1183,6 +1239,8 @@ playRouter.post("/", async (context) => {
             action: "sold",
             listingId: listing.id,
           });
+        } else {
+          await releaseWorldAction("market_buy", listing.id);
         }
       }
     } else {
@@ -1206,6 +1264,12 @@ playRouter.post("/", async (context) => {
   // ── Espionage (spec §3.5) ─────────────────────────────────────────────
   if (action === "espionage") {
     let player = await ensurePlayer(authenticated.id, authenticated.name);
+    const location = await getLocation(player.location);
+    if (!locationSupports(player, location, "espionage")) {
+      context.response.status = 403;
+      context.response.body = "Fieldwork is not available at this location.";
+      return;
+    }
     const cell = await getCellForPlayer(player.id);
     const cellOperation = cell ? await getCellOperation(cell.id) : null;
     if (
@@ -1265,8 +1329,13 @@ ${postButton("home", "Melt into the crowd")}`,
   // ── Encounters (spec §3.4) ────────────────────────────────────────────
   if (action === "encounter_start") {
     const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const location = await getLocation(player.location);
     const region = await getRegion(player.region);
-    if (region && !(await getEncounter(player.id))) {
+    if (
+      region && playerHp(player) > 0 &&
+      locationSupports(player, location, "encounter") &&
+      !(await getEncounter(player.id))
+    ) {
       const rolled = rollEncounter(
         await getEncounters(),
         region,
@@ -1281,9 +1350,16 @@ ${postButton("home", "Melt into the crowd")}`,
 
   if (action === "boss_start") {
     const player = await ensurePlayer(authenticated.id, authenticated.name);
-    if (!(await getEncounter(player.id))) {
+    const location = await getLocation(player.location);
+    if (
+      playerHp(player) > 0 &&
+      locationSupports(player, location, "encounter") &&
+      !(await getEncounter(player.id))
+    ) {
       const boss = (await getEncounters()).find((e) =>
-        e.id === fields.enc && e.kind === "boss"
+        e.id === fields.enc && e.kind === "boss" &&
+        e.regions.includes(player.region) &&
+        !player.restricted.includes(player.region)
       );
       if (boss) await saveEncounter(startEncounter(boss, player));
     }
@@ -1297,7 +1373,10 @@ ${postButton("home", "Melt into the crowd")}`,
     const encounter = (await getEncounters()).find((e) =>
       e.id === state?.encounterId
     );
-    if (state && encounter) {
+    if (
+      state && encounter && state.region === player.region &&
+      playerHp(player) > 0
+    ) {
       const turn = applyMove(
         encounter,
         state,
@@ -2176,19 +2255,31 @@ async function renderEncounterBoard(player: Player): Promise<string> {
         `<li>${escapeHtml(line)}</li>`
       ).join("\n");
       const canAct = cellState.status === "ongoing" &&
-        cellState.participantIds.includes(player.id);
+        cellState.participantIds.includes(player.id) &&
+        !(cellState.defeatedIds ?? []).includes(player.id) &&
+        (cellState.lastActorId !== player.id ||
+          !cellState.participantIds.some((id) =>
+            id !== player.id && !(cellState.defeatedIds ?? []).includes(id)
+          ));
       const moves = canAct
-        ? encounter.moves.map((move) =>
-          `<li>
-<form method="post" action="/">
+        ? encounter.moves.map((move) => {
+          const affordable = (move.cost ?? 0) <= player.currency;
+          return `<li>
+${
+            affordable
+              ? `<form method="post" action="/">
   <input type="hidden" name="a" value="cell_move">
   <input type="hidden" name="move" value="${escapeHtml(move.id)}">
   <button type="submit" class="dialogue-option">${escapeHtml(move.label)}${
-            move.cost ? ` (${move.cost}cr)` : ""
-          }</button>
-</form>
-</li>`
-        ).join("\n")
+                move.cost ? ` (${move.cost}cr)` : ""
+              }</button>
+</form>`
+              : `<button class="dialogue-option" disabled>${
+                escapeHtml(move.label)
+              } (${move.cost}cr · insufficient)</button>`
+          }
+</li>`;
+        }).join("\n")
         : "";
       const resolution = cellState.status !== "ongoing"
         ? `<p>${
@@ -2203,15 +2294,24 @@ async function renderEncounterBoard(player: Player): Promise<string> {
       } — ${cellState.enemyHp}/${encounter.maxHp} hp</h3>
 ${renderDialogueBlock(await loadArt(encounter.art), encounter.name)}
 <p>Participants: ${
-        participants.map((participant) => escapeHtml(participant.name)).join(
-          ", ",
-        ) || "none"
+        participants.map((participant) => {
+          const down = (cellState.defeatedIds ?? []).includes(participant.id);
+          return `${escapeHtml(participant.name)} (${
+            playerHp(participant)
+          }/${PLAYER_HP} hp${down ? ", down" : ""})`;
+        }).join(", ") || "none"
       }</p>
 <ul class="encounter-log">${log}</ul>
 ${moves ? `<ul class="encounter-moves">${moves}</ul>` : ""}
 ${
         !canAct && cellState.status === "ongoing"
-          ? `<p>You are observing this operation, not participating in it.</p>`
+          ? `<p>${
+            (cellState.defeatedIds ?? []).includes(player.id)
+              ? "You have been removed from this operation."
+              : cellState.lastActorId === player.id
+              ? "Another active cell member must take the next turn."
+              : "You are observing this operation, not participating in it."
+          }</p>`
           : ""
       }
 ${resolution}
@@ -2225,18 +2325,24 @@ ${resolution}
     );
     if (!encounter) return "";
     const moves = encounter.moves
-      .map(
-        (m) =>
-          `<li>
-<form method="post" action="/">
+      .map((m) => {
+        const affordable = (m.cost ?? 0) <= player.currency;
+        return `<li>
+${
+          affordable
+            ? `<form method="post" action="/">
   <input type="hidden" name="a" value="move">
-  <input type="hidden" name="move" value="${m.id}">
+  <input type="hidden" name="move" value="${escapeHtml(m.id)}">
   <button type="submit" class="dialogue-option">${escapeHtml(m.label)}${
-            m.cost ? ` (${m.cost}cr)` : ""
-          }</button>
-</form>
-</li>`,
-      )
+              m.cost ? ` (${m.cost}cr)` : ""
+            }</button>
+</form>`
+            : `<button class="dialogue-option" disabled>${
+              escapeHtml(m.label)
+            } (${m.cost}cr · insufficient)</button>`
+        }
+</li>`;
+      })
       .join("\n");
     const log = state.log.slice(-6).map((l) => `<li>${escapeHtml(l)}</li>`)
       .join("\n");

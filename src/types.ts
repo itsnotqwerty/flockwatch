@@ -309,6 +309,7 @@ export interface PlayerSession {
   token: string;
   accountId: string;
   createdAt: string;
+  expiresAt?: string;
 }
 
 export interface Cell {
@@ -338,6 +339,10 @@ export interface CellEncounterState {
   status: CellEncounterStatus;
   phaseIndex: number;
   participantIds: string[];
+  /** Participants knocked out during this operation (legacy saves: none). */
+  defeatedIds?: string[];
+  /** Last participant to act; used to keep cooperative turns cooperative. */
+  lastActorId?: string;
   log: string[];
   startedAt: string;
   updatedAt: string;

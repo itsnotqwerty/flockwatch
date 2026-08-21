@@ -258,3 +258,31 @@ Deno.test("atStages gates advance options to specific quest stages", () => {
   assert(clerkOptions.some((o) => o.id === "turn_in_form_27b"));
   assert(clerkOptions.every((o) => o.id !== "process_form_27b"));
 });
+
+Deno.test("resolveSelection rejects options hidden by quest gates", () => {
+  const horse = npcs.find((n) => n.id === "cyberhorse")!;
+  assertEquals(
+    resolveSelection(
+      horse,
+      "start",
+      "ask_quest_again",
+      freshPlayer(),
+      quests,
+    ),
+    null,
+  );
+
+  const clerk = npcs.find((n) => n.id === "clerk")!;
+  const form = quests.find((q) => q.id === "q_form_27b")!;
+  const stageZero = acceptQuest(freshPlayer(), form);
+  assertEquals(
+    resolveSelection(
+      clerk,
+      "start",
+      "turn_in_form_27b",
+      stageZero,
+      quests,
+    ),
+    null,
+  );
+});

@@ -93,10 +93,16 @@ export async function authSignUp(
 ): Promise<{ user: AuthUser | null; error: string | null }> {
   const { status, data } = await call("/signup", { body: { email, password } });
   if (status === 0) {
-    return { user: null, error: "Account services are unavailable. Try again shortly." };
+    return {
+      user: null,
+      error: "Account services are unavailable. Try again shortly.",
+    };
   }
   if (status >= 400) {
-    return { user: null, error: data?.msg ?? data?.error_description ?? "Signup failed." };
+    return {
+      user: null,
+      error: data?.msg ?? data?.error_description ?? "Signup failed.",
+    };
   }
   const user = data?.user?.id
     ? { id: data.user.id, email: data.user.email ?? email }
@@ -115,7 +121,10 @@ export async function authLogIn(
     body: { email, password },
   });
   if (status === 0) {
-    return { tokens: null, error: "Account services are unavailable. Try again shortly." };
+    return {
+      tokens: null,
+      error: "Account services are unavailable. Try again shortly.",
+    };
   }
   if (status >= 400) {
     return { tokens: null, error: "Invalid email or password." };
@@ -140,7 +149,10 @@ export async function authUpdatePassword(
     body: { password },
   });
   if (status === 0) {
-    return { ok: false, error: "Account services are unavailable. Try again shortly." };
+    return {
+      ok: false,
+      error: "Account services are unavailable. Try again shortly.",
+    };
   }
   if (status >= 400) {
     return {

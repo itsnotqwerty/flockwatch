@@ -65,8 +65,10 @@ export function performLocationAction(
   // exhausting permanently; other one-time activities stay claimed.
   const refreshAt = player.locationActionRefreshAt?.[actionKey];
   const gathering = gathersMaterials && interaction.once;
-  if (interaction.once && !gathering &&
-    player.completedLocationActions.includes(actionKey)) {
+  if (
+    interaction.once && !gathering &&
+    player.completedLocationActions.includes(actionKey)
+  ) {
     return {
       ok: false,
       reason: "You have already exhausted this opportunity.",

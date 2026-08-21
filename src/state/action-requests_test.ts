@@ -10,9 +10,9 @@ Deno.test("action request ids can only be claimed once per player", async () => 
   assertEquals(await claimActionRequest("p2", requestId, store), true);
 });
 
-Deno.test("legacy missing ids are accepted and malformed ids are rejected", async () => {
+Deno.test("missing and malformed action ids are rejected", async () => {
   const store = createMemoryStore();
-  assertEquals(await claimActionRequest("p1", undefined, store), true);
+  assertEquals(await claimActionRequest("p1", undefined, store), false);
   assertEquals(
     await claimActionRequest("p1", "not-a-request-id", store),
     false,

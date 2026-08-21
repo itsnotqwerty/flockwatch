@@ -62,7 +62,10 @@ Deno.test("untradeable items cannot be given to another player", () => {
   assertEquals(refused.sender.inventory, ["press_badge", "binoculars"]);
   assertEquals(refused.recipient.inventory, []);
   // Tradeable gear still moves when the catalog is supplied.
-  const allowed = shareItem(sender, recipient, "binoculars", [badge, binoculars]);
+  const allowed = shareItem(sender, recipient, "binoculars", [
+    badge,
+    binoculars,
+  ]);
   assert(allowed.ok);
   assertEquals(allowed.recipient.inventory, ["binoculars"]);
 });

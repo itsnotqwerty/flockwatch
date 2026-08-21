@@ -1581,16 +1581,6 @@
             "grantsQuest": "q_clerk_circuit"
           },
           {
-            "id": "clerk_signoff_la_nia",
-            "label": "Present your circuit card for a countersign",
-            "response": "Nico Brooks countersigns your card. 'Counted on the circuit. Keep moving.'",
-            "next": null,
-            "advancesQuest": "q_clerk_circuit",
-            "atStages": [
-              -1
-            ]
-          },
-          {
             "id": "q_la_palm_firmware_s0",
             "label": "Have Nico confirm the update window",
             "response": "Nico checks the crane log. '03:00, every Tuesday, the cranes blink first. Whatever updates those palms rides our quiet window. Confirmed.'",

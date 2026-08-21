@@ -13,15 +13,15 @@ const key = (playerId: string, requestId: string) => [
  * rejected before their handler can mutate game state. Claims are atomic in
  * Deno KV, so rapid double-clicks cannot race each other, and expire after a
  * day to keep storage bounded.
- * Missing ids remain accepted for forms opened before this feature deployed.
+ * Missing ids are rejected: every current game form receives a random token
+ * during rendering, which also prevents cross-site forged action posts.
  */
 export async function claimActionRequest(
   playerId: string,
   requestId: string | undefined,
   s?: Store,
 ): Promise<boolean> {
-  if (!requestId) return true;
-  if (!REQUEST_ID_PATTERN.test(requestId)) return false;
+  if (!requestId || !REQUEST_ID_PATTERN.test(requestId)) return false;
 
   const store = s ?? await openStore();
   return store.setIfAbsent(

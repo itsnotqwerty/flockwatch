@@ -24,7 +24,12 @@ export type RegionEventListener = (event: RegionEvent) => void;
 
 // Console logging with ANSI colors: green = routine, yellow = noteworthy,
 // red = adversarial. Honors NO_COLOR and non-TTY output (e.g. systemd).
-const COLOR = { green: "\x1b[32m", yellow: "\x1b[33m", red: "\x1b[31m", reset: "\x1b[0m" };
+const COLOR = {
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  red: "\x1b[31m",
+  reset: "\x1b[0m",
+};
 const EVENT_STATUS: Record<RegionEventType, keyof typeof COLOR> = {
   "presence.changed": "green",
   "social.changed": "green",

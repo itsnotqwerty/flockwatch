@@ -79,7 +79,8 @@ achieved)_
 - [x] Cross-region trade/arbitrage viability pass _(divergent wage multipliers,
       decree spreads, and travel costs make hauling goods between boards
       profitable)_
-- [ ] Expand beyond the initial six-city map
+- [x] Expand beyond the initial six-city map _(Los Angeles, Denver, Albuquerque,
+      Chicago, Boston, and Miami)_
 
 ### Activity-based refresh timers
 
@@ -96,7 +97,8 @@ Goal: teeth. The world pushes back. ✅ _(achieved)_
       encounters)
 - [x] Espionage actions: tailing, intercepts, intel gathering (spec §3.5)
 - [x] Espionage failure consequences: flags, restricted areas, market fees
-- [x] First multi-phase boss encounter _(Regional Director Hale, New York City)_
+- [x] Multi-phase boss coverage in every region _(Hale, Voss, Pelican, and the
+      Platform Oracle)_
 
 ## Phase 6 — Multiplayer
 
@@ -112,6 +114,9 @@ Goal: the MMO part of the MMORPG. ✅ _(achieved)_
 
 ## Phase 7 — Live World
 
+- [x] Renewable camera contracts keep the core loop alive after all authored
+      sites have cycled
+- [x] Stable regional stat equilibria and derived population moods
 - [ ] Email integration for out-of-game notifications (Flock alerts, decree
       announcements)
 - [ ] Recurring live-ops events per region

@@ -150,14 +150,28 @@ export function dismantleCamera(
   };
 }
 
-/** Regional coverage: active cameras per total non-contracted sites (§3.6.3). */
+/** Regional coverage: active cameras per total authored camera sites (§3.6.3). */
 export function coverageLevel(cameras: Camera[], region: string): number {
-  const regional = cameras.filter(
-    (c) => c.region === region && c.status !== "contracted",
-  );
+  const regional = cameras.filter((c) => c.region === region);
   if (regional.length === 0) return 0;
   const active = regional.filter((c) => c.status === "active").length;
   return active / regional.length;
+}
+
+/**
+ * Reopen one stripped site when a region has no installation work left. This
+ * keeps the core loop renewable without duplicating contracts every tick.
+ */
+export function renewCameraContract(
+  cameras: Camera[],
+  region: string,
+): Camera | null {
+  const regional = cameras.filter((camera) => camera.region === region);
+  if (regional.some((camera) => camera.status === "contracted")) return null;
+  const stripped = regional.find((camera) => camera.status === "dismantled");
+  return stripped
+    ? { ...stripped, status: "contracted", installedBy: null }
+    : null;
 }
 
 /** Sum a player's scrapped component counts. */

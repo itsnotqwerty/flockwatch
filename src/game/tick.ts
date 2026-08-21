@@ -15,25 +15,54 @@ export function tickRegion(region: Region, cameras: Camera[]): Region {
   const regional = cameras.filter((c) => c.region === region.id);
   const coverage = coverageLevel(cameras, region.id);
   const dismantled = regional.filter((c) => c.status === "dismantled").length;
-  const active = regional.filter((c) => c.status === "active").length;
+  const resistance = regional.length === 0 ? 0 : dismantled / regional.length;
 
-  // Gentle drift, clamped to 0..1. Unrest rises with dismantles and falls with
-  // coverage; Flock presence follows active installs.
-  const unrest = clamp(
-    region.stats.unrest + dismantled * 0.02 - coverage * 0.03,
+  // Stats approach camera-war equilibria by a bounded amount per tick. This
+  // prevents timer-frequency runaway while keeping shared actions meaningful.
+  const targetUnrest = clamp(0.25 + resistance * 0.65 - coverage * 0.2);
+  const targetPresence = clamp(0.15 + coverage * 0.75);
+  const unrest = approach(region.stats.unrest, targetUnrest, 0.01);
+  const flockPresence = approach(
+    region.stats.flockPresence,
+    targetPresence,
+    0.01,
   );
-  const flockPresence = clamp(
-    region.stats.flockPresence + active * 0.01 - dismantled * 0.02,
+  const targetProsperity = clamp(
+    0.65 - unrest * 0.2 - flockPresence * 0.15,
   );
+  const prosperity = approach(
+    region.stats.prosperity,
+    targetProsperity,
+    0.005,
+  );
+  const populationMood = unrest >= 0.7
+    ? "defiant"
+    : coverage >= 0.7
+    ? "subdued"
+    : prosperity <= 0.3
+    ? "strained"
+    : "wary";
 
   return {
     ...region,
-    stats: { ...region.stats, coverage, unrest, flockPresence },
+    stats: {
+      ...region.stats,
+      coverage,
+      unrest,
+      prosperity,
+      flockPresence,
+      populationMood,
+    },
   };
 }
 
 function clamp(n: number): number {
   return Math.min(1, Math.max(0, Math.round(n * 1000) / 1000));
+}
+
+function approach(current: number, target: number, step: number): number {
+  if (Math.abs(target - current) <= step) return clamp(target);
+  return clamp(current + Math.sign(target - current) * step);
 }
 
 /** Tick every region. Returns updated regions for the caller to persist. */

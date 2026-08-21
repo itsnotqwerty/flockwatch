@@ -4,6 +4,7 @@ import {
   createContract,
   dismantleCamera,
   installCamera,
+  renewCameraContract,
   resetCameraCounter,
   suspicionForTakedown,
   totalScrap,
@@ -108,9 +109,27 @@ Deno.test("coverageLevel reflects active over total sites", () => {
     { ...createContract("cleveland", 1), status: "active" as const },
     { ...createContract("cleveland", 1), status: "active" as const },
     { ...createContract("cleveland", 1), status: "dismantled" as const },
+    createContract("cleveland", 1),
     { ...createContract("other", 1), status: "active" as const },
   ];
-  // 2 active of 3 regional sites (contracted sites excluded).
-  assertEquals(coverageLevel(cams, "cleveland"), 2 / 3);
+  // 2 active of 4 authored regional sites, including the open contract.
+  assertEquals(coverageLevel(cams, "cleveland"), 1 / 2);
   assertEquals(coverageLevel([], "nowhere"), 0);
+});
+
+Deno.test("contract renewal reopens one stripped site only when needed", () => {
+  const active = {
+    ...createContract("cleveland", 1),
+    status: "active" as const,
+  };
+  const stripped = {
+    ...createContract("cleveland", 2),
+    status: "dismantled" as const,
+    installedBy: "p1",
+  };
+  const renewed = renewCameraContract([active, stripped], "cleveland")!;
+  assertEquals(renewed.id, stripped.id);
+  assertEquals(renewed.status, "contracted");
+  assertEquals(renewed.installedBy, null);
+  assertEquals(renewCameraContract([active, renewed], "cleveland"), null);
 });
