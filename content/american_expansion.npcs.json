@@ -491,7 +491,7 @@
           {
             "id": "ask_night_freight",
             "label": "Ask where the unmarked freight goes",
-            "response": "It comes in heavy and leaves light, and nothing that heavy drives out. Rosa's crew launches things that don't file flight plans. Ask her.",
+            "response": "It comes in heavy and leaves light, and nothing that heavy drives out. Ballast's crew launches things that don't file flight plans. Ask her.",
             "next": null,
             "grantsQuest": "q_abq_night_freight"
           },

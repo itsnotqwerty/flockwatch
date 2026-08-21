@@ -986,7 +986,7 @@
       {
         "id": "la_backlot_archivist",
         "label": "Talk to the man feeding the ducks",
-        "description": "Reyes knows which props shoot back.",
+        "description": "\"Reel\" knows which props shoot back.",
         "kind": "npcs",
         "npcIds": [
           "la_marisol",
@@ -1131,7 +1131,7 @@
       {
         "id": "den_colfax_clerk",
         "label": "Speak with the Colfax regulars",
-        "description": "Tasha and Mateo keep separate ledgers on the avenue's traffic.",
+        "description": "\"Milepost\" and Mateo keep separate ledgers on the avenue's traffic.",
         "kind": "npcs",
         "npcIds": [
           "den_tasha",
@@ -1337,7 +1337,7 @@
     "interactions": [
       {
         "id": "abq_ground_crew",
-        "label": "Join Rosa Baca's ground crew",
+        "label": "Join \"Ballast\" and the ground crew",
         "description": "She knows which balloons drift and which maintain position.",
         "kind": "npcs",
         "npcIds": [
@@ -1388,7 +1388,7 @@
       {
         "id": "chi_dispatcher",
         "label": "Meet a contact beneath the pillars",
-        "description": "Marlo trades in freight that never surfaces.",
+        "description": "\"Underpass\" trades in freight that never surfaces.",
         "kind": "npcs",
         "npcIds": [
           "chi_leon",
@@ -1532,8 +1532,8 @@
     "interactions": [
       {
         "id": "bos_archivist",
-        "label": "Buy a lobster roll from Sal",
-        "description": "Sal hears what the harbor forgets to file.",
+        "label": "Browse the archive and the pier",
+        "description": "\"Chowder\" hears what the harbor forgets to file.",
         "kind": "npcs",
         "npcIds": [
           "bos_marcus",
@@ -1779,7 +1779,7 @@
     "interactions": [
       {
         "id": "mia_wetland_surveyor",
-        "label": "Find Teo Green",
+        "label": "Find \"Sawgrass\"",
         "description": "He surveys sensors that count water, wildlife, and hesitation.",
         "kind": "npcs",
         "npcIds": [
