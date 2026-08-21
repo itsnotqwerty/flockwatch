@@ -168,7 +168,7 @@
     "interactions": [
       {
         "id": "motor_pool_staff",
-        "label": "Report to the motor-pool office",
+        "label": "Report to Flock Headquarters",
         "description": "Foreman Ray and executive supervision are available.",
         "kind": "npcs",
         "npcIds": [
