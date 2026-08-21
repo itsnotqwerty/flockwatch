@@ -4,6 +4,8 @@
  * bosses. All rendering stays in the view layer.
  */
 import type { Encounter, EncounterState, Player, Region } from "../types.ts";
+import { combatDamageBonus, combatSuspicionReduction } from "./item-effects.ts";
+import { addMaterials, formatMaterials } from "./materials.ts";
 
 /** Player field HP. Defeats happen at 0. */
 export const PLAYER_HP = 40;
@@ -21,7 +23,9 @@ export function eligibleEncounters(
   if (player.restricted.includes(region.id)) return [];
   return encounters.filter((e) => {
     if (!e.regions.includes(region.id)) return false;
-    if (e.kind === "patrol") return region.stats.flockPresence >= e.minFlockPresence;
+    if (e.kind === "patrol") {
+      return region.stats.flockPresence >= e.minFlockPresence;
+    }
     return true;
   });
 }
@@ -39,7 +43,10 @@ export function rollEncounter(
   // Spawn chance scales with Flock presence above the minimum threshold.
   const chance = Math.max(0, region.stats.flockPresence - 0.2) * 0.5;
   if (roll >= chance) return null;
-  return eligible[Math.floor((roll / Math.max(chance, 1e-9)) * eligible.length) % eligible.length];
+  return eligible[
+    Math.floor((roll / Math.max(chance, 1e-9)) * eligible.length) %
+    eligible.length
+  ];
 }
 
 /** Begin an encounter instance for a player. */
@@ -83,20 +90,31 @@ export function applyMove(
 
   let updated: Player = {
     ...player,
-    suspicion: Math.max(0, player.suspicion + move.suspicion),
+    suspicion: Math.max(
+      0,
+      player.suspicion +
+        (move.suspicion > 0
+          ? Math.max(0, move.suspicion - combatSuspicionReduction(player))
+          : move.suspicion),
+    ),
     currency: Math.max(0, player.currency - (move.cost ?? 0)),
   };
 
   if (move.flees) {
     return {
-      state: { ...state, status: "fled", log: [...state.log, "You slip away. They let you."] },
+      state: {
+        ...state,
+        status: "fled",
+        log: [...state.log, "You slip away. They let you."],
+      },
       player: updated,
       phaseLine: null,
       moveLabel: move.label,
     };
   }
 
-  const enemyHp = Math.max(0, state.enemyHp - move.damage);
+  const damage = move.damage + combatDamageBonus(player);
+  const enemyHp = Math.max(0, state.enemyHp - damage);
 
   // Boss phase thresholds (spec §3.4 multi-phase bosses).
   let phaseLine: string | null = null;
@@ -104,7 +122,8 @@ export function applyMove(
   if (encounter.phases) {
     const fraction = enemyHp / encounter.maxHp;
     while (
-      phaseIndex < encounter.phases.length && fraction <= encounter.phases[phaseIndex].at
+      phaseIndex < encounter.phases.length &&
+      fraction <= encounter.phases[phaseIndex].at
     ) {
       phaseLine = encounter.phases[phaseIndex].line;
       phaseIndex += 1;
@@ -112,7 +131,7 @@ export function applyMove(
   }
 
   const log = [...state.log];
-  log.push(`${move.label}: ${move.damage} damage to ${encounter.name}.`);
+  log.push(`${move.label}: ${damage} damage to ${encounter.name}.`);
   if (move.selfDamage > 0) log.push(`You take ${move.selfDamage} in return.`);
   if (phaseLine) log.push(phaseLine);
 
@@ -120,16 +139,27 @@ export function applyMove(
   if (enemyHp <= 0) {
     status = "victory";
     log.push(encounter.victoryLine);
-    updated = {
+    log.push(
+      `Recovered materials: ${formatMaterials(encounter.materialDrops)}.`,
+    );
+    updated = addMaterials({
       ...updated,
       currency: updated.currency + encounter.payout,
       inventory: [...updated.inventory, ...encounter.drops],
-      suspicion: Math.max(0, updated.suspicion - (encounter.clearsSuspicion ?? 0)),
+      suspicion: Math.max(
+        0,
+        updated.suspicion - (encounter.clearsSuspicion ?? 0),
+      ),
       intel: move.intel
-        ? { ...updated.intel, [state.region]: (updated.intel[state.region] ?? 0) + move.intel }
+        ? {
+          ...updated.intel,
+          [state.region]: (updated.intel[state.region] ?? 0) + move.intel,
+        }
         : updated.intel,
-    };
-  } else if (player.currency <= 0 && move.selfDamage > 0 && enemyHp > PLAYER_HP) {
+    }, encounter.materialDrops);
+  } else if (
+    player.currency <= 0 && move.selfDamage > 0 && enemyHp > PLAYER_HP
+  ) {
     // Attrition defeat: outmatched and out of options.
     status = "defeat";
     log.push(encounter.defeatLine);

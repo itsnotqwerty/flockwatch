@@ -70,3 +70,19 @@ Deno.test("Bureaucrat's Stamp halves travel cost", () => {
   assert(result.ok);
   assertEquals(result.player.currency, 100 - travelCost(dest, stamped));
 });
+
+Deno.test("transit transponder discounts travel and stacks with the stamp", () => {
+  const dest = region("new_orleans", 0.85);
+  const transponder = player({ inventory: ["transit_transponder"] });
+  assertEquals(
+    travelCost(dest, transponder),
+    Math.round(travelCost(dest) * 0.75),
+  );
+  const stacked = player({
+    inventory: ["bureaucrats_stamp", "transit_transponder"],
+  });
+  assertEquals(
+    travelCost(dest, stacked),
+    Math.round(travelCost(dest) * 0.5 * 0.75),
+  );
+});

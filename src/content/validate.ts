@@ -13,6 +13,7 @@ import type {
   Region,
   Sublocation,
 } from "../types.ts";
+import { CRAFTING_MATERIALS } from "../types.ts";
 
 export interface ContentIssue {
   file: string;
@@ -25,6 +26,37 @@ function isObject(v: unknown): v is Record<string, unknown> {
 
 function requireString(v: unknown): v is string {
   return typeof v === "string" && v.length > 0;
+}
+
+const COMPONENTS = new Set<string>(CRAFTING_MATERIALS);
+
+function validateMaterialMap(
+  value: unknown,
+  label: string,
+  file: string,
+  issues: ContentIssue[],
+  required: boolean,
+): void {
+  if (!isObject(value) || (required && Object.keys(value).length === 0)) {
+    issues.push({ file, message: `${label} must be a non-empty object` });
+    return;
+  }
+  for (const [material, amount] of Object.entries(value)) {
+    if (!COMPONENTS.has(material)) {
+      issues.push({
+        file,
+        message: `${label}: unknown material "${material}"`,
+      });
+    }
+    if (
+      typeof amount !== "number" || !Number.isInteger(amount) || amount <= 0
+    ) {
+      issues.push({
+        file,
+        message: `${label}: material "${material}" must be a positive integer`,
+      });
+    }
+  }
 }
 
 export function validateNpcs(data: unknown, file: string): ContentIssue[] {
@@ -150,6 +182,14 @@ export function validateQuests(data: unknown, file: string): ContentIssue[] {
         file,
         message: at("rewards must have currency (number) and items (array)"),
       });
+    } else {
+      validateMaterialMap(
+        raw.rewards.materials,
+        at("rewards.materials"),
+        file,
+        issues,
+        true,
+      );
     }
   }
   return issues;
@@ -284,14 +324,21 @@ export function validateLocations(data: unknown, file: string): ContentIssue[] {
           message: at(`${interaction.id}: activity requires result copy`),
         });
       }
+      if (interaction.effect?.scrap !== undefined) {
+        validateMaterialMap(
+          interaction.effect.scrap,
+          at(`${interaction.id}.effect.scrap`),
+          file,
+          issues,
+          true,
+        );
+      }
     }
   }
   return issues;
 }
 
 const RARITIES = new Set(["common", "uncommon", "rare", "contraband"]);
-const COMPONENTS = new Set(["lens", "housing", "wiring", "circuit_board"]);
-
 export function validateItems(data: unknown, file: string): ContentIssue[] {
   const issues: ContentIssue[] = [];
   if (!Array.isArray(data)) {
@@ -481,6 +528,13 @@ export function validateEncounters(
     if (!Array.isArray(raw.drops)) {
       issues.push({ file, message: at("drops must be an array") });
     }
+    validateMaterialMap(
+      raw.materialDrops,
+      at("materialDrops"),
+      file,
+      issues,
+      true,
+    );
     if (
       raw.kind === "boss" &&
       (!Array.isArray(raw.phases) || raw.phases.length < 1)
@@ -500,6 +554,9 @@ export function validateCrossReferences(
   quests: Quest[],
   regions: Region[],
   locations: Sublocation[],
+  items: Item[],
+  recipes: CraftingRecipe[],
+  encounters: Encounter[],
   file: string,
 ): ContentIssue[] {
   const issues: ContentIssue[] = [];
@@ -546,6 +603,7 @@ export function validateCrossReferences(
   }
 
   const npcIds = new Set(npcs.map((npc) => npc.id));
+  const itemIds = new Set(items.map((item) => item.id));
   const locationIds = new Set(locations.map((location) => location.id));
   const regionsById = new Map(regions.map((region) => [region.id, region]));
   for (const region of regions) {
@@ -601,6 +659,72 @@ export function validateCrossReferences(
           });
         }
       }
+    }
+  }
+
+  for (const quest of quests) {
+    for (const itemId of quest.rewards.items) {
+      if (!itemIds.has(itemId)) {
+        issues.push({
+          file,
+          message: `${quest.id}: reward item "${itemId}" not found`,
+        });
+      }
+    }
+  }
+  for (const encounter of encounters) {
+    for (const itemId of encounter.drops) {
+      if (!itemIds.has(itemId)) {
+        issues.push({
+          file,
+          message: `${encounter.id}: drop item "${itemId}" not found`,
+        });
+      }
+    }
+  }
+
+  const usedMaterials = new Set<string>();
+  for (const recipe of recipes) {
+    if (!itemIds.has(recipe.result)) {
+      issues.push({
+        file,
+        message: `${recipe.id}: result item "${recipe.result}" not found`,
+      });
+    }
+    for (const material of Object.keys(recipe.components)) {
+      usedMaterials.add(material);
+    }
+  }
+  const sourcedMaterials = new Set<string>();
+  for (const quest of quests) {
+    Object.keys(quest.rewards.materials).forEach((material) =>
+      sourcedMaterials.add(material)
+    );
+  }
+  for (const encounter of encounters) {
+    Object.keys(encounter.materialDrops).forEach((material) =>
+      sourcedMaterials.add(material)
+    );
+  }
+  for (const location of locations) {
+    for (const interaction of location.interactions) {
+      Object.keys(interaction.effect?.scrap ?? {}).forEach((material) =>
+        sourcedMaterials.add(material)
+      );
+    }
+  }
+  for (const material of CRAFTING_MATERIALS) {
+    if (!usedMaterials.has(material)) {
+      issues.push({
+        file,
+        message: `${material}: no recipe uses this material`,
+      });
+    }
+    if (!sourcedMaterials.has(material)) {
+      issues.push({
+        file,
+        message: `${material}: material has no reward source`,
+      });
     }
   }
   return issues;

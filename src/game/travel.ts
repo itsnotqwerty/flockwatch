@@ -4,6 +4,7 @@
  * crossing into a heavily-patrolled region is not free.
  */
 import type { Player, Region } from "../types.ts";
+import { travelMultiplier } from "./item-effects.ts";
 
 /** Base cost to travel anywhere. */
 export const BASE_TRAVEL_COST = 20;
@@ -27,7 +28,10 @@ export function regionIndex(regions: Region[]): Map<string, Region> {
  */
 export function travelCost(destination: Region, player?: Player): number {
   const base = BASE_TRAVEL_COST * (0.5 + destination.stats.flockPresence);
-  return Math.round(player && hasBureaucratsStamp(player) ? base / 2 : base);
+  const paperworkMultiplier = player && hasBureaucratsStamp(player) ? 0.5 : 1;
+  return Math.round(
+    base * paperworkMultiplier * (player ? travelMultiplier(player) : 1),
+  );
 }
 
 export interface TravelResult {

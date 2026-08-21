@@ -1,4 +1,5 @@
 import type { LocationInteraction, Player, Sublocation } from "../types.ts";
+import { environmentalMaterialBonus } from "./item-effects.ts";
 
 export interface LocationTravelResult {
   ok: boolean;
@@ -73,6 +74,13 @@ export function performLocationAction(
   for (const [component, amount] of Object.entries(effect.scrap ?? {})) {
     const key = component as keyof typeof scrap;
     scrap[key] = (scrap[key] ?? 0) + (amount ?? 0);
+  }
+  const firstMaterial = Object.keys(
+    effect.scrap ?? {},
+  )[0] as keyof typeof scrap;
+  if (firstMaterial && environmentalMaterialBonus(player) > 0) {
+    scrap[firstMaterial] = (scrap[firstMaterial] ?? 0) +
+      environmentalMaterialBonus(player);
   }
   const intel = { ...player.intel };
   if (effect.intel) {

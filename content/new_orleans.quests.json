@@ -14,7 +14,11 @@
         "objective": "Bring up the cargo. Sell it quiet. Learn nothing."
       }
     ],
-    "rewards": { "currency": 120, "items": ["survey_tripod"] }
+    "rewards": {
+      "currency": 120,
+      "items": ["survey_tripod"],
+      "materials": { "housing": 2, "chemical_reagent": 1 }
+    }
   },
   {
     "id": "q_foreman_wages",
@@ -35,6 +39,10 @@
         "objective": "Bring the stamped timesheets back to Foreman Ray in Atlanta."
       }
     ],
-    "rewards": { "currency": 90, "items": ["orange_vest"] }
+    "rewards": {
+      "currency": 90,
+      "items": ["orange_vest"],
+      "materials": { "ballistic_fiber": 2, "wiring": 1 }
+    }
   }
 ]

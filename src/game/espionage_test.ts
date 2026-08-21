@@ -98,4 +98,21 @@ Deno.test("market fee rate scales with flags", () => {
   assertEquals(marketFeeRate(player()), 0);
   const flagged = performEspionage("tail", player(), region(), 0.999).player;
   assertAlmostEquals(marketFeeRate(flagged), 0.15);
+  assertAlmostEquals(
+    marketFeeRate({ ...flagged, inventory: ["valuation_lens"] }),
+    0.05,
+  );
+});
+
+Deno.test("signal jammer improves espionage odds and reduces exposure", () => {
+  const normal = performEspionage("gather_intel", player(), region(), 0.65);
+  const jammed = performEspionage(
+    "gather_intel",
+    player({ inventory: ["signal_jammer"] }),
+    region(),
+    0.65,
+  );
+  assert(!normal.success);
+  assert(jammed.success);
+  assertEquals(jammed.player.suspicion, 2); // 5 base exposure - 3 from jammer
 });

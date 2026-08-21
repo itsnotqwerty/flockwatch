@@ -1,4 +1,5 @@
-import { assertEquals } from "$assert";
+import { assert, assertEquals } from "$assert";
+import { CRAFTING_MATERIALS } from "../types.ts";
 import { clearContentCache, getContent } from "./index.ts";
 
 Deno.test("every city has 2–3 locations, 5–6 interactions, and one board", async () => {
@@ -54,4 +55,46 @@ Deno.test("every city has 2–3 locations, 5–6 interactions, and one board", a
       );
     }
   }
+});
+
+Deno.test("crafting materials are useful and supplied by every game loop", async () => {
+  clearContentCache();
+  const { quests, regions, locations, items, recipes, encounters } =
+    await getContent();
+  const used = new Set(
+    recipes.flatMap((recipe) => Object.keys(recipe.components)),
+  );
+  const supplied = new Set([
+    ...quests.flatMap((quest) => Object.keys(quest.rewards.materials)),
+    ...encounters.flatMap((encounter) => Object.keys(encounter.materialDrops)),
+    ...locations.flatMap((location) =>
+      location.interactions.flatMap((interaction) =>
+        Object.keys(interaction.effect?.scrap ?? {})
+      )
+    ),
+  ]);
+
+  for (const material of CRAFTING_MATERIALS) {
+    assert(used.has(material), `${material} has no recipe use`);
+    assert(supplied.has(material), `${material} has no reward source`);
+  }
+  assert(quests.every((quest) => Object.keys(quest.rewards.materials).length));
+  assert(
+    encounters.every((encounter) =>
+      Object.keys(encounter.materialDrops).length
+    ),
+  );
+  assert(
+    regions.every((region) =>
+      locations.some((location) =>
+        location.regionId === region.id &&
+        location.interactions.some((interaction) =>
+          Object.keys(interaction.effect?.scrap ?? {}).length
+        )
+      )
+    ),
+    "every region should expose environmental materials",
+  );
+  const itemIds = new Set(items.map((item) => item.id));
+  assert(recipes.every((recipe) => itemIds.has(recipe.result)));
 });

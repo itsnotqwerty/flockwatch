@@ -30,6 +30,7 @@ const patrol: Encounter = {
   defeatLine: "You lose.",
   payout: 10,
   drops: ["cutters"],
+  materialDrops: { power_cell: 1 },
   clearsSuspicion: 5,
 };
 
@@ -112,7 +113,16 @@ Deno.test("moves damage the enemy; victory pays out and clears suspicion", () =>
   assertEquals(t2.state.status, "victory");
   assertEquals(t2.player.currency, 110);
   assert(t2.player.inventory.includes("cutters"));
+  assertEquals(t2.player.scrap.power_cell, 1);
+  assert(t2.state.log.some((line) => line.includes("1 power cell")));
   assertEquals(t2.player.suspicion, 19); // 24 - 5 cleared
+});
+
+Deno.test("crafted combat gear raises damage and masks suspicion", () => {
+  const p = player({ inventory: ["shock_baton", "covert_vest"] });
+  const turn = applyMove(patrol, startEncounter(patrol, p), p, "hit")!;
+  assertEquals(turn.state.enemyHp, 5); // 10 base + 5 from the baton
+  assertEquals(turn.player.suspicion, 0); // vest absorbs the move's +2
 });
 
 Deno.test("fleeing ends the encounter in 'fled'", () => {

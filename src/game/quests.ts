@@ -2,6 +2,7 @@
  * Hidden quest log view (spec §3.1). Pure logic.
  */
 import type { Player, PlayerQuest, Quest } from "../types.ts";
+import { addMaterials } from "./materials.ts";
 
 export interface QuestLogEntry {
   quest: Quest;
@@ -12,7 +13,10 @@ export interface QuestLogEntry {
  * The player's visible quest log. Undiscovered quests are NEVER listed;
  * hidden quests appear only after being accepted through dialogue.
  */
-export function visibleQuests(player: Player, quests: Quest[]): QuestLogEntry[] {
+export function visibleQuests(
+  player: Player,
+  quests: Quest[],
+): QuestLogEntry[] {
   const byId = new Map(quests.map((q) => [q.id, q]));
   return player.quests
     .map((state) => {
@@ -55,14 +59,14 @@ export function advanceStage(player: Player, quest: Quest): StageAdvance {
 
   if (nextIndex >= quest.stages.length) {
     // Turn-in: complete and pay out.
-    const updated: Player = {
+    const updated = addMaterials({
       ...player,
       currency: player.currency + quest.rewards.currency,
       inventory: [...player.inventory, ...quest.rewards.items],
       quests: player.quests.map((q) =>
         q.questId === quest.id ? { ...q, status: "completed" as const } : q
       ),
-    };
+    }, quest.rewards.materials);
     return { player: updated, turnedIn: true, completedObjective };
   }
 

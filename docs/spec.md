@@ -291,12 +291,15 @@ camera went missing. Flock only asks who wants the replacement contract.
 
 Scrapped material is not merely vendor trash — it is the primary crafting input:
 
-- Cameras yield components when scrapped: **lenses, housings, wiring, and
-  circuit boards**.
+- Cameras yield components when scrapped; quests, enemy victories, and
+  environmental interactions also award varying materials: **lenses, housings,
+  wiring, circuit boards, power cells, signal crystals, ballistic fiber, and
+  chemical reagents**.
 - Components are combined at workbenches to craft items, including:
-  - **Tools** (e.g., cutters that speed up future takedowns, signal jammers that
-    reduce suspicion gain)
-  - **Equipment** (e.g., gear with espionage stat modifiers)
+  - **Tools** (e.g., cutters that mask future takedowns and field toolkits that
+    reduce crafting fees)
+  - **Equipment** (e.g., combat weapons and armor, signal jammers, transit
+    transponders, valuation lenses, and cooperative cell relays)
   - **Tradeable goods** for the market (see §3.3)
 - Raw scrap remains sellable on the market for players who prefer currency over
   crafting.

@@ -83,6 +83,8 @@ Deno.test("advancing past the final stage turns the quest in and pays out", () =
   assertEquals(player.quests[0].status, "completed");
   assertEquals(player.currency, 50);
   assert(player.inventory.includes("binoculars"));
+  assertEquals(player.scrap.lens, 1);
+  assertEquals(player.scrap.ballistic_fiber, 1);
 });
 
 Deno.test("advanceStage is a no-op for quests not held or already finished", () => {

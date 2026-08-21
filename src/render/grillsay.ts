@@ -9,7 +9,10 @@ export const MAX_WIDTH = 40;
 
 const ART_DIR = new URL("../content/art/", import.meta.url);
 // Classic boomer fallback lives in the grillsay submodule.
-const FALLBACK_ART = new URL("../../tools/grillsay/art/boomer.txt", import.meta.url);
+const FALLBACK_ART = new URL(
+  "../../tools/grillsay/art/boomer.txt",
+  import.meta.url,
+);
 
 export function wordWrap(text: string, width: number = MAX_WIDTH): string[] {
   const words = text.split(" ");
@@ -57,7 +60,10 @@ export async function loadArt(name: string): Promise<string> {
 }
 
 /** Full grillsay render: speech bubble above character art. */
-export async function renderDialogue(message: string, art = "boomer"): Promise<string> {
+export async function renderDialogue(
+  message: string,
+  art = "boomer",
+): Promise<string> {
   return `${renderBubble(message)}\n${await loadArt(art)}`;
 }
 
@@ -74,7 +80,9 @@ export function validateWrap(messages: string[]): WrapIssue[] {
   const issues: WrapIssue[] = [];
   for (const message of messages) {
     for (const word of message.split(/\s+/)) {
-      if (word.length > MAX_WIDTH) issues.push({ text: word, length: word.length });
+      if (word.length > MAX_WIDTH) {
+        issues.push({ text: word, length: word.length });
+      }
     }
   }
   return issues;

@@ -92,6 +92,17 @@ Deno.test("coverage scales suspicion", () => {
   assert(suspicionForTakedown(1) > suspicionForTakedown(0));
 });
 
+Deno.test("cutters reduce camera takedown suspicion", () => {
+  const active = {
+    ...createContract("cleveland", 50),
+    status: "active" as const,
+  };
+  const equipped = freshPlayer();
+  equipped.inventory.push("cutters");
+  const { player } = dismantleCamera(active, equipped, undefined, 0.5);
+  assertEquals(player.suspicion, Math.max(0, suspicionForTakedown(0.5) - 8));
+});
+
 Deno.test("coverageLevel reflects active over total sites", () => {
   const cams = [
     { ...createContract("cleveland", 1), status: "active" as const },

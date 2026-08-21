@@ -6,7 +6,7 @@ import {
   startCellEncounter,
 } from "./cell-encounters.ts";
 
-function player(id: string): Player {
+function player(id: string, over: Partial<Player> = {}): Player {
   return {
     id,
     name: id,
@@ -23,6 +23,7 @@ function player(id: string): Player {
     completedLocationActions: [],
     trustedPlayerIds: [],
     lastSeenAt: "",
+    ...over,
   };
 }
 
@@ -53,6 +54,7 @@ const boss: Encounter = {
   defeatLine: "Denied.",
   payout: 50,
   drops: ["binoculars"],
+  materialDrops: { signal_crystal: 1 },
   clearsSuspicion: 5,
   phases: [{ at: 0.5, line: "The hearing recesses." }],
 };
@@ -71,11 +73,20 @@ Deno.test("cell bosses require two colocated members and share enemy state", () 
   const second = applyCellMove(boss, first.state, player("p2"), "hit", 2)!;
   assert(second.victory);
   assertEquals(second.state.status, "victory");
+  assert(second.state.log.some((line) => line.includes("1 signal crystal")));
 });
 
 Deno.test("cell boss rewards apply to every participant", () => {
   const rewarded = rewardCellParticipant(player("p1"), boss);
   assertEquals(rewarded.currency, 75);
   assertEquals(rewarded.inventory, ["binoculars"]);
+  assertEquals(rewarded.scrap.signal_crystal, 1);
   assertEquals(rewarded.suspicion, 5);
+});
+
+Deno.test("a cell relay strengthens cooperative attacks", () => {
+  const operator = player("p1", { inventory: ["cell_relay"] });
+  const state = startCellEncounter(boss, cell, [operator, player("p2")], 0)!;
+  const turn = applyCellMove(boss, state, operator, "hit", 1)!;
+  assertEquals(turn.state.enemyHp, 7); // 10 base + 3 from the relay
 });

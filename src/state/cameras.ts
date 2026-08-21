@@ -16,7 +16,10 @@ export async function listCameras(s?: Store): Promise<Camera[]> {
   return entries.map((e) => e.value);
 }
 
-export async function camerasInRegion(region: string, s?: Store): Promise<Camera[]> {
+export async function camerasInRegion(
+  region: string,
+  s?: Store,
+): Promise<Camera[]> {
   return (await listCameras(s)).filter((c) => c.region === region);
 }
 

@@ -5,8 +5,14 @@
     "hidden": true,
     "trigger": { "npc": "gulf_saltine", "dialogueOption": "ask_salvage" },
     "stages": [
-      { "id": "s1", "objective": "Agree to Saltine's terms for the delta wreck." },
-      { "id": "s2", "objective": "Bring up the cargo. Sell it quiet. Learn nothing." }
+      {
+        "id": "s1",
+        "objective": "Agree to Saltine's terms for the delta wreck."
+      },
+      {
+        "id": "s2",
+        "objective": "Bring up the cargo. Sell it quiet. Learn nothing."
+      }
     ],
     "rewards": { "currency": 120, "items": ["survey_tripod"] }
   },
@@ -16,9 +22,18 @@
     "hidden": true,
     "trigger": { "npc": "atl_foreman_ray", "dialogueOption": "ask_backpay" },
     "stages": [
-      { "id": "s1", "objective": "Ray's timesheets vanished into the system. Groundskeeper Walt in Silicon Valley keeps the real records. Ask him." },
-      { "id": "s2", "objective": "The records need an official stamp. Barista-Inspector Cole in the Pacific Northwest can stamp anything." },
-      { "id": "s3", "objective": "Bring the stamped timesheets back to Foreman Ray in Atlanta." }
+      {
+        "id": "s1",
+        "objective": "Ray's timesheets vanished into the system. Groundskeeper Walt in Silicon Valley keeps the real records. Ask him."
+      },
+      {
+        "id": "s2",
+        "objective": "The records need an official stamp. Barista-Inspector Cole in the Pacific Northwest can stamp anything."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the stamped timesheets back to Foreman Ray in Atlanta."
+      }
     ],
     "rewards": { "currency": 90, "items": ["orange_vest"] }
   }

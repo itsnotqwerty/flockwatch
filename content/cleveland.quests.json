@@ -9,7 +9,11 @@
       { "id": "s2", "objective": "Note which pigeons do not eat." },
       { "id": "s3", "objective": "Report the count to Old Man Martinez." }
     ],
-    "rewards": { "currency": 50, "items": ["binoculars"] }
+    "rewards": {
+      "currency": 50,
+      "items": ["binoculars"],
+      "materials": { "lens": 1, "ballistic_fiber": 1 }
+    }
   },
   {
     "id": "q_form_27b",
@@ -30,7 +34,8 @@
     ],
     "rewards": {
       "currency": 35,
-      "items": ["form_27b_blank", "bureaucrats_stamp"]
+      "items": ["form_27b_blank", "bureaucrats_stamp"],
+      "materials": { "signal_crystal": 1 }
     }
   },
   {
@@ -45,7 +50,11 @@
       },
       { "id": "s2", "objective": "Accept a camera installation contract." }
     ],
-    "rewards": { "currency": 75, "items": ["ladder_permit"] }
+    "rewards": {
+      "currency": 75,
+      "items": ["ladder_permit"],
+      "materials": { "housing": 1, "wiring": 1 }
+    }
   },
   {
     "id": "q_cyberhorse",
@@ -67,7 +76,11 @@
       },
       { "id": "s4", "objective": "Gaze upon the truth of the Cyberhorse." }
     ],
-    "rewards": { "currency": 5, "items": ["sci_fi_sunglasses"] }
+    "rewards": {
+      "currency": 5,
+      "items": ["sci_fi_sunglasses"],
+      "materials": { "power_cell": 1 }
+    }
   },
   {
     "id": "q_boomer_errand",
@@ -88,7 +101,11 @@
         "objective": "Return the fully-processed form to Boomer Dave."
       }
     ],
-    "rewards": { "currency": 40, "items": ["lawn_chair_cushion"] }
+    "rewards": {
+      "currency": 40,
+      "items": ["lawn_chair_cushion"],
+      "materials": { "chemical_reagent": 2 }
+    }
   },
   {
     "id": "q_cyberhorse2",
@@ -109,6 +126,10 @@
         "objective": "Deliver the HONK DAMPENER to the Cyberhorse."
       }
     ],
-    "rewards": { "currency": 15, "items": ["golden_horseshoe"] }
+    "rewards": {
+      "currency": 15,
+      "items": ["golden_horseshoe"],
+      "materials": { "signal_crystal": 1, "power_cell": 1 }
+    }
   }
 ]

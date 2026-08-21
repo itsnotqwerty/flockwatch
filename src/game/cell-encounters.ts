@@ -1,4 +1,6 @@
 import type { Cell, CellEncounterState, Encounter, Player } from "../types.ts";
+import { combatDamageBonus, combatSuspicionReduction } from "./item-effects.ts";
+import { addMaterials, formatMaterials } from "./materials.ts";
 
 export function startCellEncounter(
   encounter: Encounter,
@@ -64,7 +66,16 @@ export function applyCellMove(
   const updatedActor: Player = {
     ...actor,
     currency: actor.currency - (move.cost ?? 0),
-    suspicion: Math.max(0, Math.min(100, actor.suspicion + move.suspicion)),
+    suspicion: Math.max(
+      0,
+      Math.min(
+        100,
+        actor.suspicion +
+          (move.suspicion > 0
+            ? Math.max(0, move.suspicion - combatSuspicionReduction(actor))
+            : move.suspicion),
+      ),
+    ),
   };
   const log = [...state.log];
   let participantIds = state.participantIds;
@@ -84,8 +95,9 @@ export function applyCellMove(
       reason: null,
     };
   }
-  const enemyHp = Math.max(0, state.enemyHp - move.damage);
-  log.push(`${actor.name} uses ${move.label}: ${move.damage} damage.`);
+  const damage = move.damage + combatDamageBonus(actor, true);
+  const enemyHp = Math.max(0, state.enemyHp - damage);
+  log.push(`${actor.name} uses ${move.label}: ${damage} damage.`);
   if (move.selfDamage > 0) {
     log.push(`${actor.name} absorbs ${move.selfDamage} in return.`);
   }
@@ -101,7 +113,12 @@ export function applyCellMove(
     }
   }
   const victory = enemyHp === 0;
-  if (victory) log.push(encounter.victoryLine);
+  if (victory) {
+    log.push(encounter.victoryLine);
+    log.push(
+      `Recovered materials: ${formatMaterials(encounter.materialDrops)}.`,
+    );
+  }
   return {
     state: {
       ...state,
@@ -121,10 +138,10 @@ export function rewardCellParticipant(
   player: Player,
   encounter: Encounter,
 ): Player {
-  return {
+  return addMaterials({
     ...player,
     currency: player.currency + encounter.payout,
     inventory: [...player.inventory, ...encounter.drops],
     suspicion: Math.max(0, player.suspicion - (encounter.clearsSuspicion ?? 0)),
-  };
+  }, encounter.materialDrops);
 }

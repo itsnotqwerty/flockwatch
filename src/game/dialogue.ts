@@ -2,7 +2,14 @@
  * Dialogue tree traversal and quest-grant resolution (spec §3.1).
  * Pure logic: no oak, no storage imports.
  */
-import type { DialogueNode, DialogueOption, Npc, Player, Quest } from "../types.ts";
+import type {
+  DialogueNode,
+  DialogueOption,
+  Npc,
+  Player,
+  Quest,
+} from "../types.ts";
+import { addMaterials } from "./materials.ts";
 
 export function getNode(npc: Npc, nodeId: string): DialogueNode | null {
   return npc.nodes.find((n) => n.id === nodeId) ?? null;
@@ -30,7 +37,9 @@ export function availableOptions(
   if (!node) return [];
   return node.options.filter((o) => {
     if (o.requiresQuestCompleted) {
-      const prereq = player.quests.find((q) => q.questId === o.requiresQuestCompleted);
+      const prereq = player.quests.find((q) =>
+        q.questId === o.requiresQuestCompleted
+      );
       if (!prereq || prereq.status !== "completed") return false;
     }
     if (o.grantsQuest) {
@@ -101,7 +110,11 @@ export function acceptQuest(player: Player, quest: Quest): Player {
   if (player.quests.some((q) => q.questId === quest.id)) return player;
   return {
     ...player,
-    quests: [...player.quests, { questId: quest.id, status: "accepted", stageIndex: 0 }],
+    quests: [...player.quests, {
+      questId: quest.id,
+      status: "accepted",
+      stageIndex: 0,
+    }],
   };
 }
 
@@ -109,12 +122,12 @@ export function acceptQuest(player: Player, quest: Quest): Player {
 export function completeQuest(player: Player, quest: Quest): Player {
   const entry = player.quests.find((q) => q.questId === quest.id);
   if (!entry || entry.status !== "accepted") return player;
-  return {
+  return addMaterials({
     ...player,
     currency: player.currency + quest.rewards.currency,
     inventory: [...player.inventory, ...quest.rewards.items],
     quests: player.quests.map((q) =>
       q.questId === quest.id ? { ...q, status: "completed" as const } : q
     ),
-  };
+  }, quest.rewards.materials);
 }

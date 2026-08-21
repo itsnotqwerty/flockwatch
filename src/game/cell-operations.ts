@@ -4,6 +4,8 @@ import type {
   EspionageActionType,
   Player,
 } from "../types.ts";
+import { cellOperationSuspicionReduction } from "./item-effects.ts";
+import { addMaterials } from "./materials.ts";
 
 export const CELL_OPERATION_STAGES: Array<{
   action: EspionageActionType;
@@ -93,16 +95,25 @@ export function advanceCellOperation(
       log,
       updatedAt: new Date(now).toISOString(),
     },
-    actor: { ...actor, suspicion: Math.min(100, actor.suspicion + 4) },
+    actor: {
+      ...actor,
+      suspicion: Math.min(
+        100,
+        actor.suspicion + Math.max(
+          0,
+          4 - cellOperationSuspicionReduction(actor),
+        ),
+      ),
+    },
     completed,
     reason: null,
   };
 }
 
 export function rewardCellOperation(player: Player, region: string): Player {
-  return {
+  return addMaterials({
     ...player,
     currency: player.currency + 20,
     intel: { ...player.intel, [region]: (player.intel[region] ?? 0) + 3 },
-  };
+  }, { signal_crystal: 1 });
 }

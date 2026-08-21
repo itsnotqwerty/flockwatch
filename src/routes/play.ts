@@ -62,9 +62,10 @@ import {
 import {
   canAffordCraft,
   craft,
-  CRAFT_FEE,
+  craftingFee,
   describeCost,
 } from "../game/crafting.ts";
+import { formatMaterials } from "../game/materials.ts";
 import {
   buyListing,
   cancelListing,
@@ -952,6 +953,16 @@ playRouter.post("/", async (context) => {
   // ── Crafting (spec §3.6.2) ────────────────────────────────────────────
   if (action === "craft") {
     const player = await ensurePlayer(authenticated.id, authenticated.name);
+    const location = await getLocation(player.location);
+    const hasWorkbench = location?.regionId === player.region &&
+      location.interactions.some((interaction) =>
+        interaction.kind === "workbench"
+      );
+    if (!hasWorkbench) {
+      context.response.status = 403;
+      context.response.body = "Crafting requires a workbench at your location.";
+      return;
+    }
     const recipe = (await getRecipes()).find((r) => r.id === fields.recipe);
     if (recipe) {
       const result = craft(player, recipe);
@@ -1237,6 +1248,7 @@ ${postButton("home", "Back to the park")}`,
         reveal = renderQuestTurnIn(
           result.advancesQuest.title,
           result.advancesQuest.rewards.currency,
+          formatMaterials(result.advancesQuest.rewards.materials),
         );
       }
     }
@@ -1508,6 +1520,9 @@ ${note}
 <p>Funds: ${result.player.currency}cr · Suspicion: ${result.player.suspicion} · Intel here: ${
         result.player.intel[result.player.region] ?? 0
       }</p>
+<p>Crafting materials: ${
+        escapeHtml(formatMaterials(result.player.scrap) || "none")
+      }</p>
 </section>`;
       break;
     }
@@ -1619,11 +1634,10 @@ async function renderWorkbench(player: Player): Promise<string> {
   const recipes = await getRecipes();
   const items = await getItems();
   const itemName = new Map(items.map((i) => [i.id, i.name]));
+  const itemDescription = new Map(items.map((i) => [i.id, i.description]));
+  const fee = craftingFee(player);
 
-  const scrapLine = (Object.entries(player.scrap) as Array<[string, number]>)
-    .filter(([, n]) => n > 0)
-    .map(([c, n]) => `${n} ${c}`)
-    .join(", ") || "none";
+  const scrapLine = formatMaterials(player.scrap) || "none";
 
   const rows = recipes
     .map((r) => {
@@ -1637,15 +1651,15 @@ async function renderWorkbench(player: Player): Promise<string> {
 </form>`
         : `<em>insufficient</em>`;
       return `<li><strong>${name}</strong> — ${
-        describeCost(r)
-      } · ${CRAFT_FEE}cr license ${btn}</li>`;
+        escapeHtml(itemDescription.get(r.result) ?? "No filed function.")
+      }<br><em>${describeCost(r)} · ${fee}cr license</em> ${btn}</li>`;
     })
     .join("\n");
 
   return `<section class="workbench">
 <h3>Workbench</h3>
-<p>Scrap: ${scrapLine}</p>
-<p class="fee-note">The Bureau of Workmanship levies a ${CRAFT_FEE}cr licensing fee per craft.</p>
+<p>Crafting materials: ${escapeHtml(scrapLine)}</p>
+<p class="fee-note">The Bureau of Workmanship levies a ${fee}cr licensing fee per craft.</p>
 <ul class="recipe-list">
 ${rows}
 </ul>
@@ -1682,7 +1696,7 @@ async function renderMarket(player: Player): Promise<string> {
     ? held
       .map(
         (i) =>
-          `<li>
+          `<li><span>${escapeHtml(i.description)}</span>
 <form method="post" action="/">
   <input type="hidden" name="a" value="sell">
   <input type="hidden" name="item" value="${i.id}">
@@ -1715,17 +1729,23 @@ async function renderMarket(player: Player): Promise<string> {
         const adjusted = price !== l.price
           ? ` <em>(decree-adjusted from ${l.price}cr)</em>`
           : "";
-        return `<li><strong>${name}</strong> — ${price}cr ${
+        return `<li><strong>${escapeHtml(name)}</strong> — ${price}cr ${
           own ? "(yours) " : ""
-        }${action}${adjusted}${history.get(l.itemId) ?? ""}</li>`;
+        }<br><span>${
+          escapeHtml(item?.description ?? "Unfiled merchandise.")
+        }</span>${action}${adjusted}${history.get(l.itemId) ?? ""}</li>`;
       })
       .join("\n")
     : `<li>The board is bare. The Ministry blames supply chains.</li>`;
 
   const region = await getRegion(player.region);
+  const valuationNote = player.inventory.includes("valuation_lens")
+    ? `<p class="stamp-note">Your Valuation Lens reduces flag surcharges by 10 percentage points.</p>`
+    : "";
   return `<section class="market">
 <h3>The Market — ${escapeHtml(region?.name ?? player.region)}</h3>
 <p>Funds: ${player.currency} credits</p>
+${valuationNote}
 <h4>Sell from your pack</h4>
 <ul class="market-sell">
 ${sellRows}
@@ -1765,7 +1785,7 @@ async function renderEspionage(player: Player): Promise<string> {
 <h3>Cell Field Operation — Complete</h3>
 <p>${
         escapeHtml(cell.name)
-      } recovered the dossier. Every participant received 20cr and 3 local intel.</p>
+      } recovered the dossier. Every participant received 20cr, 3 local intel, and 1 signal crystal.</p>
 <p>Participants: ${roster}</p>
 <ul class="operation-log">${log}</ul>
 ${postButton("clear_cell_operation", "Close operation file")}
@@ -2012,9 +2032,13 @@ async function renderTravel(player: Player): Promise<string> {
   const stampNote = stamped
     ? `<p class="stamp-note">Your Bureaucrat's Stamp expedites all paperwork. Fares halved.</p>`
     : "";
+  const transponderNote = player.inventory.includes("transit_transponder")
+    ? `<p class="stamp-note">Your Ghost Transit Transponder reduces the remaining fare by 25%.</p>`
+    : "";
   return `<section class="travel">
 <h3>Elsewhere in the Union</h3>
 ${stampNote}
+${transponderNote}
 <ul class="travel-list">
 ${rows}
 </ul>

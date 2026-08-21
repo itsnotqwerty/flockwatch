@@ -152,6 +152,8 @@ Deno.test("completeQuest pays out rewards and marks completion", () => {
   assertEquals(done.quests[0].status, "completed");
   assertEquals(done.currency, 50);
   assert(done.inventory.includes("binoculars"));
+  assertEquals(done.scrap.lens, 1);
+  assertEquals(done.scrap.ballistic_fiber, 1);
   // Completing a quest never accepted is a no-op.
   assertEquals(completeQuest(freshPlayer(), quest).quests.length, 0);
 });

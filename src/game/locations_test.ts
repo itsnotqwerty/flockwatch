@@ -79,3 +79,13 @@ Deno.test("location activities reject unaffordable costs", () => {
   assertEquals(result.player.currency, 1);
   assertEquals(result.player.completedLocationActions, []);
 });
+
+Deno.test("survey tripod improves the primary environmental salvage yield", () => {
+  const result = performLocationAction(
+    player({ inventory: ["survey_tripod"] }),
+    mill,
+    salvage,
+  );
+  assert(result.ok);
+  assertEquals(result.player.scrap.wiring, 3);
+});

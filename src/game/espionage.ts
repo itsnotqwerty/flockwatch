@@ -3,7 +3,17 @@
  * communications, and gather intel. Every operation carries a risk of being
  * blown, which leaves a persistent flag with in-world consequences.
  */
-import type { EspionageActionType, EspionageFlag, Player, Region } from "../types.ts";
+import type {
+  EspionageActionType,
+  EspionageFlag,
+  Player,
+  Region,
+} from "../types.ts";
+import {
+  espionageOddsBonus,
+  espionageSuspicionReduction,
+  marketFeeReduction,
+} from "./item-effects.ts";
 
 let flagCounter = 0;
 
@@ -34,17 +44,25 @@ export function isRestricted(player: Player, region: string): boolean {
 
 /** Flagged players pay a surcharge on every market purchase. */
 export function marketFeeRate(player: Player): number {
-  return player.flags.length === 0 ? 0 : Math.min(0.25, 0.10 + player.flags.length * 0.05);
+  if (player.flags.length === 0) return 0;
+  return Math.max(
+    0,
+    Math.min(0.25, 0.10 + player.flags.length * 0.05) -
+      marketFeeReduction(player),
+  );
 }
 
 const NARRATIVE: Record<EspionageActionType, { ok: string; blown: string }> = {
   tail: {
-    ok: "You keep three lampposts between you and the mark. Their route is logged.",
-    blown: "The mark stops dead and stares directly at you. You have been made.",
+    ok:
+      "You keep three lampposts between you and the mark. Their route is logged.",
+    blown:
+      "The mark stops dead and stares directly at you. You have been made.",
   },
   intercept: {
     ok: "The relay chatters. You skim the traffic before the censors wake up.",
-    blown: "The channel was a canary trap. Somewhere, a file with your name gets thicker.",
+    blown:
+      "The channel was a canary trap. Somewhere, a file with your name gets thicker.",
   },
   gather_intel: {
     ok: "A clerk leaves a cabinet unlocked. The dossier grows.",
@@ -71,7 +89,8 @@ export function performEspionage(
       intel: 0,
       payout: 0,
       flag: null,
-      narrative: "The checkpoints here have your photograph. You do not linger.",
+      narrative:
+        "The checkpoints here have your photograph. You do not linger.",
     };
   }
   if (player.suspicion >= ESPIONAGE_SUSPICION_CAP) {
@@ -87,8 +106,9 @@ export function performEspionage(
   }
 
   // Success odds: base 70%, minus Flock presence and suspicion pressure.
-  const odds = 0.70 - region.stats.flockPresence * 0.25 - player.suspicion / 400
-    - player.flags.length * 0.05;
+  const odds = 0.70 - region.stats.flockPresence * 0.25 -
+    player.suspicion / 400 -
+    player.flags.length * 0.05 + espionageOddsBonus(player);
   const success = roll < Math.max(0.1, odds);
 
   if (!success) {
@@ -102,7 +122,10 @@ export function performEspionage(
     };
     const updated: Player = {
       ...player,
-      suspicion: player.suspicion + 15,
+      suspicion: player.suspicion + Math.max(
+        0,
+        15 - espionageSuspicionReduction(player),
+      ),
       flags: [...player.flags, flag],
       // A second flag in the same region gets the player restricted from it.
       restricted: player.flags.some((f) => f.region === region.id) &&
@@ -126,8 +149,14 @@ export function performEspionage(
   const updated: Player = {
     ...player,
     currency: player.currency + payout,
-    suspicion: Math.max(0, player.suspicion + 5),
-    intel: { ...player.intel, [region.id]: (player.intel[region.id] ?? 0) + intel },
+    suspicion: Math.max(
+      0,
+      player.suspicion + Math.max(0, 5 - espionageSuspicionReduction(player)),
+    ),
+    intel: {
+      ...player.intel,
+      [region.id]: (player.intel[region.id] ?? 0) + intel,
+    },
   };
   return {
     ok: true,

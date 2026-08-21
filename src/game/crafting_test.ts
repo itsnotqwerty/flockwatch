@@ -1,5 +1,11 @@
 import { assert, assertEquals } from "$assert";
-import { canCraft, craft, CRAFT_FEE, describeCost } from "./crafting.ts";
+import {
+  canCraft,
+  craft,
+  CRAFT_FEE,
+  craftingFee,
+  describeCost,
+} from "./crafting.ts";
 import type { CraftingRecipe, Player } from "../types.ts";
 
 const jammer: CraftingRecipe = {
@@ -66,5 +72,14 @@ Deno.test("craft fails cleanly without the licensing fee", () => {
 });
 
 Deno.test("describeCost formats the component list", () => {
-  assertEquals(describeCost(jammer), "2 circuit_board, 3 wiring");
+  assertEquals(describeCost(jammer), "2 circuit board, 3 copper wiring");
+});
+
+Deno.test("field toolkit cuts the workbench fee in half", () => {
+  const before = player({ circuit_board: 2, wiring: 3 }, 5);
+  before.inventory.push("field_toolkit");
+  assertEquals(craftingFee(before), 5);
+  const result = craft(before, jammer);
+  assertEquals(result.crafted, "signal_jammer");
+  assertEquals(result.player.currency, 0);
 });

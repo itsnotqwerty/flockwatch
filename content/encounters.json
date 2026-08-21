@@ -55,6 +55,7 @@
     "defeatLine": "The audit concludes. You are carried away by the paperwork.",
     "payout": 12,
     "drops": [],
+    "materialDrops": { "ballistic_fiber": 1, "chemical_reagent": 1 },
     "clearsSuspicion": 10
   },
   {
@@ -102,6 +103,7 @@
     "defeatLine": "Your signal is triangulated, catalogued, and monetized.",
     "payout": 20,
     "drops": ["circuit_board_cache"],
+    "materialDrops": { "circuit_board": 2, "power_cell": 1 },
     "clearsSuspicion": 0
   },
   {
@@ -147,6 +149,11 @@
     "defeatLine": "Hale thanks you for your cooperation. You will be hearing from the Bureau.",
     "payout": 250,
     "drops": ["golden_horseshoe"],
+    "materialDrops": {
+      "signal_crystal": 2,
+      "power_cell": 2,
+      "ballistic_fiber": 2
+    },
     "clearsSuspicion": 40,
     "phases": [
       {

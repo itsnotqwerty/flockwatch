@@ -6,6 +6,7 @@
  * count of active cameras.
  */
 import type { Camera, CameraCooldowns, Player } from "../types.ts";
+import { cameraTakedownReduction } from "./item-effects.ts";
 
 let cameraCounter = 0;
 
@@ -21,7 +22,11 @@ export function createContract(region: string, baseWage: number): Camera {
 }
 
 /** Create a contract with an explicit id (stable, idempotent seeding). */
-export function makeContract(id: string, region: string, baseWage: number): Camera {
+export function makeContract(
+  id: string,
+  region: string,
+  baseWage: number,
+): Camera {
   return {
     id,
     region,
@@ -36,7 +41,7 @@ export function makeContract(id: string, region: string, baseWage: number): Came
 
 /** Cooldown durations (ms) per camera activity. */
 export const ACTIVITY_COOLDOWNS = {
-  install: 5_000,    // 5s between installs (test-scale)
+  install: 5_000, // 5s between installs (test-scale)
   dismantle: 12_000, // 12s between takedowns — riskier work
 } as const;
 
@@ -83,8 +88,15 @@ export function installCamera(
   cooldowns: CameraCooldowns | undefined,
   wageMultiplier = 1,
   now = Date.now(),
-): { camera: Camera; player: Player; cooldowns: CameraCooldowns; wages: number } {
-  if (camera.status !== "contracted" || !canPerform(cooldowns, "install", now)) {
+): {
+  camera: Camera;
+  player: Player;
+  cooldowns: CameraCooldowns;
+  wages: number;
+} {
+  if (
+    camera.status !== "contracted" || !canPerform(cooldowns, "install", now)
+  ) {
     return { camera, player, cooldowns: cooldowns ?? {}, wages: 0 };
   }
   const wages = Math.round(camera.wageValue * wageMultiplier);
@@ -125,7 +137,10 @@ export function dismantleCamera(
     player: {
       ...player,
       scrap,
-      suspicion: player.suspicion + suspicionForTakedown(coverage),
+      suspicion: player.suspicion + Math.max(
+        0,
+        suspicionForTakedown(coverage) - cameraTakedownReduction(player),
+      ),
     },
     cooldowns: stampActivity(cooldowns, "dismantle", now),
   };

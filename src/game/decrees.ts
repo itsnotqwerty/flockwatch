@@ -8,13 +8,21 @@ import type { Decree } from "../types.ts";
  * The combined price multiplier from all decrees in force for a region.
  * National and regional decrees stack multiplicatively.
  */
-export function decreeMultiplier(decrees: Decree[], region: string, now = Date.now()): number {
+export function decreeMultiplier(
+  decrees: Decree[],
+  region: string,
+  now = Date.now(),
+): number {
   return activeDecrees(decrees, region, now)
     .reduce((m, d) => m * d.priceMultiplier, 1);
 }
 
 /** Decrees in force for a region right now. */
-export function activeDecrees(decrees: Decree[], region: string, now = Date.now()): Decree[] {
+export function activeDecrees(
+  decrees: Decree[],
+  region: string,
+  now = Date.now(),
+): Decree[] {
   return decrees.filter((d) => {
     if (Date.parse(d.expiresAt) <= now) return false;
     return d.scope === "national" || d.region === region;
@@ -22,8 +30,16 @@ export function activeDecrees(decrees: Decree[], region: string, now = Date.now(
 }
 
 /** Apply the decree multiplier to a listing's asking price. */
-export function decreedPrice(basePrice: number, decrees: Decree[], region: string, now = Date.now()): number {
-  return Math.max(1, Math.round(basePrice * decreeMultiplier(decrees, region, now)));
+export function decreedPrice(
+  basePrice: number,
+  decrees: Decree[],
+  region: string,
+  now = Date.now(),
+): number {
+  return Math.max(
+    1,
+    Math.round(basePrice * decreeMultiplier(decrees, region, now)),
+  );
 }
 
 /** Build a decree record (used by the tick to proclaim new decrees). */

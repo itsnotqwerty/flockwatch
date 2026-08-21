@@ -30,21 +30,21 @@
   {
     "id": "cutters",
     "name": "Heavy-Duty Cutters",
-    "description": "Faster takedowns. Quieter, too.",
+    "description": "Reduces suspicion gained from every camera takedown by 8.",
     "rarity": "uncommon",
     "tradeable": true
   },
   {
     "id": "signal_jammer",
     "name": "Signal Jammer",
-    "description": "Reduces suspicion while you work. Probably legal.",
+    "description": "Improves espionage success odds by 12% and reduces fieldwork suspicion by 3.",
     "rarity": "rare",
     "tradeable": true
   },
   {
     "id": "survey_tripod",
     "name": "Survey Tripod",
-    "description": "Legitimate-looking. Legitimacy is a feature.",
+    "description": "Recovers one extra unit of the primary material from environmental salvage.",
     "rarity": "common",
     "tradeable": true
   },
@@ -89,5 +89,47 @@
     "description": "Pulled from a van that will not be missed. Dense with resale value.",
     "rarity": "uncommon",
     "tradeable": true
+  },
+  {
+    "id": "shock_baton",
+    "name": "Induction Shock Baton",
+    "description": "Adds 5 damage to every non-fleeing combat move.",
+    "rarity": "uncommon",
+    "tradeable": true
+  },
+  {
+    "id": "covert_vest",
+    "name": "Covert-Weave Vest",
+    "description": "Reduces suspicion from combat by 3 and from espionage by 2.",
+    "rarity": "rare",
+    "tradeable": true
+  },
+  {
+    "id": "transit_transponder",
+    "name": "Ghost Transit Transponder",
+    "description": "Reduces regional travel costs by 25%, stacking with official paperwork.",
+    "rarity": "rare",
+    "tradeable": true
+  },
+  {
+    "id": "valuation_lens",
+    "name": "Ministry Valuation Lens",
+    "description": "Reduces market surcharges caused by espionage flags by 10 percentage points.",
+    "rarity": "rare",
+    "tradeable": true
+  },
+  {
+    "id": "field_toolkit",
+    "name": "Unlicensed Field Toolkit",
+    "description": "Cuts the workbench licensing fee from 10 credits to 5.",
+    "rarity": "uncommon",
+    "tradeable": true
+  },
+  {
+    "id": "cell_relay",
+    "name": "Cooperative Cell Relay",
+    "description": "Adds 3 damage in cell encounters and reduces cell-operation suspicion by 2.",
+    "rarity": "rare",
+    "tradeable": false
   }
 ]

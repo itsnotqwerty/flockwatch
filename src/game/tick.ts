@@ -19,8 +19,12 @@ export function tickRegion(region: Region, cameras: Camera[]): Region {
 
   // Gentle drift, clamped to 0..1. Unrest rises with dismantles and falls with
   // coverage; Flock presence follows active installs.
-  const unrest = clamp(region.stats.unrest + dismantled * 0.02 - coverage * 0.03);
-  const flockPresence = clamp(region.stats.flockPresence + active * 0.01 - dismantled * 0.02);
+  const unrest = clamp(
+    region.stats.unrest + dismantled * 0.02 - coverage * 0.03,
+  );
+  const flockPresence = clamp(
+    region.stats.flockPresence + active * 0.01 - dismantled * 0.02,
+  );
 
   return {
     ...region,

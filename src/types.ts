@@ -19,6 +19,8 @@ export interface QuestStage {
 export interface QuestRewards {
   currency: number;
   items: string[];
+  /** Crafting materials awarded when the assignment is filed. */
+  materials: Partial<Record<ScrapComponent, number>>;
 }
 
 /** Quest definition. Hidden quests are never listed until triggered. */
@@ -140,6 +142,8 @@ export interface Encounter {
   payout: number;
   /** Items granted on victory. */
   drops: string[];
+  /** Crafting materials recovered on victory. */
+  materialDrops: Partial<Record<ScrapComponent, number>>;
   /** Suspicion cleared on victory. */
   clearsSuspicion?: number;
   /** Bosses only: flavored phase-change announcements at these hp fractions. */
@@ -164,7 +168,18 @@ export interface EncounterState {
 
 export type CameraStatus = "contracted" | "active" | "dismantled";
 
-export type ScrapComponent = "lens" | "housing" | "wiring" | "circuit_board";
+export const CRAFTING_MATERIALS = [
+  "lens",
+  "housing",
+  "wiring",
+  "circuit_board",
+  "power_cell",
+  "signal_crystal",
+  "ballistic_fiber",
+  "chemical_reagent",
+] as const;
+
+export type ScrapComponent = typeof CRAFTING_MATERIALS[number];
 
 export interface Camera {
   id: string;

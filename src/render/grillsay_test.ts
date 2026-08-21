@@ -1,10 +1,21 @@
 import { assert, assertEquals } from "$assert";
-import { loadArt, renderBubble, renderDialogue, validateWrap, wordWrap } from "./grillsay.ts";
+import {
+  loadArt,
+  renderBubble,
+  renderDialogue,
+  validateWrap,
+  wordWrap,
+} from "./grillsay.ts";
 
 Deno.test("wordWrap respects the 40-column width", () => {
-  const lines = wordWrap("The pigeons are definitely just pigeons and nobody should count them");
+  const lines = wordWrap(
+    "The pigeons are definitely just pigeons and nobody should count them",
+  );
   for (const line of lines) assert(line.length <= 40);
-  assertEquals(lines.join(" "), "The pigeons are definitely just pigeons and nobody should count them");
+  assertEquals(
+    lines.join(" "),
+    "The pigeons are definitely just pigeons and nobody should count them",
+  );
 });
 
 Deno.test("renderBubble frames single lines with angle brackets", () => {
@@ -12,7 +23,9 @@ Deno.test("renderBubble frames single lines with angle brackets", () => {
 });
 
 Deno.test("renderBubble frames multi-line bubbles", () => {
-  const bubble = renderBubble("one two three four five six seven eight nine ten eleven");
+  const bubble = renderBubble(
+    "one two three four five six seven eight nine ten eleven",
+  );
   const lines = bubble.split("\n");
   assert(lines[0].startsWith(" _"));
   assert(lines[1].startsWith("/ "));
@@ -22,7 +35,7 @@ Deno.test("renderBubble frames multi-line bubbles", () => {
 
 Deno.test("loadArt returns art files and falls back safely", async () => {
   const boomer = await loadArt("boomer");
-  assert(boomer.includes("\\########/"))
+  assert(boomer.includes("\\########/"));
   const fallback = await loadArt("does_not_exist");
   assert(fallback.length > 0);
   // Path traversal attempts fall back instead of throwing.

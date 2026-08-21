@@ -2,7 +2,13 @@
  * Player market (spec §3.3) — pure logic. Atomic listings: an item cannot be
  * simultaneously held, listed, and sold.
  */
-import type { Decree, Item, MarketListing, Player, PricePoint } from "../types.ts";
+import type {
+  Decree,
+  Item,
+  MarketListing,
+  Player,
+  PricePoint,
+} from "../types.ts";
 import { decreedPrice } from "./decrees.ts";
 import { marketFeeRate } from "./espionage.ts";
 
@@ -30,13 +36,25 @@ export function createListing(
   price: number,
 ): MarketResult<{ seller: Player; listing: MarketListing }> {
   if (!item.tradeable) {
-    return { ok: false, reason: "That item cannot be traded.", value: { seller, listing: null as unknown as MarketListing } };
+    return {
+      ok: false,
+      reason: "That item cannot be traded.",
+      value: { seller, listing: null as unknown as MarketListing },
+    };
   }
   if (!seller.inventory.includes(item.id)) {
-    return { ok: false, reason: "You do not hold that item.", value: { seller, listing: null as unknown as MarketListing } };
+    return {
+      ok: false,
+      reason: "You do not hold that item.",
+      value: { seller, listing: null as unknown as MarketListing },
+    };
   }
   if (!Number.isFinite(price) || price <= 0) {
-    return { ok: false, reason: "Price must be positive.", value: { seller, listing: null as unknown as MarketListing } };
+    return {
+      ok: false,
+      reason: "Price must be positive.",
+      value: { seller, listing: null as unknown as MarketListing },
+    };
   }
   listingCounter += 1;
   const listing: MarketListing = {
@@ -50,7 +68,13 @@ export function createListing(
   return {
     ok: true,
     reason: null,
-    value: { seller: { ...seller, inventory: seller.inventory.filter((i) => i !== item.id) }, listing },
+    value: {
+      seller: {
+        ...seller,
+        inventory: seller.inventory.filter((i) => i !== item.id),
+      },
+      listing,
+    },
   };
 }
 
@@ -82,11 +106,19 @@ export function buyListing(
   now = Date.now(),
 ): MarketResult<{ buyer: Player; seller: Player; paid: number }> {
   if (listing.sellerId === buyer.id) {
-    return { ok: false, reason: "You cannot buy your own listing.", value: { buyer, seller, paid: 0 } };
+    return {
+      ok: false,
+      reason: "You cannot buy your own listing.",
+      value: { buyer, seller, paid: 0 },
+    };
   }
   const paid = purchasePrice(listing, buyer, decrees, now);
   if (buyer.currency < paid) {
-    return { ok: false, reason: "Insufficient funds.", value: { buyer, seller, paid } };
+    return {
+      ok: false,
+      reason: "Insufficient funds.",
+      value: { buyer, seller, paid },
+    };
   }
   const proceeds = decreedPrice(listing.price, decrees, listing.regionId, now);
   return {
@@ -110,12 +142,18 @@ export function cancelListing(
   listing: MarketListing,
 ): MarketResult<{ seller: Player }> {
   if (listing.sellerId !== seller.id) {
-    return { ok: false, reason: "That is not your listing.", value: { seller } };
+    return {
+      ok: false,
+      reason: "That is not your listing.",
+      value: { seller },
+    };
   }
   return {
     ok: true,
     reason: null,
-    value: { seller: { ...seller, inventory: [...seller.inventory, listing.itemId] } },
+    value: {
+      seller: { ...seller, inventory: [...seller.inventory, listing.itemId] },
+    },
   };
 }
 

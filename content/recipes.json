@@ -8,13 +8,75 @@
   {
     "id": "recipe_signal_jammer",
     "result": "signal_jammer",
-    "components": { "circuit_board": 2, "wiring": 3 },
+    "components": {
+      "circuit_board": 2,
+      "wiring": 3,
+      "power_cell": 1,
+      "signal_crystal": 1
+    },
     "workbench": true
   },
   {
     "id": "recipe_survey_tripod",
     "result": "survey_tripod",
-    "components": { "housing": 1, "wiring": 2 },
-    "workbench": false
+    "components": { "housing": 1, "wiring": 2, "lens": 1 },
+    "workbench": true
+  },
+  {
+    "id": "recipe_shock_baton",
+    "result": "shock_baton",
+    "components": { "housing": 1, "wiring": 2, "power_cell": 2 },
+    "workbench": true
+  },
+  {
+    "id": "recipe_covert_vest",
+    "result": "covert_vest",
+    "components": {
+      "ballistic_fiber": 3,
+      "chemical_reagent": 1,
+      "wiring": 1
+    },
+    "workbench": true
+  },
+  {
+    "id": "recipe_transit_transponder",
+    "result": "transit_transponder",
+    "components": {
+      "signal_crystal": 2,
+      "circuit_board": 1,
+      "wiring": 1
+    },
+    "workbench": true
+  },
+  {
+    "id": "recipe_valuation_lens",
+    "result": "valuation_lens",
+    "components": {
+      "lens": 2,
+      "circuit_board": 1,
+      "signal_crystal": 1
+    },
+    "workbench": true
+  },
+  {
+    "id": "recipe_field_toolkit",
+    "result": "field_toolkit",
+    "components": {
+      "housing": 1,
+      "chemical_reagent": 1,
+      "ballistic_fiber": 1
+    },
+    "workbench": true
+  },
+  {
+    "id": "recipe_cell_relay",
+    "result": "cell_relay",
+    "components": {
+      "signal_crystal": 2,
+      "power_cell": 1,
+      "circuit_board": 1,
+      "wiring": 2
+    },
+    "workbench": true
   }
 ]

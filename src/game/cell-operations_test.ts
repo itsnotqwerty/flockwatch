@@ -6,7 +6,7 @@ import {
   startCellOperation,
 } from "./cell-operations.ts";
 
-function player(id: string): Player {
+function player(id: string, over: Partial<Player> = {}): Player {
   return {
     id,
     name: id,
@@ -23,6 +23,7 @@ function player(id: string): Player {
     completedLocationActions: [],
     trustedPlayerIds: [],
     lastSeenAt: "",
+    ...over,
   };
 }
 
@@ -65,4 +66,12 @@ Deno.test("cell operation advances in order with distinct participants", () => {
   const rewarded = rewardCellOperation(player("a"), "cleveland");
   assertEquals(rewarded.currency, 45);
   assertEquals(rewarded.intel.cleveland, 3);
+  assertEquals(rewarded.scrap.signal_crystal, 1);
+});
+
+Deno.test("cell relay reduces coordinated-operation suspicion", () => {
+  const relayUser = player("a", { inventory: ["cell_relay"] });
+  const state = startCellOperation(cell, [relayUser, player("b")], 0)!;
+  const turn = advanceCellOperation(state, relayUser, "tail", 1)!;
+  assertEquals(turn.actor.suspicion, 2);
 });

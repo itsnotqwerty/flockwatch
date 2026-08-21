@@ -82,10 +82,19 @@ export function renderQuestReveal(
 }
 
 /** A turn-in notice shown when a quest's final stage is completed. */
-export function renderQuestTurnIn(questTitle: string, payout: number): string {
+export function renderQuestTurnIn(
+  questTitle: string,
+  payout: number,
+  materials = "",
+): string {
   return `<aside class="quest-reveal quest-turnin">
 <p class="quest-reveal-title">Assignment Filed: ${escapeHtml(questTitle)}</p>
 <p>The Forms are satisfied. ${payout} credits have been disbursed to your account.</p>
+${
+    materials
+      ? `<p>Recovered crafting materials: ${escapeHtml(materials)}.</p>`
+      : ""
+  }
 </aside>`;
 }
 

@@ -19,7 +19,7 @@
         "kind": "activity",
         "result": "A dead control cabinet yields wiring and a circuit board. The mill records the loss as efficiency.",
         "effect": {
-          "scrap": { "wiring": 2, "circuit_board": 1 },
+          "scrap": { "wiring": 2, "circuit_board": 1, "power_cell": 1 },
           "suspicion": 2
         },
         "once": true
@@ -117,7 +117,10 @@
         "description": "Reach into municipal water with institutional confidence.",
         "kind": "activity",
         "result": "You recover a wet lens and decide not to ask what it saw.",
-        "effect": { "scrap": { "lens": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": { "lens": 1, "chemical_reagent": 1 },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -165,7 +168,11 @@
         "description": "Look for the paperwork that vanished from Ray's timesheets.",
         "kind": "activity",
         "result": "A permit sits beneath a coil of cable. Its signature predates the form.",
-        "effect": { "item": "ladder_permit", "suspicion": 2 },
+        "effect": {
+          "item": "ladder_permit",
+          "scrap": { "ballistic_fiber": 1, "housing": 1 },
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -280,7 +287,11 @@
         "kind": "activity",
         "result": "The trap contains wiring, a circuit board, and one municipal apology.",
         "effect": {
-          "scrap": { "wiring": 1, "circuit_board": 1 },
+          "scrap": {
+            "wiring": 1,
+            "circuit_board": 1,
+            "chemical_reagent": 1
+          },
           "suspicion": 2
         },
         "once": true
@@ -462,7 +473,10 @@
         "description": "Recover raw material before Public Works inventories it.",
         "kind": "activity",
         "result": "A grate yields wiring and a lens polished by municipal rain.",
-        "effect": { "scrap": { "wiring": 1, "lens": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": { "wiring": 1, "lens": 1, "chemical_reagent": 1 },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -504,7 +518,10 @@
         "description": "Recover something before its destination is invented.",
         "kind": "activity",
         "result": "A crate marked MOSS CONTROL contains a useful circuit board.",
-        "effect": { "scrap": { "circuit_board": 1 }, "suspicion": 2 },
+        "effect": {
+          "scrap": { "circuit_board": 1, "signal_crystal": 1 },
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -636,7 +653,14 @@
         "description": "Recover components before the recycling ledger does.",
         "kind": "activity",
         "result": "A prototype becomes two circuit boards and several nondisclosure obligations.",
-        "effect": { "scrap": { "circuit_board": 2 }, "suspicion": 2 },
+        "effect": {
+          "scrap": {
+            "circuit_board": 2,
+            "power_cell": 1,
+            "signal_crystal": 1
+          },
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -678,7 +702,10 @@
         "description": "Recover what commuters abandoned deliberately.",
         "kind": "activity",
         "result": "A lens rolls from beneath a bench. It is warm and recently interested.",
-        "effect": { "scrap": { "lens": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": { "lens": 1, "ballistic_fiber": 1 },
+          "suspicion": 1
+        },
         "once": true
       },
       {
@@ -804,7 +831,10 @@
         "description": "Recover components before the next schedule revision.",
         "kind": "activity",
         "result": "The board surrenders wiring and a lens still focused on yesterday.",
-        "effect": { "scrap": { "wiring": 2, "lens": 1 }, "suspicion": 2 },
+        "effect": {
+          "scrap": { "wiring": 2, "lens": 1, "chemical_reagent": 1 },
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -888,7 +918,10 @@
         "description": "Open freight listed as empty but drawing power.",
         "kind": "activity",
         "result": "A humming crate yields a circuit board and no customs explanation.",
-        "effect": { "scrap": { "circuit_board": 1 }, "suspicion": 3 },
+        "effect": {
+          "scrap": { "circuit_board": 1, "power_cell": 1 },
+          "suspicion": 3
+        },
         "once": true
       },
       {
@@ -1035,7 +1068,10 @@
         "description": "Recover its optics before the next hiking season.",
         "kind": "activity",
         "result": "The counter contains a clean lens and a list of suspicious switchbacks.",
-        "effect": { "scrap": { "lens": 1 }, "intel": 1 },
+        "effect": {
+          "scrap": { "lens": 1, "signal_crystal": 1 },
+          "intel": 1
+        },
         "once": true
       }
     ]
@@ -1110,7 +1146,10 @@
         "description": "Recover the pattern heat wrote into its contacts.",
         "kind": "activity",
         "result": "The cell returns one useful circuit board and a repeating coordinate.",
-        "effect": { "scrap": { "circuit_board": 1 }, "intel": 1 },
+        "effect": {
+          "scrap": { "circuit_board": 1, "power_cell": 1 },
+          "intel": 1
+        },
         "once": true
       },
       {
@@ -1236,7 +1275,9 @@
         "description": "Recover hardware from infrastructure that never fully retires.",
         "kind": "activity",
         "result": "The cabinet yields a housing and wiring labeled RIVER, OLD DIRECTION.",
-        "effect": { "scrap": { "housing": 1, "wiring": 1 } },
+        "effect": {
+          "scrap": { "housing": 1, "wiring": 1, "ballistic_fiber": 1 }
+        },
         "once": true
       },
       {
@@ -1404,7 +1445,10 @@
         "description": "Recover the hardware attached to a rejected concern.",
         "kind": "activity",
         "result": "A shredded memo still contains one intact circuit board.",
-        "effect": { "scrap": { "circuit_board": 1 }, "intel": 1 },
+        "effect": {
+          "scrap": { "circuit_board": 1, "chemical_reagent": 1 },
+          "intel": 1
+        },
         "once": true
       },
       {
@@ -1494,7 +1538,10 @@
         "description": "Recover freight before customs reclassifies it as weather.",
         "kind": "activity",
         "result": "A sealed case holds wiring and a surprisingly dry housing.",
-        "effect": { "scrap": { "wiring": 1, "housing": 1 }, "suspicion": 2 },
+        "effect": {
+          "scrap": { "wiring": 1, "housing": 1, "ballistic_fiber": 1 },
+          "suspicion": 2
+        },
         "once": true
       },
       {
@@ -1524,7 +1571,10 @@
         "description": "Recover hardware the swamp has already decommissioned.",
         "kind": "activity",
         "result": "Mud releases a lens and one length of waterproof wiring.",
-        "effect": { "scrap": { "lens": 1, "wiring": 1 }, "suspicion": 1 },
+        "effect": {
+          "scrap": { "lens": 1, "wiring": 1, "chemical_reagent": 1 },
+          "suspicion": 1
+        },
         "once": true
       },
       {

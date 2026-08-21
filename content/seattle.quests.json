@@ -11,7 +11,11 @@
         "objective": "Deliver nothing to no one. You were never here."
       }
     ],
-    "rewards": { "currency": 60, "items": ["cutters"] }
+    "rewards": {
+      "currency": 60,
+      "items": ["cutters"],
+      "materials": { "wiring": 2, "ballistic_fiber": 1 }
+    }
   },
   {
     "id": "q_rap_distro",
@@ -32,6 +36,10 @@
         "objective": "Return to Lil Peep-Peep in Atlanta with the deal signed."
       }
     ],
-    "rewards": { "currency": 110, "items": ["limited_vinyl"] }
+    "rewards": {
+      "currency": 110,
+      "items": ["limited_vinyl"],
+      "materials": { "signal_crystal": 2 }
+    }
   }
 ]

@@ -51,11 +51,15 @@ rather keep filed under miscellaneous.
 
 The core loop of FlockWatch is surveillance itself. Take Flock contracts to
 **put cameras up** and earn wages — or join the resistance and **take cameras
-down** to strip them for scrap. Scrap isn't junk: lenses, housings, wiring, and
-circuit boards are crafted into tools, equipment, and tradeable goods. The
-cameras go up, the cameras come down, and everyone gets paid. Region
-surveillance coverage shifts with every camera installed or dismantled — the
-whole server is playing both sides of the same war.
+down** to strip them for scrap. Quests, enemy victories, and environmental
+fieldwork also recover materials—from lenses and circuitry to power cells,
+signal crystals, ballistic fiber, and chemical reagents. Every material feeds at
+least one recipe for tools, equipment, and tradeable goods. Crafted gear can
+change combat, espionage, travel, camera work, markets, fieldwork, cooperative
+operations, and even future crafting costs. The cameras go up, the cameras come
+down, and everyone gets paid. Region surveillance coverage shifts with every
+camera installed or dismantled — the whole server is playing both sides of the
+same war.
 
 ### Multiplayer
 
