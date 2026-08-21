@@ -64,6 +64,24 @@ Deno.test("travel is locked until the contractor credential is earned", () => {
   assertEquals(result.player.region, "cleveland");
 });
 
+Deno.test("legacy players outside Cleveland receive a free one-way return", () => {
+  const legacy = player({
+    inventory: [],
+    currency: 0,
+    region: "boston",
+    location: "bos_harbor_archive",
+  });
+  const returned = travel(legacy, region("cleveland", 0.7));
+  assert(returned.ok);
+  assertEquals(returned.player.region, "cleveland");
+  assertEquals(returned.player.location, "cleveland_center");
+  assertEquals(returned.player.currency, 0);
+
+  const stillLocked = travel(legacy, region("new_york_city", 0.9));
+  assert(!stillLocked.ok);
+  assertEquals(stillLocked.player.region, "boston");
+});
+
 Deno.test("travel rejects staying put and insufficient funds", () => {
   const same = travel(player(), region("cleveland", 0.7));
   assert(!same.ok);

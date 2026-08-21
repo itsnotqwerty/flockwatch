@@ -54,6 +54,20 @@ export function travel(
     return { ok: false, reason: "You are already there.", player };
   }
   if (!hasTemporaryFlockCredential(player)) {
+    // Saves created before the credential gate may already be outside the
+    // onboarding region. Give them one free, one-way route back to Cleveland
+    // so the new progression cannot strand an existing character.
+    if (destination.id === "cleveland") {
+      return {
+        ok: true,
+        reason: null,
+        player: {
+          ...player,
+          region: destination.id,
+          location: destination.locations[0] ?? player.location,
+        },
+      };
+    }
     return {
       ok: false,
       reason:

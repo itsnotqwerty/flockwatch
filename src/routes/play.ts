@@ -2490,6 +2490,17 @@ ${bossRows ? `<ul class="boss-list">\n${bossRows}\n</ul>` : ""}
 /** Travel options to other regions (spec §3.0). */
 async function renderTravel(player: Player): Promise<string> {
   if (!hasTemporaryFlockCredential(player)) {
+    if (player.region !== "cleveland") {
+      return `<section class="travel travel-locked">
+<h3>Legacy Transit Exception</h3>
+<p>Your saved location predates the contractor credential requirement. Transit authorizes one free return to Cleveland so Clerk Gusteau can regularize your file.</p>
+<form method="post" action="/">
+  <input type="hidden" name="a" value="travel">
+  <input type="hidden" name="region" value="cleveland">
+  <button type="submit" class="link-button">Return to Cleveland (free)</button>
+</form>
+</section>`;
+    }
     return `<section class="travel travel-locked">
 <h3>Interregional Transit Withheld</h3>
 <p>Your available jurisdiction is Cleveland. Clerk Gusteau at the Lake Erie Freight Arcade can issue a temporary Flock contractor credential after a field competency check.</p>
