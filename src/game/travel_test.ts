@@ -54,6 +54,11 @@ Deno.test("travel moves the player and charges the cost", () => {
   assertEquals(result.player.currency, 100 - travelCost(dest, traveler));
 });
 
+Deno.test("contractor credential authorizes travel without discounting it", () => {
+  const dest = region("new_orleans", 0.85);
+  assertEquals(travelCost(dest, player()), travelCost(dest));
+});
+
 Deno.test("travel is locked until the contractor credential is earned", () => {
   const result = travel(
     player({ inventory: [] }),
@@ -96,7 +101,7 @@ Deno.test("Bureaucrat's Stamp halves travel cost", () => {
   const stamped = player({
     inventory: ["temporary_flock_credential", "bureaucrats_stamp"],
   });
-  assertEquals(travelCost(dest, stamped), Math.round(travelCost(dest) / 4));
+  assertEquals(travelCost(dest, stamped), Math.round(travelCost(dest) / 2));
   const result = travel(stamped, dest);
   assert(result.ok);
   assertEquals(result.player.currency, 100 - travelCost(dest, stamped));
@@ -109,7 +114,7 @@ Deno.test("transit transponder discounts travel and stacks with the stamp", () =
   });
   assertEquals(
     travelCost(dest, transponder),
-    Math.round(travelCost(dest) * 0.5 * 0.75),
+    Math.round(travelCost(dest) * 0.75),
   );
   const stacked = player({
     inventory: [
@@ -120,6 +125,6 @@ Deno.test("transit transponder discounts travel and stacks with the stamp", () =
   });
   assertEquals(
     travelCost(dest, stacked),
-    Math.round(travelCost(dest) * 0.5 * 0.5 * 0.75),
+    Math.round(travelCost(dest) * 0.5 * 0.75),
   );
 });

@@ -31,8 +31,7 @@ export function espionageSuspicionReduction(player: Player): number {
 }
 
 export function travelMultiplier(player: Player): number {
-  return (has(player, "temporary_flock_credential") ? 0.5 : 1) *
-    (has(player, "transit_transponder") ? 0.75 : 1) *
+  return (has(player, "transit_transponder") ? 0.75 : 1) *
     (has(player, "tide_tables") ? 0.9 : 1);
 }
 

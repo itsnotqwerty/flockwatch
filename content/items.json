@@ -205,7 +205,7 @@
   {
     "id": "temporary_flock_credential",
     "name": "Temporary Flock Contractor Credential",
-    "description": "A ninety-day badge whose expiration field is blank. Unlocks interregional transit and halves contractor fares.",
+    "description": "A ninety-day badge whose expiration field is blank. Authorizes interregional transit but provides no fare discount.",
     "rarity": "rare",
     "tradeable": false
   },

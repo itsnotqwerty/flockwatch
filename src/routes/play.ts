@@ -2533,7 +2533,7 @@ async function renderTravel(player: Player): Promise<string> {
     ? `<p class="stamp-note">Your Ghost Transit Transponder reduces the remaining fare by 25%.</p>`
     : "";
   const credentialNote =
-    `<p class="stamp-note">Your temporary Flock contractor credential authorizes interregional transit and halves fares.</p>`;
+    `<p class="stamp-note">Your temporary Flock contractor credential authorizes interregional transit. Standard fares apply.</p>`;
   return `<section class="travel">
 <h3>Elsewhere in the Union</h3>
 ${credentialNote}
