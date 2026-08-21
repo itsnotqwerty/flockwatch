@@ -383,8 +383,10 @@ ${interactions}
 ${localTravel}
 ${decrees}
 ${travelBoard}
+<div class="action-row">
 ${postButton("log", "Review your assignments")}
-${postButton("inventory", "Inventory")}`,
+${postButton("inventory", "Inventory")}
+</div>`,
   });
 });
 
@@ -1360,29 +1362,61 @@ ${postButton("home", "Back to the park")}`,
         )
         .join("\n")
       : `<li>Nothing. The Agencies prefer it that way.</li>`;
-    const scrap = formatMaterials(player.scrap);
-    const intelEntries = Object.entries(player.intel);
-    const intel = intelEntries.length
-      ? intelEntries
-        .map(([r, n]) => `<li>${escapeHtml(r)}: ${n}</li>`)
+    const scrapEntries = Object.entries(player.scrap);
+    const scrapList = scrapEntries.length
+      ? scrapEntries
+        .map(
+          ([material, count]) =>
+            `<li><strong>${escapeHtml(material.replaceAll("_", " "))}</strong> × ${count}</li>`,
+        )
         .join("\n")
-      : `<li>No regional intelligence on file.</li>`;
+      : `<li>No salvage on hand.</li>`;
+    const intelEntries = Object.entries(player.intel);
+    let intelTable: string;
+    if (intelEntries.length) {
+      const regions = await getRegionContent();
+      const nameFor = (id: string) =>
+        regions.find((r) => r.id === id)?.name ?? id;
+      const rows = intelEntries
+        .sort(([a], [b]) => nameFor(a).localeCompare(nameFor(b)))
+        .map(
+          ([regionId, n]) =>
+            `<tr><td>${escapeHtml(nameFor(regionId))}</td><td>${n}</td></tr>`,
+        )
+        .join("\n");
+      intelTable = `<table class="intel-table">
+<thead><tr><th>Region</th><th>Intel</th></tr></thead>
+<tbody>
+${rows}
+</tbody>
+</table>`;
+    } else {
+      intelTable = `<p>No regional intelligence on file.</p>`;
+    }
     context.response.type = "text/html";
     context.response.body = renderPage({
       title: "Inventory",
       body: `<h2>Inventory</h2>
-<p>Funds: ${player.currency} credits</p>
+<p class="eyebrow">${player.currency} credits on file</p>
+<section class="inventory-items">
 <h3>Items</h3>
-<ul class="quest-log">
+<ul>
 ${itemList}
 </ul>
+</section>
+<section class="inventory-scrap">
 <h3>Scrap</h3>
-<p>${scrap || "No salvage on hand."}</p>
-<h3>Intelligence</h3>
-<ul class="quest-log">
-${intel}
+<ul>
+${scrapList}
 </ul>
-${postButton("home", "Back to the park")}`,
+</section>
+<section class="inventory-intel">
+<h3>Intelligence</h3>
+${intelTable}
+</section>
+<div class="action-row">
+${postButton("home", "Back to the park")}
+</div>`,
     });
     return;
   }

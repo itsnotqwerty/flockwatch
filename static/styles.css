@@ -122,6 +122,18 @@ main > .character-bar {
   margin: 0;
 }
 
+/* Footer action buttons sit in one inline row across the full width. */
+.action-row {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.action-row form {
+  margin: 0;
+}
+
 .live-status {
   margin-left: auto;
   color: var(--surveillance);
@@ -180,6 +192,37 @@ main > section ul li:last-child {
 
 main > section li form {
   display: inline;
+}
+
+/* Intel table inside the inventory intelligence panel. */
+.intel-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+}
+
+.intel-table th {
+  text-align: left;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding: 0.2rem 0.5rem 0.2rem 0;
+}
+
+.intel-table td {
+  padding: 0.3rem 0.5rem 0.3rem 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.intel-table td:last-child,
+.intel-table th:last-child {
+  text-align: right;
+}
+
+.intel-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 /* The active encounter is urgent: full-width banner above the boards. */
