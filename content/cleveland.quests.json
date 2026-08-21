@@ -30,7 +30,7 @@
         "id": "s3",
         "objective": "Have it signed by a Flock agent. A real signature, on a form that does not exist."
       },
-      { "id": "s4", "objective": "Return it to any clerk for collection." }
+      { "id": "s4", "objective": "Return it to Clerk Gusteau at the Freight Arcade in Cleveland." }
     ],
     "rewards": {
       "currency": 35,

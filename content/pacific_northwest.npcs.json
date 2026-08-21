@@ -131,9 +131,8 @@
           {
             "id": "ask_form_27b",
             "label": "Ask about Form 27-B",
-            "response": "We don't... stock that form. Officially. I can stamp a requisition that says you never asked. The requisition is the form. Welcome to the Bureau.",
-            "next": null,
-            "grantsQuest": "q_form_27b"
+            "response": "27-B? That's Cleveland's form. The Lake Erie Freight Arcade, window closed, take a number. We don't stock it. Officially or otherwise.",
+            "next": null
           },
           {
             "id": "process_form_12f",
@@ -150,22 +149,6 @@
             "next": null,
             "advancesQuest": "q_foreman_wages",
             "atStages": [1]
-          },
-          {
-            "id": "process_form_27b",
-            "label": "Submit the form for review",
-            "response": "Reviewed. Notarized. Denied appeal filed on your behalf. It still needs an agent's signature. Agents sign nothing. Enjoy the paradox.",
-            "next": null,
-            "advancesQuest": "q_form_27b",
-            "atStages": [0, 1]
-          },
-          {
-            "id": "turn_in_form_27b",
-            "label": "Present the signed Form 27-B",
-            "response": "Signed? By an actual agent? I need to... yes. The stamp. You've earned it. The Bureau recognizes you. Paperwork fears you now.",
-            "next": null,
-            "advancesQuest": "q_form_27b",
-            "atStages": [3]
           },
           {
             "id": "ask_itinerary",
