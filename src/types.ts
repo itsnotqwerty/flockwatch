@@ -439,6 +439,12 @@ export interface Player {
   restricted: string[];
   /** One-time location activities already claimed by this player. */
   completedLocationActions: string[];
+  /**
+   * Epoch-ms when each scrap-granting activity next refreshes, keyed by
+   * `locationId:interactionId`. Material gathering opportunities recover
+   * every five minutes.
+   */
+  locationActionRefreshAt?: Record<string, number>;
   /** Player ids this character has explicitly authorized for sharing. */
   trustedPlayerIds: string[];
   /** ISO timestamp used for same-location presence. */

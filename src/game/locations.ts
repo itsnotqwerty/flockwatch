@@ -38,10 +38,14 @@ export interface LocationActionResult {
   player: Player;
 }
 
+/** Material gathering opportunities refresh on this cadence. */
+export const GATHERING_REFRESH_MS = 5 * 60 * 1000;
+
 export function performLocationAction(
   player: Player,
   location: Sublocation,
   interaction: LocationInteraction,
+  now: number = Date.now(),
 ): LocationActionResult {
   if (location.regionId !== player.region || location.id !== player.location) {
     return { ok: false, reason: "You are not there.", narrative: "", player };
@@ -55,10 +59,26 @@ export function performLocationAction(
     };
   }
   const actionKey = `${location.id}:${interaction.id}`;
-  if (interaction.once && player.completedLocationActions.includes(actionKey)) {
+  const gathersMaterials = Object.keys(interaction.effect?.scrap ?? {})
+    .length > 0;
+  // Material gathering opportunities refresh every five minutes instead of
+  // exhausting permanently; other one-time activities stay claimed.
+  const refreshAt = player.locationActionRefreshAt?.[actionKey];
+  const gathering = gathersMaterials && interaction.once;
+  if (interaction.once && !gathering &&
+    player.completedLocationActions.includes(actionKey)) {
     return {
       ok: false,
       reason: "You have already exhausted this opportunity.",
+      narrative: interaction.result ?? "Nothing new presents itself.",
+      player,
+    };
+  }
+  if (gathering && refreshAt !== undefined && now < refreshAt) {
+    const waitMin = Math.ceil((refreshAt - now) / 60000);
+    return {
+      ok: false,
+      reason: `Picked clean. More material surfaces in about ${waitMin} min.`,
       narrative: interaction.result ?? "Nothing new presents itself.",
       player,
     };
@@ -116,9 +136,15 @@ export function performLocationAction(
       scrap,
       intel,
       inventory,
-      completedLocationActions: interaction.once
+      completedLocationActions: interaction.once && !gathering
         ? [...player.completedLocationActions, actionKey]
         : player.completedLocationActions,
+      locationActionRefreshAt: gathering
+        ? {
+          ...player.locationActionRefreshAt,
+          [actionKey]: now + GATHERING_REFRESH_MS,
+        }
+        : player.locationActionRefreshAt,
     },
   };
 }

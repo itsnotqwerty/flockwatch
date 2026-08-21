@@ -30,6 +30,7 @@ function normalizePlayer(raw: Player): Player {
     intel: raw.intel ?? {},
     restricted: raw.restricted ?? [],
     completedLocationActions: raw.completedLocationActions ?? [],
+    locationActionRefreshAt: raw.locationActionRefreshAt ?? {},
     trustedPlayerIds: raw.trustedPlayerIds ?? [],
     lastSeenAt: raw.lastSeenAt ?? new Date().toISOString(),
   };

@@ -1,6 +1,10 @@
 import { assert, assertEquals } from "$assert";
 import type { LocationInteraction, Player, Sublocation } from "../types.ts";
-import { performLocationAction, travelWithinRegion } from "./locations.ts";
+import {
+  GATHERING_REFRESH_MS,
+  performLocationAction,
+  travelWithinRegion,
+} from "./locations.ts";
 
 function player(overrides: Partial<Player> = {}): Player {
   return {
@@ -88,4 +92,51 @@ Deno.test("survey tripod improves the primary environmental salvage yield", () =
   );
   assert(result.ok);
   assertEquals(result.player.scrap.wiring, 3);
+});
+
+Deno.test("material gathering refreshes after five minutes", () => {
+  const now = Date.now();
+  const first = performLocationAction(player(), mill, salvage, now);
+  assert(first.ok);
+  assertEquals(first.player.scrap.wiring, 2);
+  // Immediately after: still picked clean.
+  const soon = performLocationAction(
+    first.player,
+    mill,
+    salvage,
+    now + 60_000,
+  );
+  assert(!soon.ok);
+  assert(soon.reason!.includes("material"));
+  // After the refresh window the opportunity is available again.
+  const later = performLocationAction(
+    first.player,
+    mill,
+    salvage,
+    now + GATHERING_REFRESH_MS,
+  );
+  assert(later.ok);
+  assertEquals(later.player.scrap.wiring, 4);
+});
+
+Deno.test("non-material one-time activities stay exhausted", () => {
+  const rumor: LocationInteraction = {
+    id: "rumor",
+    label: "Rumor",
+    description: "Hear a thing.",
+    kind: "activity",
+    effect: { intel: 1 },
+    once: true,
+  };
+  const now = Date.now();
+  const first = performLocationAction(player(), mill, rumor, now);
+  assert(first.ok);
+  const later = performLocationAction(
+    first.player,
+    mill,
+    rumor,
+    now + GATHERING_REFRESH_MS * 4,
+  );
+  assert(!later.ok);
+  assertEquals(later.reason, "You have already exhausted this opportunity.");
 });
