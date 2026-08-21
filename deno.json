@@ -5,7 +5,7 @@
     "dev": "deno run --allow-all --env-file=.env main.ts",
     "test": "deno test --allow-read=./tools,./src,./content --allow-env",
     "check-content": "deno run --allow-read=./content tools/check_content.ts",
-    "migrate-to-supabase": "deno run --allow-all --env-file=.env tools/migrate_to_supabase.ts"
+    "migrate-to-supabase": "deno run --allow-all --unstable-kv --env-file=.env tools/migrate_to_supabase.ts"
   },
   "imports": {
     "oak": "npm:@oakserver/oak",
