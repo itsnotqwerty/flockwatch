@@ -1,4 +1,4 @@
-import type { Player, PlayerQuest } from "../types.ts";
+import type { Item, Player, PlayerQuest } from "../types.ts";
 
 export function setTrust(
   player: Player,
@@ -38,6 +38,7 @@ export function shareItem(
   sender: Player,
   recipient: Player,
   itemId: string,
+  items: Item[] = [],
 ): ShareResult {
   const denied = canShare(sender, recipient);
   if (denied) return { ok: false, reason: denied, sender, recipient };
@@ -46,6 +47,16 @@ export function shareItem(
     return {
       ok: false,
       reason: "You do not hold that item.",
+      sender,
+      recipient,
+    };
+  }
+  // Untradeable items are bound to their holder and can never change hands.
+  const catalog = items.find((item) => item.id === itemId);
+  if (catalog && !catalog.tradeable) {
+    return {
+      ok: false,
+      reason: "That item is registered to you and cannot be transferred.",
       sender,
       recipient,
     };

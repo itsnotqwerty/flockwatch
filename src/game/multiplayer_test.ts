@@ -1,5 +1,5 @@
 import { assert, assertEquals } from "$assert";
-import type { Player } from "../types.ts";
+import type { Item, Player } from "../types.ts";
 import { setTrust, shareIntel, shareItem, shareQuest } from "./multiplayer.ts";
 
 function player(id: string, overrides: Partial<Player> = {}): Player {
@@ -40,6 +40,31 @@ Deno.test("trust gates item transfer at a shared location", () => {
       "binoculars",
     ).ok,
   );
+});
+
+Deno.test("untradeable items cannot be given to another player", () => {
+  const badge: Item = {
+    id: "press_badge",
+    name: "Press Badge",
+    description: "",
+    rarity: "rare",
+    tradeable: false,
+  };
+  const binoculars: Item = { ...badge, id: "binoculars", tradeable: true };
+  const sender = setTrust(
+    player("sender", { inventory: ["press_badge", "binoculars"] }),
+    "recipient",
+    true,
+  );
+  const recipient = player("recipient");
+  const refused = shareItem(sender, recipient, "press_badge", [badge]);
+  assert(!refused.ok);
+  assertEquals(refused.sender.inventory, ["press_badge", "binoculars"]);
+  assertEquals(refused.recipient.inventory, []);
+  // Tradeable gear still moves when the catalog is supplied.
+  const allowed = shareItem(sender, recipient, "binoculars", [badge, binoculars]);
+  assert(allowed.ok);
+  assertEquals(allowed.recipient.inventory, ["binoculars"]);
 });
 
 Deno.test("intel sharing copies the sender's current city dossier", () => {

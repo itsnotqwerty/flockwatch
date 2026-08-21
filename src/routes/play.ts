@@ -689,7 +689,7 @@ playRouter.post("/", async (context) => {
       return;
     }
     const result = action === "share_item"
-      ? shareItem(sender, recipient, fields.item ?? "")
+      ? shareItem(sender, recipient, fields.item ?? "", await getItems())
       : shareIntel(sender, recipient);
     if (result.ok) {
       await savePlayer(result.sender);
@@ -1558,6 +1558,10 @@ async function renderMultiplayer(player: Player): Promise<string> {
   const itemNames = new Map(
     (await getItems()).map((item) => [item.id, item.name]),
   );
+  // Untradeable items can never be given to another player.
+  const tradeable = new Set(
+    (await getItems()).filter((item) => item.tradeable).map((item) => item.id),
+  );
 
   const presenceRows = nearby.length
     ? (await Promise.all(nearby.map(async (candidate) => {
@@ -1581,11 +1585,13 @@ async function renderMultiplayer(player: Player): Promise<string> {
         }</button>
 </form>`
         : "";
-      const itemOptions = player.inventory.map((itemId) =>
-        `<option value="${escapeHtml(itemId)}">${
-          escapeHtml(itemNames.get(itemId) ?? itemId)
-        }</option>`
-      ).join("");
+      const itemOptions = player.inventory
+        .filter((itemId) => tradeable.has(itemId))
+        .map((itemId) =>
+          `<option value="${escapeHtml(itemId)}">${
+            escapeHtml(itemNames.get(itemId) ?? itemId)
+          }</option>`
+        ).join("");
       const sharing = trusted
         ? `<div class="sharing-controls">
 ${
