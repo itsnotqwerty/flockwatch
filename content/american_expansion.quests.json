@@ -14,7 +14,7 @@
       },
       {
         "id": "s2",
-        "objective": "Take Eliass weatherproof copy to Leon beneath Lower Wacker Drive in Chicago."
+        "objective": "Take Elias's weatherproof copy to Leon beneath Lower Wacker Drive in Chicago."
       },
       {
         "id": "s3",
@@ -23,8 +23,13 @@
     ],
     "rewards": {
       "currency": 145,
-      "items": ["limited_vinyl"],
-      "materials": { "signal_crystal": 1, "wiring": 2 }
+      "items": [
+        "limited_vinyl"
+      ],
+      "materials": {
+        "signal_crystal": 1,
+        "wiring": 2
+      }
     }
   },
   {
@@ -38,7 +43,7 @@
     "stages": [
       {
         "id": "s1",
-        "objective": "Bring Eliass pressure ledger south to Inez Romero at Albuquerque's Old Town Frequency Shop."
+        "objective": "Bring Elias's pressure ledger south to Inez Romero at Albuquerque's Old Town Frequency Shop."
       },
       {
         "id": "s2",
@@ -51,8 +56,13 @@
     ],
     "rewards": {
       "currency": 135,
-      "items": ["cutters"],
-      "materials": { "power_cell": 2, "lens": 1 }
+      "items": [
+        "cutters"
+      ],
+      "materials": {
+        "power_cell": 2,
+        "lens": 1
+      }
     }
   },
   {
@@ -74,13 +84,18 @@
       },
       {
         "id": "s3",
-        "objective": "Return Marcuss archival checksum to Inez in Albuquerque."
+        "objective": "Return Marcus's archival checksum to Inez in Albuquerque."
       }
     ],
     "rewards": {
       "currency": 150,
-      "items": ["signal_jammer"],
-      "materials": { "signal_crystal": 2, "circuit_board": 1 }
+      "items": [
+        "signal_jammer"
+      ],
+      "materials": {
+        "signal_crystal": 2,
+        "circuit_board": 1
+      }
     }
   },
   {
@@ -88,7 +103,7 @@
     "title": "The Freight Ghost",
     "hidden": true,
     "trigger": {
-      "npc": "chi_lena",
+      "npc": "chi_leon",
       "dialogueOption": "ask_freight_ghost"
     },
     "stages": [
@@ -98,7 +113,7 @@
       },
       {
         "id": "s2",
-        "objective": "Take Marcuss copied seal to Elias at Denver's Union Weather Hall for altitude testing."
+        "objective": "Take Marcus's copied seal to Elias at Denver's Union Weather Hall for altitude testing."
       },
       {
         "id": "s3",
@@ -107,8 +122,13 @@
     ],
     "rewards": {
       "currency": 140,
-      "items": ["orange_vest"],
-      "materials": { "housing": 2, "ballistic_fiber": 1 }
+      "items": [
+        "orange_vest"
+      ],
+      "materials": {
+        "housing": 2,
+        "ballistic_fiber": 1
+      }
     }
   },
   {
@@ -116,13 +136,13 @@
     "title": "The Common Record",
     "hidden": true,
     "trigger": {
-      "npc": "bos_mae",
+      "npc": "bos_marcus",
       "dialogueOption": "ask_common_record"
     },
     "stages": [
       {
         "id": "s1",
-        "objective": "Bring Marcuss watermarked page to Sol Navarro at Miami's Port Causeway Exchange."
+        "objective": "Bring Marcus's watermarked page to Sol Navarro at Miami's Port Causeway Exchange."
       },
       {
         "id": "s2",
@@ -135,8 +155,13 @@
     ],
     "rewards": {
       "currency": 155,
-      "items": ["binoculars"],
-      "materials": { "lens": 2, "chemical_reagent": 1 }
+      "items": [
+        "binoculars"
+      ],
+      "materials": {
+        "lens": 2,
+        "chemical_reagent": 1
+      }
     }
   },
   {
@@ -158,13 +183,378 @@
       },
       {
         "id": "s3",
-        "objective": "Return Leons inland shipping match to Sol at the Miami Port Causeway Exchange."
+        "objective": "Return Leon's inland shipping match to Sol at the Miami Port Causeway Exchange."
       }
     ],
     "rewards": {
       "currency": 145,
-      "items": ["survey_tripod"],
-      "materials": { "power_cell": 1, "chemical_reagent": 2 }
+      "items": [
+        "survey_tripod"
+      ],
+      "materials": {
+        "power_cell": 1,
+        "chemical_reagent": 2
+      }
+    }
+  },
+  {
+    "id": "q_la_dub_roster",
+    "title": "The Dub Roster",
+    "hidden": true,
+    "trigger": {
+      "npc": "la_jules",
+      "dialogueOption": "ask_dubs"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Collect tonight's dedication list from the San Pedro transmitter."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Reel\" at Echo Park flag which dedications are coded."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the flagged roster back to Jules."
+      }
+    ],
+    "rewards": {
+      "currency": 75,
+      "items": [],
+      "materials": {
+        "signal_crystal": 1
+      }
+    }
+  },
+  {
+    "id": "q_den_melt_log",
+    "title": "The Melt Log",
+    "hidden": true,
+    "trigger": {
+      "npc": "den_jun",
+      "dialogueOption": "ask_melt"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Measure the snowmelt at the Front Range Uplink."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Elias Snow at Union Weather Hall confirm the reading is early."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the confirmed log back to Jun."
+      }
+    ],
+    "rewards": {
+      "currency": 55,
+      "materials": {
+        "signal_crystal": 1
+      },
+      "items": []
+    }
+  },
+  {
+    "id": "q_chi_switch_shift",
+    "title": "The Switch Shift",
+    "hidden": true,
+    "trigger": {
+      "npc": "chi_omar",
+      "dialogueOption": "ask_switch"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Log the bridge openings at the Lakefront Switchhouse."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Underpass\" in the underpass say which openings had no boat."
+      },
+      {
+        "id": "s3",
+        "objective": "Report the phantom openings to Omar."
+      }
+    ],
+    "rewards": {
+      "currency": 70,
+      "items": [],
+      "materials": {
+        "wiring": 1
+      }
+    }
+  },
+  {
+    "id": "q_bos_platform_docket",
+    "title": "The Platform Docket",
+    "hidden": true,
+    "trigger": {
+      "npc": "bos_priya",
+      "dialogueOption": "ask_docket"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Collect the service records from the Lost Green Line Stop."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Chowder\" at the harbor pier confirm which trains actually ran."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the confirmed docket back to Priya."
+      }
+    ],
+    "rewards": {
+      "currency": 65,
+      "items": [],
+      "materials": {
+        "circuit_board": 1
+      }
+    }
+  },
+  {
+    "id": "q_mia_storm_board",
+    "title": "The Storm Board",
+    "hidden": true,
+    "trigger": {
+      "npc": "mia_camila",
+      "dialogueOption": "ask_storm_board"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Take down last night's storm-route board in Little Havana."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Sawgrass\" at the Everglades edge verify the water line."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the verified board back to Camila."
+      }
+    ],
+    "rewards": {
+      "currency": 60,
+      "materials": {
+        "wiring": 1
+      },
+      "items": []
+    }
+  },
+  {
+    "id": "q_la_palm_firmware",
+    "title": "The Decorative Palms",
+    "hidden": true,
+    "trigger": {
+      "npc": "la_deacon",
+      "dialogueOption": "ask_firmware"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Pull the firmware log from the decorative palms at Union Depot."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Nico Brooks at the San Pedro port confirm the update window."
+      },
+      {
+        "id": "s3",
+        "objective": "Return the confirmed log to Deacon."
+      }
+    ],
+    "rewards": {
+      "currency": 70,
+      "items": [],
+      "materials": {
+        "circuit_board": 1
+      }
+    }
+  },
+  {
+    "id": "q_abq_night_freight",
+    "title": "Night Freight",
+    "hidden": true,
+    "trigger": {
+      "npc": "abq_nico",
+      "dialogueOption": "ask_night_freight"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Log the unmarked freight's cooling load at the yards."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Ballast\" confirm the cargo flies out by balloon."
+      },
+      {
+        "id": "s3",
+        "objective": "Report the route to Nico."
+      }
+    ],
+    "rewards": {
+      "currency": 65,
+      "items": [],
+      "materials": {
+        "wiring": 1
+      }
+    }
+  },
+  {
+    "id": "q_chi_timeclock_ghosts",
+    "title": "Timeclock Ghosts",
+    "hidden": true,
+    "trigger": {
+      "npc": "chi_darnell",
+      "dialogueOption": "ask_ghost_punches"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Pull the punch cards for the retired workers."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Leon Kowalski trace which freight the ghost shifts load."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the traced roster back to Darnell."
+      }
+    ],
+    "rewards": {
+      "currency": 75,
+      "items": [],
+      "materials": {
+        "ballistic_fiber": 1
+      }
+    }
+  },
+  {
+    "id": "q_bos_recycling_minutes",
+    "title": "The Recycling Minutes",
+    "hidden": true,
+    "trigger": {
+      "npc": "bos_finn",
+      "dialogueOption": "ask_recycling"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Recover this month's discarded minutes from the review board bins."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Marcus Donnelly at the harbor archive verify which were shredded early."
+      },
+      {
+        "id": "s3",
+        "objective": "Return the verified minutes to Finn."
+      }
+    ],
+    "rewards": {
+      "currency": 60,
+      "items": [],
+      "materials": {
+        "lens": 1
+      }
+    }
+  },
+  {
+    "id": "q_mia_shutter_permits",
+    "title": "The Shutter Permits",
+    "hidden": true,
+    "trigger": {
+      "npc": "mia_lucia",
+      "dialogueOption": "ask_shutter_permits"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Count the unpermitted storm shutters in Little Havana."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Sawgrass\" confirm which ones went up before the last storm warning."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the confirmed count back to Lucía."
+      }
+    ],
+    "rewards": {
+      "currency": 55,
+      "items": [],
+      "materials": {
+        "wiring": 1
+      }
+    }
+  },
+  {
+    "id": "q_bos_tide_log",
+    "title": "The Tide Log",
+    "hidden": true,
+    "trigger": {
+      "npc": "bos_leo",
+      "dialogueOption": "ask_tide_log"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Log the tide against the harbor gauge."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Marcus Donnelly check the gauge against the archive's future-dated records."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the verified log back to Leo."
+      }
+    ],
+    "rewards": {
+      "currency": 50,
+      "items": [],
+      "materials": {
+        "lens": 1
+      }
+    }
+  },
+  {
+    "id": "q_chi_lake_signal",
+    "title": "The Lake Signal",
+    "hidden": true,
+    "trigger": {
+      "npc": "chi_yvette",
+      "dialogueOption": "ask_lake_signal"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Record the signal washing ashore at the switchhouse."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Omar Bell identify which bridge relays it."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the identified relay back to Yvette."
+      }
+    ],
+    "rewards": {
+      "currency": 60,
+      "items": [],
+      "materials": {
+        "circuit_board": 1
+      }
     }
   }
 ]

@@ -29,6 +29,33 @@
             "label": "Step off the grass",
             "response": "That's what I thought.",
             "next": null
+          },
+          {
+            "id": "q_cle_scrap_tally_s1",
+            "label": "Report the stamped tally",
+            "response": "Martinez grunts. 'Officially missing is the best kind of found. You learn fast, kid.'",
+            "next": null,
+            "advancesQuest": "q_cle_scrap_tally",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_scrap_tally",
+            "label": "Ask about the missing scrap",
+            "response": "Cameras come down, scrap goes somewhere. Some of it's coming back mounted wrong-side-up. Tally what's in the tunnel, then have the Bureau clerk stamp the count so it's officially missing.",
+            "next": null,
+            "grantsQuest": "q_cle_scrap_tally"
+          },
+          {
+            "id": "groundskeeper_signoff_groundskeeper",
+            "label": "Present your circuit card for a countersign",
+            "response": "Old Man Martinez signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
+            "next": null,
+            "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              5
+            ]
           }
         ]
       },
@@ -119,6 +146,26 @@
             "label": "Leave the Bureau",
             "response": "Your visit has been logged. Have a compliant day.",
             "next": null
+          },
+          {
+            "id": "q_cle_scrap_tally_s0",
+            "label": "Ask the clerk to stamp the tally as missing",
+            "response": "The clerk stamps it without reading. 'Filed under missing. Everything here is filed under missing. It saves a cabinet.'",
+            "next": null,
+            "advancesQuest": "q_cle_scrap_tally",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "clerk_signoff_clerk",
+            "label": "Present your circuit card for a countersign",
+            "response": "Clerk Gusteau stamps your card without looking up. 'Filed. Countersigned. Never happened. Next window.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              5
+            ]
           }
         ]
       },
@@ -197,6 +244,23 @@
             "label": "Keep walking",
             "response": "We never spoke. We never speak. Remember that.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_informant",
+            "label": "Present your census card for a countersign",
+            "response": "\"Dietrich\" reads it twice, signs once in pencil. \"The census never happened. You were never counted.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              0
+            ]
           }
         ]
       },
@@ -260,6 +324,16 @@
             "label": "Leave Boomer alone",
             "response": "You kids just don't know hard work and freedom. You kids just don't know hard work and freedom and America.",
             "next": null
+          },
+          {
+            "id": "boomer_signoff_boomer",
+            "label": "Present your circuit card for a countersign",
+            "response": "Boomer Dave signs in duplicate and keeps the carbon. 'Documented. Filed. Framed, probably. You're one of us now, kid.'",
+            "next": null,
+            "advancesQuest": "q_boomer_circuit",
+            "atStages": [
+              4
+            ]
           }
         ]
       }

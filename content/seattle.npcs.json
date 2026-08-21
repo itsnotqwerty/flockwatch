@@ -54,6 +54,33 @@
             "label": "Move along",
             "response": "Smart. Standing still is how you get catalogued.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_pnw_moss",
+            "label": "Present your census card for a countersign",
+            "response": "\"Moss\" presses a damp thumb to the card. \"Paper rots up here. This one we keep dry. You are counted.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              4
+            ]
+          },
+          {
+            "id": "q_sea_ferry_manifest_s0",
+            "label": "Have Moss mark the real crossings",
+            "response": "Moss circles three. 'These are ferries. The rest are weather with a schedule. Don't ride the weather.'",
+            "next": null,
+            "advancesQuest": "q_sea_ferry_manifest",
+            "atStages": [
+              0
+            ]
           }
         ]
       },
@@ -107,6 +134,33 @@
             "label": "Leave her to it",
             "response": "Watch the ridge line. The unplugged ones are the ones that matter.",
             "next": null
+          },
+          {
+            "id": "q_pnw_trailhead_count_s1",
+            "label": "Report the verified count",
+            "response": "Priya logs it. 'Counters counting counters. At least now we know which ones to trust. Good work.'",
+            "next": null,
+            "advancesQuest": "q_pnw_trailhead_count",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_trailhead",
+            "label": "Ask about the trailhead sensors",
+            "response": "The trail counters count hikers, but somebody's been counting the counters. Get me the numbers from the ridge and have the clerk at the visitor center confirm the firmware is stock.",
+            "next": null,
+            "grantsQuest": "q_pnw_trailhead_count"
+          },
+          {
+            "id": "groundskeeper_signoff_pnw_priya",
+            "label": "Present your circuit card for a countersign",
+            "response": "Harbor Engineer Priya signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
+            "next": null,
+            "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              4
+            ]
           }
         ]
       }
@@ -188,6 +242,77 @@
             "label": "Leave the visitor center",
             "response": "Come back anytime! The cameras out front are just for weather. Weather and tourism.",
             "next": null
+          },
+          {
+            "id": "q_pnw_trailhead_count_s0",
+            "label": "Ask Cole to verify the counter firmware",
+            "response": "Cole plugs it in between lattes. 'Stock firmware. The extras are purely decorative. Like the steamed milk of surveillance.'",
+            "next": null,
+            "advancesQuest": "q_pnw_trailhead_count",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "clerk_signoff_pnw_cole",
+            "label": "Present your circuit card for a countersign",
+            "response": "Barista-Inspector Cole stamps your card without looking up. 'Filed. Countersigned. Never happened. Next window.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              6
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pnw_mara",
+    "name": "Mara Chen",
+    "role": "Ferry Signal Technician, Municipal Visitor Center",
+    "region": "seattle",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The ferries use foghorns. The new signals use passenger names.",
+        "options": [
+          {
+            "id": "ask_ferry_manifest",
+            "label": "Ask about the ferry logs",
+            "response": "Ferries log passengers who never board and cargo that never lands. I need the manifest cross-checked by someone the rain doesn't bother. Moss knows which crossings are real.",
+            "next": null,
+            "grantsQuest": "q_sea_ferry_manifest"
+          },
+          {
+            "id": "ask_ferries",
+            "label": "Ask about the ferry signals",
+            "response": "Every crossing reports its passengers twice: once to shore and once somewhere inland.",
+            "next": null
+          },
+          {
+            "id": "ask_fog",
+            "label": "Ask what moves in the fog",
+            "response": "Boats, mostly. The antennas move only when nobody is looking.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Return the maintenance badge",
+            "response": "Keep it dry. The scanner trusts water damage more than people.",
+            "next": null
+          },
+          {
+            "id": "foreman_signoff_pnw_mara",
+            "label": "Present your circuit card for a countersign",
+            "response": "Mara Chen countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              7
+            ]
           }
         ]
       }

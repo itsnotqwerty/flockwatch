@@ -1038,7 +1038,7 @@
         "kind": "npcs",
         "npcIds": [
           "la_jules",
-          "la_nia"
+          "la_nico"
         ]
       },
       {
@@ -1391,7 +1391,7 @@
         "description": "Marlo trades in freight that never surfaces.",
         "kind": "npcs",
         "npcIds": [
-          "chi_lena",
+          "chi_leon",
           "chi_marlo"
         ]
       },
@@ -1536,7 +1536,7 @@
         "description": "Sal hears what the harbor forgets to file.",
         "kind": "npcs",
         "npcIds": [
-          "bos_mae",
+          "bos_marcus",
           "bos_leo",
           "bos_sal"
         ]

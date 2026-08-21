@@ -3,9 +3,15 @@
     "id": "q_pnw_courier",
     "title": "The Courier Run",
     "hidden": true,
-    "trigger": { "npc": "pnw_moss", "dialogueOption": "ask_work" },
+    "trigger": {
+      "npc": "pnw_moss",
+      "dialogueOption": "ask_work"
+    },
     "stages": [
-      { "id": "s1", "objective": "Accept the courier arrangement from Moss." },
+      {
+        "id": "s1",
+        "objective": "Accept the courier arrangement from Moss."
+      },
       {
         "id": "s2",
         "objective": "Deliver nothing to no one. You were never here."
@@ -13,15 +19,23 @@
     ],
     "rewards": {
       "currency": 60,
-      "items": ["cutters"],
-      "materials": { "wiring": 2, "ballistic_fiber": 1 }
+      "items": [
+        "cutters"
+      ],
+      "materials": {
+        "wiring": 2,
+        "ballistic_fiber": 1
+      }
     }
   },
   {
     "id": "q_rap_distro",
     "title": "Street Distribution",
     "hidden": true,
-    "trigger": { "npc": "atl_lil_peep", "dialogueOption": "ask_distro" },
+    "trigger": {
+      "npc": "atl_lil_peep",
+      "dialogueOption": "ask_distro"
+    },
     "stages": [
       {
         "id": "s1",
@@ -38,8 +52,72 @@
     ],
     "rewards": {
       "currency": 110,
-      "items": ["limited_vinyl"],
-      "materials": { "signal_crystal": 2 }
+      "items": [
+        "limited_vinyl"
+      ],
+      "materials": {
+        "signal_crystal": 2
+      }
+    }
+  },
+  {
+    "id": "q_sea_ferry_manifest",
+    "title": "The Ferry Manifest",
+    "hidden": true,
+    "trigger": {
+      "npc": "pnw_mara",
+      "dialogueOption": "ask_ferry_manifest"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Pull the ferry crossing manifest at the visitor center."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Moss\" mark which crossings are real."
+      },
+      {
+        "id": "s3",
+        "objective": "Return the marked manifest to Mara."
+      }
+    ],
+    "rewards": {
+      "currency": 65,
+      "items": [],
+      "materials": {
+        "circuit_board": 1
+      }
+    }
+  },
+  {
+    "id": "q_pnw_trailhead_count",
+    "title": "Trailhead Count",
+    "hidden": true,
+    "trigger": {
+      "npc": "pnw_priya",
+      "dialogueOption": "ask_trailhead"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Read the trail counters at the uplink ridge."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Barista-Inspector Cole confirm the counter firmware is stock."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the confirmed count back to Priya."
+      }
+    ],
+    "rewards": {
+      "currency": 60,
+      "materials": {
+        "circuit_board": 1
+      },
+      "items": []
     }
   }
 ]

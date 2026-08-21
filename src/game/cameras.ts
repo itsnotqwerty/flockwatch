@@ -6,7 +6,10 @@
  * count of active cameras.
  */
 import type { Camera, CameraCooldowns, Player } from "../types.ts";
-import { cameraTakedownReduction } from "./item-effects.ts";
+import {
+  cameraTakedownReduction,
+  eventSuspicionReduction,
+} from "./item-effects.ts";
 
 let cameraCounter = 0;
 
@@ -139,7 +142,8 @@ export function dismantleCamera(
       scrap,
       suspicion: player.suspicion + Math.max(
         0,
-        suspicionForTakedown(coverage) - cameraTakedownReduction(player),
+        suspicionForTakedown(coverage) - cameraTakedownReduction(player) -
+          eventSuspicionReduction(player),
       ),
     },
     cooldowns: stampActivity(cooldowns, "dismantle", now),

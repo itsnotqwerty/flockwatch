@@ -1,5 +1,9 @@
 import type { Cell, CellEncounterState, Encounter, Player } from "../types.ts";
-import { combatDamageBonus, combatSuspicionReduction } from "./item-effects.ts";
+import {
+  combatDamageBonus,
+  combatSuspicionReduction,
+  eventSuspicionReduction,
+} from "./item-effects.ts";
 import { addMaterials, formatMaterials } from "./materials.ts";
 
 export function startCellEncounter(
@@ -72,7 +76,11 @@ export function applyCellMove(
         100,
         actor.suspicion +
           (move.suspicion > 0
-            ? Math.max(0, move.suspicion - combatSuspicionReduction(actor))
+            ? Math.max(
+              0,
+              move.suspicion - combatSuspicionReduction(actor) -
+                eventSuspicionReduction(actor),
+            )
             : move.suspicion),
       ),
     ),

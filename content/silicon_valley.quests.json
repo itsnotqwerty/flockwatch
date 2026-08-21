@@ -1,0 +1,32 @@
+[
+  {
+    "id": "q_sv_moat_audit",
+    "title": "The Moat Audit",
+    "hidden": true,
+    "trigger": {
+      "npc": "sv_brad",
+      "dialogueOption": "ask_moat_audit"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Survey the drainage moat around the Kellerman campus."
+      },
+      {
+        "id": "s2",
+        "objective": "Have Groundskeeper Walt confirm what's actually draining into it."
+      },
+      {
+        "id": "s3",
+        "objective": "Report the inflow to Brad."
+      }
+    ],
+    "rewards": {
+      "currency": 85,
+      "items": [],
+      "materials": {
+        "power_cell": 1
+      }
+    }
+  }
+]

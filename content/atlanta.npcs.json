@@ -53,6 +53,23 @@
             "label": "Move along",
             "response": "Stay sweet. The city likes that. It's watching how sweet you stay.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_atl_peaches",
+            "label": "Present your census card for a countersign",
+            "response": "\"Peaches\" stamps it with a peach pit. \"Sweet. Officially you are one of us. Unofficially, always were.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              1
+            ]
           }
         ]
       },
@@ -105,6 +122,16 @@
             "label": "Leave Hank to his porch",
             "response": "You kids just don't know hard work. My lawn mower is older than you and it starts on the first pull.",
             "next": null
+          },
+          {
+            "id": "boomer_signoff_atl_boomer_hank",
+            "label": "Present your circuit card for a countersign",
+            "response": "Boomer Hank signs in duplicate and keeps the carbon. 'Documented. Filed. Framed, probably. You're one of us now, kid.'",
+            "next": null,
+            "advancesQuest": "q_boomer_circuit",
+            "atStages": [
+              3
+            ]
           }
         ]
       }
@@ -156,6 +183,16 @@
             "label": "Leave the crew to it",
             "response": "You kids just don't know hard work. You kids just don't know hard work and a good pen.",
             "next": null
+          },
+          {
+            "id": "foreman_signoff_atl_foreman_ray",
+            "label": "Present your circuit card for a countersign",
+            "response": "Foreman Ray checks the roster and punches your card. 'Atlanta crew is accounted for. Keep the line moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              6
+            ]
           }
         ]
       },
@@ -225,6 +262,16 @@
             "label": "Nod and bounce",
             "response": "Tell the tower I said the mixtape drops Friday. It already knows. It pre-ordered.",
             "next": null
+          },
+          {
+            "id": "rapper_signoff_atl_lil_peep",
+            "label": "Present your circuit card for a countersign",
+            "response": "Lil Peep-Peep drops a verse over your card. 'Signed on the off-beat. The circuit carries you now. Stay loud, stay low.'",
+            "next": null,
+            "advancesQuest": "q_rapper_circuit",
+            "atStages": [
+              3
+            ]
           }
         ]
       },

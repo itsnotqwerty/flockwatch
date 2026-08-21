@@ -1,5 +1,8 @@
 import type { LocationInteraction, Player, Sublocation } from "../types.ts";
-import { environmentalMaterialBonus } from "./item-effects.ts";
+import {
+  environmentalMaterialBonus,
+  eventSuspicionReduction,
+} from "./item-effects.ts";
 
 export interface LocationTravelResult {
   ok: boolean;
@@ -99,7 +102,16 @@ export function performLocationAction(
       currency,
       suspicion: Math.max(
         0,
-        Math.min(100, player.suspicion + (effect.suspicion ?? 0)),
+        Math.min(
+          100,
+          player.suspicion +
+            ((effect.suspicion ?? 0) > 0
+              ? Math.max(
+                0,
+                (effect.suspicion ?? 0) - eventSuspicionReduction(player),
+              )
+              : (effect.suspicion ?? 0)),
+        ),
       ),
       scrap,
       intel,

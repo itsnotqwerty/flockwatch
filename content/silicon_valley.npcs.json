@@ -53,6 +53,23 @@
             "label": "Keep walking",
             "response": "We never spoke. But your gait is in the system now. Nothing personal. It's just good data.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_sv_ping",
+            "label": "Present your census card for a countersign",
+            "response": "\"Ping\" scans it, signs the checksum. \"Logged. Backed up. Deniable in three jurisdictions.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              5
+            ]
           }
         ]
       },
@@ -142,6 +159,16 @@
             "label": "Abandon the desk",
             "response": "Your departure has been timestamped. Your arrival never was. You were never here, officially.",
             "next": null
+          },
+          {
+            "id": "clerk_signoff_sv_clerk_miriam",
+            "label": "Present your circuit card for a countersign",
+            "response": "Clerk Miriam stamps your card without looking up. 'Filed. Countersigned. Never happened. Next window.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              4
+            ]
           }
         ]
       }
@@ -176,6 +203,16 @@
             "label": "Leave Greg to his lemons",
             "response": "Pull yourself up by your bootstraps. That's what the cameras are doing, incidentally.",
             "next": null
+          },
+          {
+            "id": "boomer_signoff_sv_boomer_greg",
+            "label": "Present your circuit card for a countersign",
+            "response": "Boomer Greg signs in duplicate and keeps the carbon. 'Documented. Filed. Framed, probably. You're one of us now, kid.'",
+            "next": null,
+            "advancesQuest": "q_boomer_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -220,6 +257,33 @@
             "label": "Step off the lawn",
             "response": "Good. The lawn logged you at an acceptable distance. Keep it that way.",
             "next": null
+          },
+          {
+            "id": "q_sv_moat_audit_s0",
+            "label": "Have Walt confirm the moat inflow",
+            "response": "Walt wipes his hands. 'Datacenter coolant and one espresso machine's worth of drip. The campus drains its secrets downhill. Confirmed.'",
+            "next": null,
+            "advancesQuest": "q_sv_moat_audit",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "join_groundskeeper_circuit",
+            "label": "Ask about the groundskeeper circuit",
+            "response": "Six of us mow around the things nobody explains. Visit every groundskeeper, get the countersigns, and the circuit cuts you a master key.",
+            "next": null,
+            "grantsQuest": "q_groundskeeper_circuit"
+          },
+          {
+            "id": "groundskeeper_signoff_sv_groundskeeper_walt",
+            "label": "Present your circuit card for a countersign",
+            "response": "Groundskeeper Walt signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
+            "next": null,
+            "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
@@ -260,6 +324,33 @@
             "label": "Walk away mid-pitch",
             "response": "Your loss, bro! Actually it's alpha decay! I'll invoice you for the exposure!",
             "next": null
+          },
+          {
+            "id": "ask_moat_audit",
+            "label": "Ask about the campus moat",
+            "response": "I paid for a defensive moat. It's filling with something that isn't rainwater. Walt mows the whole valley — he knows what drains where. Confirm the inflow and I'll invoice someone.",
+            "next": null,
+            "grantsQuest": "q_sv_moat_audit"
+          },
+          {
+            "id": "q_sv_moat_audit_s1",
+            "label": "Report the inflow to Brad",
+            "response": "Brad nods like a man adding a line item. 'Coolant. In my moat. That's a licensing opportunity. You're on the friends-of-the-moat list.'",
+            "next": null,
+            "advancesQuest": "q_sv_moat_audit",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "financebro_signoff_sv_brad",
+            "label": "Present your circuit card for a countersign",
+            "response": "Brad Kellerman initials in gel pen. 'Approved. Your account with the circuit is now... let's call it interest-bearing.'",
+            "next": null,
+            "advancesQuest": "q_financebro_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       },

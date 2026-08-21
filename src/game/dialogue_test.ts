@@ -97,7 +97,7 @@ Deno.test("quest options stay visible while the quest is accepted", () => {
   // the branch holding the advance option, and re-selecting it never
   // re-grants (resolveSelection flags alreadyHad).
   assert(options.some((o) => o.id === "ask_about_birds"));
-  assertEquals(options.length, 3);
+  assertEquals(options.length, 4);
 });
 
 Deno.test("quest options are hidden once the quest is finished", () => {
@@ -105,7 +105,7 @@ Deno.test("quest options are hidden once the quest is finished", () => {
   const player = completeQuest(acceptQuest(freshPlayer(), quest), quest);
   const options = availableOptions(groundskeeper, "start", player);
   assert(options.every((o) => o.id !== "ask_about_birds"));
-  assertEquals(options.length, 2); // work + leave remain
+  assertEquals(options.length, 3); // work + scrap tally + leave remain
 });
 
 Deno.test("advance node stays reachable after leaving the branch early", () => {

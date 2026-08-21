@@ -53,6 +53,33 @@
             "label": "Keep walking",
             "response": "Smart. In this city the conversation never ends. It just changes cameras.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_nyc_sable",
+            "label": "Present your census card for a countersign",
+            "response": "\"Sable\" signs without looking. \"You were on the list before you asked. The list is just catching up.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              3
+            ]
+          },
+          {
+            "id": "q_no_levee_receipts_s0",
+            "label": "Ask Sable to vouch for the reading",
+            "response": "Sable doesn't look up. 'The river's honest. The reports aren't. Consider it vouched — the river and I go back.'",
+            "next": null,
+            "advancesQuest": "q_no_levee_receipts",
+            "atStages": [
+              0
+            ]
           }
         ]
       },
@@ -115,6 +142,16 @@
             "label": "Let him get back to the terminal",
             "response": "Buy the dip. There is always a dip. That's the thing about watching everyone — you see the dips coming.",
             "next": null
+          },
+          {
+            "id": "financebro_signoff_nyc_chad",
+            "label": "Present your circuit card for a countersign",
+            "response": "Chadwick \"Chad\" Brennan III initials in gel pen. 'Approved. Your account with the circuit is now... let's call it interest-bearing.'",
+            "next": null,
+            "advancesQuest": "q_financebro_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       },
@@ -177,6 +214,23 @@
             "label": "Leave the studio",
             "response": "The show opens Friday. The cameras are invited. They never RSVP, but they always attend.",
             "next": null
+          },
+          {
+            "id": "join_artho_circuit",
+            "label": "Ask about the artho circuit",
+            "response": "Three archivists, three collections, zero permits. Get every artho's countersign and the circuit issues you a lanyard. Opening night, every night.",
+            "next": null,
+            "grantsQuest": "q_artho_circuit"
+          },
+          {
+            "id": "artho_signoff_nyc_marin",
+            "label": "Present your circuit card for a countersign",
+            "response": "Marin Voss signs on archival vellum. 'Catalogued. Your presence is now part of the permanent collection. Do not dust it.'",
+            "next": null,
+            "advancesQuest": "q_artho_circuit",
+            "atStages": [
+              0
+            ]
           }
         ]
       },
@@ -239,6 +293,16 @@
             "label": "Back toward the stairs",
             "response": "TAKE THE STAIRS! The escalators report your WEIGHT to a wellness bureau! Load cells in EVERY STEP! It's in the TERMS OF SERVICE!",
             "next": null
+          },
+          {
+            "id": "schizo_signoff_nyc_raymond",
+            "label": "Present your circuit card for a countersign",
+            "response": "Raymond signs in a cipher only the pigeons read. 'Heard you coming three blocks out. The hat knows you now. Wear it indoors.'",
+            "next": null,
+            "advancesQuest": "q_schizo_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       },

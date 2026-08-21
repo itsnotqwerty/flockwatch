@@ -4,7 +4,10 @@ import type {
   EspionageActionType,
   Player,
 } from "../types.ts";
-import { cellOperationSuspicionReduction } from "./item-effects.ts";
+import {
+  cellOperationSuspicionReduction,
+  eventSuspicionReduction,
+} from "./item-effects.ts";
 import { addMaterials } from "./materials.ts";
 
 export const CELL_OPERATION_STAGES: Array<{
@@ -101,7 +104,8 @@ export function advanceCellOperation(
         100,
         actor.suspicion + Math.max(
           0,
-          4 - cellOperationSuspicionReduction(actor),
+          4 - cellOperationSuspicionReduction(actor) -
+            eventSuspicionReduction(actor),
         ),
       ),
     },

@@ -4,7 +4,11 @@
  * bosses. All rendering stays in the view layer.
  */
 import type { Encounter, EncounterState, Player, Region } from "../types.ts";
-import { combatDamageBonus, combatSuspicionReduction } from "./item-effects.ts";
+import {
+  combatDamageBonus,
+  combatSuspicionReduction,
+  eventSuspicionReduction,
+} from "./item-effects.ts";
 import { addMaterials, formatMaterials } from "./materials.ts";
 
 /** Player field HP. Defeats happen at 0. */
@@ -94,7 +98,11 @@ export function applyMove(
       0,
       player.suspicion +
         (move.suspicion > 0
-          ? Math.max(0, move.suspicion - combatSuspicionReduction(player))
+          ? Math.max(
+            0,
+            move.suspicion - combatSuspicionReduction(player) -
+              eventSuspicionReduction(player),
+          )
           : move.suspicion),
     ),
     currency: Math.max(0, player.currency - (move.cost ?? 0)),

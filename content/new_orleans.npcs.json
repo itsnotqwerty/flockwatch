@@ -54,6 +54,33 @@
             "label": "Move along",
             "response": "Tide's turning. Good time to not be here.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_gulf_saltine",
+            "label": "Present your census card for a countersign",
+            "response": "\"Saltine\" signs with a fishhook scratch. \"Tide carried it in. Tide carries it out. Counted.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              2
+            ]
+          },
+          {
+            "id": "q_gulf_buoy_ledger_s0",
+            "label": "Relay the buoy pattern",
+            "response": "Saltine nods. 'That's a landing schedule, not a light show. Someone's bringing cargo that isn't on a manifest.'",
+            "next": null,
+            "advancesQuest": "q_gulf_buoy_ledger",
+            "atStages": [
+              0
+            ]
           }
         ]
       },
@@ -117,6 +144,33 @@
             "label": "Back away from the dock",
             "response": "You mark my words. One day a pelican's gonna file a report on you.",
             "next": null
+          },
+          {
+            "id": "q_gulf_buoy_ledger_s1",
+            "label": "Report the confirmed schedule",
+            "response": "LaRue coils a rope. 'Knew it. The water keeps better books than the port. You did good, hand.'",
+            "next": null,
+            "advancesQuest": "q_gulf_buoy_ledger",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_buoys",
+            "label": "Ask about the blinking buoys",
+            "response": "The channel markers blink in a pattern. Patterns mean schedules. Saltine reads schedules like scripture. Get the pattern to the docks, then back to me before the tide changes the locks.",
+            "next": null,
+            "grantsQuest": "q_gulf_buoy_ledger"
+          },
+          {
+            "id": "fisherman_signoff_gulf_larue",
+            "label": "Present your circuit card for a countersign",
+            "response": "Fisherman LaRue signs in salt pencil. 'The water vouches for you now. Tides know your name. Don't wear it out.'",
+            "next": null,
+            "advancesQuest": "q_fisherman_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -157,6 +211,23 @@
             "label": "Climb out of the outfall",
             "response": "STAY BELOW THE STORM SURGE LINE! The barometers SHARE NOTES! It's in the WEATHER SERVICE CHARTER!",
             "next": null
+          },
+          {
+            "id": "join_schizo_circuit",
+            "label": "Ask about the other circuit",
+            "response": "Two of us hear the real broadcast. Get both countersigns and the circuit lines you a hat. The lining matters. The lining is the whole point.",
+            "next": null,
+            "grantsQuest": "q_schizo_circuit"
+          },
+          {
+            "id": "schizo_signoff_gulf_vern",
+            "label": "Present your circuit card for a countersign",
+            "response": "Vern signs in a cipher only the pigeons read. 'Heard you coming three blocks out. The hat knows you now. Wear it indoors.'",
+            "next": null,
+            "advancesQuest": "q_schizo_circuit",
+            "atStages": [
+              0
+            ]
           }
         ]
       },
@@ -215,6 +286,33 @@
             "label": "Leave the chapel",
             "response": "The installation runs until the tide takes it. That is the review I care about.",
             "next": null
+          },
+          {
+            "id": "q_no_levee_receipts_s1",
+            "label": "Deliver the vouched reading",
+            "response": "Odette seals it in wax. 'Dry paper, wet truth. Now the inspection exists. That's more than the levee can say.'",
+            "next": null,
+            "advancesQuest": "q_no_levee_receipts",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_levee",
+            "label": "Ask about the levee inspection",
+            "response": "The levee got inspected on paper three times this year. The paper is dry. The levee is not. Get me a real reading from the outfall, then have Sable vouch for it — she owes the river a favor.",
+            "next": null,
+            "grantsQuest": "q_no_levee_receipts"
+          },
+          {
+            "id": "artho_signoff_gulf_odette",
+            "label": "Present your circuit card for a countersign",
+            "response": "Odette Marchand signs on archival vellum. 'Catalogued. Your presence is now part of the permanent collection. Do not dust it.'",
+            "next": null,
+            "advancesQuest": "q_artho_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       },
@@ -273,6 +371,23 @@
             "label": "Leave Earl to his dock",
             "response": "You kids just don't know honest bait. My tackle box is older than you and every lure in it still works.",
             "next": null
+          },
+          {
+            "id": "join_boomer_circuit",
+            "label": "Ask about the boomer circuit",
+            "response": "Five of us keep every receipt since the seventies. Get all five countersigns and the circuit binds you a binder. Weatherproof. Like us.",
+            "next": null,
+            "grantsQuest": "q_boomer_circuit"
+          },
+          {
+            "id": "boomer_signoff_gulf_boomer_earl",
+            "label": "Present your circuit card for a countersign",
+            "response": "Boomer Earl signs in duplicate and keeps the carbon. 'Documented. Filed. Framed, probably. You're one of us now, kid.'",
+            "next": null,
+            "advancesQuest": "q_boomer_circuit",
+            "atStages": [
+              0
+            ]
           }
         ]
       }

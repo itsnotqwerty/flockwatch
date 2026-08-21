@@ -3,7 +3,10 @@
     "id": "q_gulf_salvage",
     "title": "Salvage Rights",
     "hidden": true,
-    "trigger": { "npc": "gulf_saltine", "dialogueOption": "ask_salvage" },
+    "trigger": {
+      "npc": "gulf_saltine",
+      "dialogueOption": "ask_salvage"
+    },
     "stages": [
       {
         "id": "s1",
@@ -16,15 +19,23 @@
     ],
     "rewards": {
       "currency": 120,
-      "items": ["survey_tripod"],
-      "materials": { "housing": 2, "chemical_reagent": 1 }
+      "items": [
+        "survey_tripod"
+      ],
+      "materials": {
+        "housing": 2,
+        "chemical_reagent": 1
+      }
     }
   },
   {
     "id": "q_foreman_wages",
     "title": "Unpaid in Full",
     "hidden": true,
-    "trigger": { "npc": "atl_foreman_ray", "dialogueOption": "ask_backpay" },
+    "trigger": {
+      "npc": "atl_foreman_ray",
+      "dialogueOption": "ask_backpay"
+    },
     "stages": [
       {
         "id": "s1",
@@ -41,8 +52,73 @@
     ],
     "rewards": {
       "currency": 90,
-      "items": ["orange_vest"],
-      "materials": { "ballistic_fiber": 2, "wiring": 1 }
+      "items": [
+        "orange_vest"
+      ],
+      "materials": {
+        "ballistic_fiber": 2,
+        "wiring": 1
+      }
+    }
+  },
+  {
+    "id": "q_no_levee_receipts",
+    "title": "Levee Receipts",
+    "hidden": true,
+    "trigger": {
+      "npc": "gulf_odette",
+      "dialogueOption": "ask_levee"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Take a water reading at Storm Drain Outfall 9."
+      },
+      {
+        "id": "s2",
+        "objective": "Have \"Sable\" in New York City vouch for the reading."
+      },
+      {
+        "id": "s3",
+        "objective": "Bring the vouched reading back to Odette."
+      }
+    ],
+    "rewards": {
+      "currency": 85,
+      "items": [],
+      "materials": {
+        "signal_crystal": 1
+      }
+    }
+  },
+  {
+    "id": "q_gulf_buoy_ledger",
+    "title": "The Buoy Ledger",
+    "hidden": true,
+    "trigger": {
+      "npc": "gulf_larue",
+      "dialogueOption": "ask_buoys"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "objective": "Record the buoy pattern off the causeway."
+      },
+      {
+        "id": "s2",
+        "objective": "Carry the pattern to \"Saltine\" at the docks."
+      },
+      {
+        "id": "s3",
+        "objective": "Deliver the confirmed schedule to LaRue before the tide turns."
+      }
+    ],
+    "rewards": {
+      "currency": 70,
+      "materials": {
+        "wiring": 2
+      },
+      "items": []
     }
   }
 ]

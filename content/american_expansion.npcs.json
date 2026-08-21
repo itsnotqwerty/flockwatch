@@ -31,7 +31,7 @@
           {
             "id": "scan_common_record",
             "label": "Show her the watermarked record",
-            "response": "The watermark resolves under old studio lamps. Marcuss page names a camera office that officially opens next year.",
+            "response": "The watermark resolves under old studio lamps. Marcus's page names a camera office that officially opens next year.",
             "next": null,
             "advancesQuest": "q_bos_common_record",
             "atStages": [
@@ -53,6 +53,16 @@
             "label": "Ask who owns the backlot",
             "response": "Four shell companies and one retired pigeon. The pigeon has the cleanest books.",
             "next": null
+          },
+          {
+            "id": "artho_signoff_la_marisol",
+            "label": "Present your circuit card for a countersign",
+            "response": "Marisol Vega signs on archival vellum. 'Catalogued. Your presence is now part of the permanent collection. Do not dust it.'",
+            "next": null,
+            "advancesQuest": "q_artho_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -87,6 +97,33 @@
             "label": "Step away from the signal cabinet",
             "response": "Mind the platform cameras. They arrive before the trains do.",
             "next": null
+          },
+          {
+            "id": "ask_firmware",
+            "label": "Ask about the Tuesday firmware windows",
+            "response": "The palms update every Tuesday at 03:00, right when the port cranes go quiet. Nico logs the crane windows. Get me a cross-reference.",
+            "next": null,
+            "grantsQuest": "q_la_palm_firmware"
+          },
+          {
+            "id": "q_la_palm_firmware_s1",
+            "label": "Return the confirmed log",
+            "response": "Deacon pockets it. 'So the palms phone home on the port's dime. Officially decorative. Officially.'",
+            "next": null,
+            "advancesQuest": "q_la_palm_firmware",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "foreman_signoff_la_deacon",
+            "label": "Present your circuit card for a countersign",
+            "response": "Deacon Price checks the roster and punches your card. 'Los Angeles crew is accounted for. Keep the line moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -121,6 +158,33 @@
             "label": "Sign off",
             "response": "Stay tuned. Staying tuned is different from being tracked. Mostly.",
             "next": null
+          },
+          {
+            "id": "q_la_dub_roster_s1",
+            "label": "Return the flagged roster",
+            "response": "Jules shuffles the cards. 'Clean list. Dirty list. One camera with cold feet. You're a natural, kid.'",
+            "next": null,
+            "advancesQuest": "q_la_dub_roster",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_dubs",
+            "label": "Ask about the coded dedications",
+            "response": "Every dedication on my show is a message. Half are for ships, half are for people who don't exist. Reel can tell the difference. Get tonight's roster sorted.",
+            "next": null,
+            "grantsQuest": "q_la_dub_roster"
+          },
+          {
+            "id": "rapper_signoff_la_jules",
+            "label": "Present your circuit card for a countersign",
+            "response": "Jules Static drops a verse over your card. 'Signed on the off-beat. The circuit carries you now. Stay loud, stay low.'",
+            "next": null,
+            "advancesQuest": "q_rapper_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -157,7 +221,7 @@
           },
           {
             "id": "test_freight_seal",
-            "label": "Altitude-test Marcuss copied seal",
+            "label": "Altitude-test Marcus's copied seal",
             "response": "The ink expands above five thousand feet. It reveals a Chicago routing number beneath the colonial date.",
             "next": null,
             "advancesQuest": "q_chi_freight_ghost",
@@ -180,6 +244,26 @@
             "label": "Ask about mountain snow",
             "response": "It melts into five states and reports to six agencies before breakfast.",
             "next": null
+          },
+          {
+            "id": "q_den_melt_log_s0",
+            "label": "Have Elias confirm the early melt",
+            "response": "Elias checks twice. 'Early. Off the books early. The mountain's reporting to a different calendar than the agency is.'",
+            "next": null,
+            "advancesQuest": "q_den_melt_log",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "clerk_signoff_den_eli",
+            "label": "Present your circuit card for a countersign",
+            "response": "Elias Snow stamps your card without looking up. 'Filed. Countersigned. Never happened. Next window.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -214,6 +298,33 @@
             "label": "Head downhill",
             "response": "Take water. Altitude makes the forms feel heavier.",
             "next": null
+          },
+          {
+            "id": "q_den_melt_log_s1",
+            "label": "Deliver the confirmed log",
+            "response": "Jun marks the trail map. 'Confirmed early. The trail counters knew first. They always do.'",
+            "next": null,
+            "advancesQuest": "q_den_melt_log",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_melt",
+            "label": "Ask about the early melt",
+            "response": "The snow's melting three weeks early and the weather service says it isn't. Elias keeps the records they don't publish. Get my reading confirmed.",
+            "next": null,
+            "grantsQuest": "q_den_melt_log"
+          },
+          {
+            "id": "groundskeeper_signoff_den_jun",
+            "label": "Present your circuit card for a countersign",
+            "response": "Jun Park signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
+            "next": null,
+            "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -256,6 +367,23 @@
             "label": "Continue down the avenue",
             "response": "Keep moving. Parked cars get entered into the census.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_den_tasha",
+            "label": "Present your census card for a countersign",
+            "response": "\"Milepost\" signs under fluorescent buzz. \"After 2 a.m. every signature is miscellaneous. Yours counts anyway.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              6
+            ]
           }
         ]
       }
@@ -282,7 +410,7 @@
           },
           {
             "id": "calibrate_weather",
-            "label": "Deliver Eliass pressure ledger",
+            "label": "Deliver Elias's pressure ledger",
             "response": "The desert reading matches a storm surge. Sol in Miami keeps the coastal half of this impossible weather.",
             "next": null,
             "advancesQuest": "q_den_weather_chain",
@@ -315,6 +443,16 @@
             "label": "Browse the repair shelves",
             "response": "Everything works. Nothing broadcasts under its legal name.",
             "next": null
+          },
+          {
+            "id": "foreman_signoff_abq_inez",
+            "label": "Present your circuit card for a countersign",
+            "response": "Inez Romero checks the roster and punches your card. 'Albuquerque crew is accounted for. Keep the line moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              3
+            ]
           }
         ]
       }
@@ -349,6 +487,33 @@
             "label": "Clear the tracks",
             "response": "Good. The next train is not on a schedule you are cleared to read.",
             "next": null
+          },
+          {
+            "id": "ask_night_freight",
+            "label": "Ask where the unmarked freight goes",
+            "response": "It comes in heavy and leaves light, and nothing that heavy drives out. Rosa's crew launches things that don't file flight plans. Ask her.",
+            "next": null,
+            "grantsQuest": "q_abq_night_freight"
+          },
+          {
+            "id": "q_abq_night_freight_s1",
+            "label": "Report the air route to Nico",
+            "response": "Nico kills the arc welder. 'By balloon. That's why the rails never balance. You just balanced my books, hand.'",
+            "next": null,
+            "advancesQuest": "q_abq_night_freight",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "foreman_signoff_abq_nico",
+            "label": "Present your circuit card for a countersign",
+            "response": "Nico Yazzie checks the roster and punches your card. 'Albuquerque crew is accounted for. Keep the line moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              4
+            ]
           }
         ]
       }
@@ -391,13 +556,40 @@
             "label": "Release the tether",
             "response": "Let it rise. The sky has less paperwork than the ground.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_abq_rosa",
+            "label": "Present your census card for a countersign",
+            "response": "\"Ballast\" ties the card to a tether and lets it rise an inch. \"Official weight now. Counted.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              7
+            ]
+          },
+          {
+            "id": "q_abq_night_freight_s0",
+            "label": "Ask Ballast about the airborne cargo",
+            "response": "Ballast grins. 'Some freight prefers altitude. Manifest says weather. The weather says nothing. Confirmed, it flies.'",
+            "next": null,
+            "advancesQuest": "q_abq_night_freight",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
     ]
   },
   {
-    "id": "chi_lena",
+    "id": "chi_leon",
     "name": "Leon Kowalski",
     "role": "Freight Dispatcher, Lower Wacker",
     "region": "chicago",
@@ -450,6 +642,26 @@
             "label": "Ask how far down the road goes",
             "response": "Far enough that daylight becomes an administrative rumor.",
             "next": null
+          },
+          {
+            "id": "q_chi_timeclock_ghosts_s0",
+            "label": "Have Leon trace the ghost shifts",
+            "response": "Leon runs the numbers twice. 'Those shifts load the weather cars. The ones with no destination. Traced. Don't clock in after midnight.'",
+            "next": null,
+            "advancesQuest": "q_chi_timeclock_ghosts",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "clerk_signoff_chi_lena",
+            "label": "Present your circuit card for a countersign",
+            "response": "Leon Kowalski stamps your card without looking up. 'Filed. Countersigned. Never happened. Next window.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -484,6 +696,43 @@
             "label": "Let the bridge close",
             "response": "Stand clear. Infrastructure gets territorial after dark.",
             "next": null
+          },
+          {
+            "id": "q_chi_switch_shift_s1",
+            "label": "Report the phantom openings",
+            "response": "Omar lets the bridge settle. 'Phantom openings on Tuesdays. Infrastructure gets curious. Now it's documented curious.'",
+            "next": null,
+            "advancesQuest": "q_chi_switch_shift",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_switch",
+            "label": "Ask which bridge opens for no boat",
+            "response": "One bridge opens when no boat's coming. It needs the clear view of something. Underpass sees what the river cams miss. Find out which openings are phantom.",
+            "next": null,
+            "grantsQuest": "q_chi_switch_shift"
+          },
+          {
+            "id": "q_chi_lake_signal_s0",
+            "label": "Ask Omar which bridge relays the signal",
+            "response": "Omar doesn't look up from the gears. 'The one that opens for no boat. It repeats whatever the lake sends. Identified. Don't answer it.'",
+            "next": null,
+            "advancesQuest": "q_chi_lake_signal",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "groundskeeper_signoff_chi_omar",
+            "label": "Present your circuit card for a countersign",
+            "response": "Omar Bell signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
+            "next": null,
+            "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -518,13 +767,40 @@
             "label": "Clock out",
             "response": "Keep the stub. It proves you were here and also that you were not scheduled.",
             "next": null
+          },
+          {
+            "id": "ask_ghost_punches",
+            "label": "Ask about the retired workers punching in",
+            "response": "Men who retired in the nineties punch in every night and load something. Leon dispatches the real freight. He'll know what the ghosts are moving.",
+            "next": null,
+            "grantsQuest": "q_chi_timeclock_ghosts"
+          },
+          {
+            "id": "q_chi_timeclock_ghosts_s1",
+            "label": "Deliver the traced roster",
+            "response": "Darnell files it under grievances. 'Ghost labor loading ghost freight. The union's got standing now. Thanks, steward.'",
+            "next": null,
+            "advancesQuest": "q_chi_timeclock_ghosts",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "foreman_signoff_chi_darnell",
+            "label": "Present your circuit card for a countersign",
+            "response": "Darnell Price checks the roster and punches your card. 'Chicago crew is accounted for. Keep the line moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              5
+            ]
           }
         ]
       }
     ]
   },
   {
-    "id": "bos_mae",
+    "id": "bos_marcus",
     "name": "Marcus Donnelly",
     "role": "Municipal Archivist, Boston Harbor",
     "region": "boston",
@@ -577,6 +853,36 @@
             "label": "Ask how deep the archive goes",
             "response": "Three floors below sea level and one floor below municipal memory.",
             "next": null
+          },
+          {
+            "id": "q_bos_recycling_minutes_s0",
+            "label": "Have Marcus verify the shredded pages",
+            "response": "Marcus cross-checks the watermark dates. 'Three sets shredded before their meetings. The archive remembers what the board forgets. Verified.'",
+            "next": null,
+            "advancesQuest": "q_bos_recycling_minutes",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "q_bos_tide_log_s0",
+            "label": "Check the gauge against the archive",
+            "response": "Marcus lays the log beside a page dated next spring. 'Matches next year's April. The harbor's running ahead of the calendar. Verified.'",
+            "next": null,
+            "advancesQuest": "q_bos_tide_log",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "clerk_signoff_bos_marcus",
+            "label": "Present your circuit card for a countersign",
+            "response": "Marcus Donnelly stamps your card without looking up. 'Filed. Countersigned. Never happened. Next window.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              3
+            ]
           }
         ]
       }
@@ -611,6 +917,40 @@
             "label": "Take the stairs",
             "response": "A practical choice. I cannot advise it officially.",
             "next": null
+          },
+          {
+            "id": "q_bos_platform_docket_s1",
+            "label": "Deliver the confirmed docket",
+            "response": "Priya stamps it. 'Proof of service. The platform may now legally exist on alternate Tuesdays. Counsel thanks you.'",
+            "next": null,
+            "advancesQuest": "q_bos_platform_docket",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_docket",
+            "label": "Ask about the platform's legal standing",
+            "response": "The city sued this platform and it failed to appear. I need proof the trains ran — service records, cross-checked by someone who watches the harbor rail line. Chowder watches everything.",
+            "next": null,
+            "grantsQuest": "q_bos_platform_docket"
+          },
+          {
+            "id": "join_financebro_circuit",
+            "label": "Ask about the finance circuit",
+            "response": "Three of us move money the cameras can't follow. Collect every countersign and the circuit slips you a marked-up prospectus. Read the margins.",
+            "next": null,
+            "grantsQuest": "q_financebro_circuit"
+          },
+          {
+            "id": "financebro_signoff_bos_priya",
+            "label": "Present your circuit card for a countersign",
+            "response": "Priya Shah initials in gel pen. 'Approved. Your account with the circuit is now... let's call it interest-bearing.'",
+            "next": null,
+            "advancesQuest": "q_financebro_circuit",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
@@ -645,6 +985,33 @@
             "label": "Exit through peer review",
             "response": "Two reviewers objected, so naturally you are approved.",
             "next": null
+          },
+          {
+            "id": "ask_recycling",
+            "label": "Ask about the early-shredded minutes",
+            "response": "Some minutes get recycled before the meeting that wrote them. Marcus keeps the harbor's real archive. He'll know which pages died young.",
+            "next": null,
+            "grantsQuest": "q_bos_recycling_minutes"
+          },
+          {
+            "id": "q_bos_recycling_minutes_s1",
+            "label": "Return the verified minutes",
+            "response": "Finn feeds them to the shredder, then stops. 'Habit. These ones we keep. Ethics, filed properly for once.'",
+            "next": null,
+            "advancesQuest": "q_bos_recycling_minutes",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "groundskeeper_signoff_bos_finn",
+            "label": "Present your circuit card for a countersign",
+            "response": "Finn O'Rourke signs with a muddy thumb. 'Counted. The hatch keys talk to each other, you know. Now they'll know you.'",
+            "next": null,
+            "advancesQuest": "q_groundskeeper_circuit",
+            "atStages": [
+              3
+            ]
           }
         ]
       }
@@ -681,7 +1048,7 @@
           },
           {
             "id": "read_common_record",
-            "label": "Inspect Marcuss watermarked page",
+            "label": "Inspect Marcus's watermarked page",
             "response": "Ultraviolet light reveals a Los Angeles film code. Marisol Vega will know which studio printed it.",
             "next": null,
             "advancesQuest": "q_bos_common_record",
@@ -704,6 +1071,16 @@
             "label": "Ask who watches the causeway",
             "response": "Customs watches cargo. Flock watches customs. The gulls watch everybody.",
             "next": null
+          },
+          {
+            "id": "fisherman_signoff_mia_sol",
+            "label": "Present your circuit card for a countersign",
+            "response": "Sol Navarro signs in salt pencil. 'The water vouches for you now. Tides know your name. Don't wear it out.'",
+            "next": null,
+            "advancesQuest": "q_fisherman_circuit",
+            "atStages": [
+              1
+            ]
           }
         ]
       }
@@ -738,6 +1115,33 @@
             "label": "Leave a dedication",
             "response": "I will play it after the weather alert and before the official correction.",
             "next": null
+          },
+          {
+            "id": "q_mia_storm_board_s1",
+            "label": "Return the verified board",
+            "response": "Camila pins it up. 'Verified by the swamp itself. Tonight the route is the truth. Tomorrow it's whatever they say. That's radio.'",
+            "next": null,
+            "advancesQuest": "q_mia_storm_board",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_storm_board",
+            "label": "Ask about the storm routes",
+            "response": "I broadcast storm routes by night and the city corrects them by morning. I need the water line verified by someone the swamp trusts. Sawgrass reads the Everglades like a ticker.",
+            "next": null,
+            "grantsQuest": "q_mia_storm_board"
+          },
+          {
+            "id": "rapper_signoff_mia_camila",
+            "label": "Present your circuit card for a countersign",
+            "response": "Camila Reyes drops a verse over your card. 'Signed on the off-beat. The circuit carries you now. Stay loud, stay low.'",
+            "next": null,
+            "advancesQuest": "q_rapper_circuit",
+            "atStages": [
+              2
+            ]
           }
         ]
       }
@@ -780,6 +1184,43 @@
             "label": "Back away from the waterline",
             "response": "Slowly. The alligators are not agents, but they do accept tips.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_mia_teo",
+            "label": "Present your census card for a countersign",
+            "response": "\"Sawgrass\" presses the card flat on dry peat. \"The water holds the last copy. You are the census now.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              11
+            ]
+          },
+          {
+            "id": "q_mia_storm_board_s0",
+            "label": "Have Sawgrass verify the water line",
+            "response": "Sawgrass presses a hand to the sawgrass. 'Water's where your board says. The city's map is a week behind. Verified.'",
+            "next": null,
+            "advancesQuest": "q_mia_storm_board",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "q_mia_shutter_permits_s0",
+            "label": "Have Sawgrass confirm the shutter timeline",
+            "response": "Sawgrass nods at the treeline. 'Shutters rose when the water did. Before the warning. The swamp told them first. Confirmed.'",
+            "next": null,
+            "advancesQuest": "q_mia_shutter_permits",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
@@ -822,6 +1263,33 @@
             "label": "Head back to the archive",
             "response": "We never spoke. The pier has no memory and excellent posture.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_bos_sal",
+            "label": "Present your census card for a countersign",
+            "response": "\"Chowder\" signs with a grease pencil. \"Filed between the catch and the tide. The harbor remembers.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              10
+            ]
+          },
+          {
+            "id": "q_bos_platform_docket_s0",
+            "label": "Have Chowder confirm the real trains",
+            "response": "Chowder checks against the tide log. 'Three ran. Two were weather. One was a rumor with a headlight. Confirmed.'",
+            "next": null,
+            "advancesQuest": "q_bos_platform_docket",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
@@ -864,6 +1332,33 @@
             "label": "Climb back to street level",
             "response": "You were never below. The stairs are a rumor. Remember that.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_chi_marlo",
+            "label": "Present your census card for a countersign",
+            "response": "\"Underpass\" signs on a pillar marked with old routes. \"Freight that never surfaces still moves. So do you.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              9
+            ]
+          },
+          {
+            "id": "q_chi_switch_shift_s0",
+            "label": "Ask Underpass about the phantom openings",
+            "response": "Underpass taps a pillar. 'Tuesdays and the fog. No boat either time. The bridge just wanted a look. Logged.'",
+            "next": null,
+            "advancesQuest": "q_chi_switch_shift",
+            "atStages": [
+              0
+            ]
           }
         ]
       }
@@ -906,6 +1401,346 @@
             "label": "Walk the shore",
             "response": "Stay in frame. It's safer when they think you're background.",
             "next": null
+          },
+          {
+            "id": "join_informant_census",
+            "label": "Ask about the informant census",
+            "response": "There's a headcount. There is no headcount. Sign in and visit every one of us — twelve of us, coast to coast — and the circuit owes you a badge. A plastic one. It's official.",
+            "next": null,
+            "grantsQuest": "q_informant_census"
+          },
+          {
+            "id": "census_signoff_la_reyes",
+            "label": "Present your census card for a countersign",
+            "response": "\"Reel\" signs in the dark between reels. \"Keep it off the record. This one stays in the can.\"",
+            "next": null,
+            "advancesQuest": "q_informant_census",
+            "atStages": [
+              8
+            ]
+          },
+          {
+            "id": "q_la_dub_roster_s0",
+            "label": "Have Reel flag the coded dedications",
+            "response": "Reel reads it by the projector light. 'These three are ships. These two are a divorce. This one is a camera asking for the night off. Flagged.'",
+            "next": null,
+            "advancesQuest": "q_la_dub_roster",
+            "atStages": [
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "la_nico",
+    "name": "Nico Brooks",
+    "role": "Longshore Union Recorder, San Pedro",
+    "region": "los_angeles",
+    "art": "clerk",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The cranes lift cargo. My ledger lifts the names they tried to erase.",
+        "options": [
+          {
+            "id": "ask_ledger",
+            "label": "Ask about the union ledger",
+            "response": "Every missing shift points to the same sealed yard and the same camera contractor.",
+            "next": null
+          },
+          {
+            "id": "ask_containers",
+            "label": "Ask which containers hum",
+            "response": "The empty ones. Full containers have nothing to prove.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Sign out of the port",
+            "response": "Use the blue pen. Black ink goes straight to management.",
+            "next": null
+          },
+          {
+            "id": "join_clerk_circuit",
+            "label": "Ask about the clerk circuit",
+            "response": "Seven desks, seven stamps, one form nobody admits exists. Collect every clerk's countersign and the circuit issues you a desk stamp of your own.",
+            "next": null,
+            "grantsQuest": "q_clerk_circuit"
+          },
+          {
+            "id": "clerk_signoff_la_nia",
+            "label": "Present your circuit card for a countersign",
+            "response": "Nico Brooks countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_clerk_circuit",
+            "atStages": [
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "den_mateo",
+    "name": "Mateo Ruiz",
+    "role": "Snowplow Radio Operator, Colfax Mile Marker",
+    "region": "denver",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "Snow covers every lane except the one the cameras requested first.",
+        "options": [
+          {
+            "id": "ask_plows",
+            "label": "Ask about the plow routes",
+            "response": "Officially we clear hospitals first. Unofficially we clear line of sight.",
+            "next": null
+          },
+          {
+            "id": "ask_radio",
+            "label": "Listen to the plow radio",
+            "response": "Half road reports, half camera maintenance, all classified as weather.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step away from the salt truck",
+            "response": "Watch your boots. The city invoices footprints by weight.",
+            "next": null
+          },
+          {
+            "id": "join_foreman_circuit",
+            "label": "Ask about the foreman circuit",
+            "response": "Eight of us keep the crews and the books. Get every foreman's countersign and the circuit owes you a punch card. Laminated. Union-made.",
+            "next": null,
+            "grantsQuest": "q_foreman_circuit"
+          },
+          {
+            "id": "foreman_signoff_den_mateo",
+            "label": "Present your circuit card for a countersign",
+            "response": "Mateo Ruiz countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "abq_elena",
+    "name": "Elena Chávez",
+    "role": "Diner Owner, Old Town Frequency Shop",
+    "region": "albuquerque",
+    "art": "boomer",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "I serve breakfast all day because the clocks keep changing their story.",
+        "options": [
+          {
+            "id": "ask_regulars",
+            "label": "Ask about the late-night regulars",
+            "response": "Rail crews, balloon crews, and one inspector who never orders food.",
+            "next": null
+          },
+          {
+            "id": "ask_receipts",
+            "label": "Inspect the receipt roll",
+            "response": "It prints radio coordinates after midnight. I charge them for coffee anyway.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Settle the check",
+            "response": "Cash is honest. Cards remember too much.",
+            "next": null
+          },
+          {
+            "id": "boomer_signoff_abq_elena",
+            "label": "Present your circuit card for a countersign",
+            "response": "Elena Chávez countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_boomer_circuit",
+            "atStages": [
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chi_yvette",
+    "name": "Yvette King",
+    "role": "Lake Radio Host, Lakefront Switchhouse",
+    "region": "chicago",
+    "art": "rapper",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The lake carries every signal east, then sends the interesting ones back.",
+        "options": [
+          {
+            "id": "ask_broadcast",
+            "label": "Ask about the overnight broadcast",
+            "response": "Weather, freight, blues, and names the official traffic report forgot.",
+            "next": null
+          },
+          {
+            "id": "ask_echo",
+            "label": "Ask about the lake echo",
+            "response": "It repeats Chicago clearly and adds one sentence from somewhere else.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Leave the request line",
+            "response": "I will play it when the bridge opens for nobody.",
+            "next": null
+          },
+          {
+            "id": "join_rapper_circuit",
+            "label": "Ask about the rapper circuit",
+            "response": "Four stations, four signals, one underground. Carry the track to every voice on the circuit, get the countersigns, and we cut you a demo.",
+            "next": null,
+            "grantsQuest": "q_rapper_circuit"
+          },
+          {
+            "id": "rapper_signoff_chi_yvette",
+            "label": "Present your circuit card for a countersign",
+            "response": "Yvette King countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_rapper_circuit",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "ask_lake_signal",
+            "label": "Ask about the signal off the lake",
+            "response": "Every night a signal washes in off the lake, salt-free and encrypted. Omar tends the bridge that repeats it. Find out which one and I can finally schedule around it.",
+            "next": null,
+            "grantsQuest": "q_chi_lake_signal"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bos_leo",
+    "name": "Leo Baptiste",
+    "role": "Harbor Fisherman, Boston Harbor Archive",
+    "region": "boston",
+    "art": "fisherman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "The harbor gives back everything except the paperwork that sank it.",
+        "options": [
+          {
+            "id": "ask_catch",
+            "label": "Ask what the nets caught",
+            "response": "Two cod, one camera housing, and a permit dated seventeen ninety-one.",
+            "next": null
+          },
+          {
+            "id": "ask_buoys",
+            "label": "Ask about the new buoys",
+            "response": "They mark the channel and count who looks at it.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Step off the pier",
+            "response": "Mind the gulls. They work for whoever has fries.",
+            "next": null
+          },
+          {
+            "id": "join_fisherman_circuit",
+            "label": "Ask about the fisherman circuit",
+            "response": "Three of us read the water for a living. Visit every fisherman, get the countersigns, and the circuit hands you the annotated tables.",
+            "next": null,
+            "grantsQuest": "q_fisherman_circuit"
+          },
+          {
+            "id": "fisherman_signoff_bos_leo",
+            "label": "Present your circuit card for a countersign",
+            "response": "Leo Baptiste countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_fisherman_circuit",
+            "atStages": [
+              0
+            ]
+          },
+          {
+            "id": "ask_tide_log",
+            "label": "Ask about the off tide",
+            "response": "The tide came in wrong twice this week. Wrong for this year, anyway. Marcus keeps records dated ahead of the water. Check my log against his.",
+            "next": null,
+            "grantsQuest": "q_bos_tide_log"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mia_lucia",
+    "name": "Lucía Torres",
+    "role": "Storm Shutter Contractor, Little Havana Dispatch",
+    "region": "miami",
+    "art": "foreman",
+    "start": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "line": "I board windows before storms and uncover cameras after them.",
+        "options": [
+          {
+            "id": "ask_shutters",
+            "label": "Ask which shutters are wired",
+            "response": "The free municipal ones. Nothing is free once it needs a network address.",
+            "next": null
+          },
+          {
+            "id": "ask_storms",
+            "label": "Ask about the last hurricane",
+            "response": "It removed three roofs and revealed seven antennas nobody owned.",
+            "next": null
+          },
+          {
+            "id": "leave",
+            "label": "Return the drill",
+            "response": "Keep the screws. After the next warning, every hardware store forgets them.",
+            "next": null
+          },
+          {
+            "id": "foreman_signoff_mia_lucia",
+            "label": "Present your circuit card for a countersign",
+            "response": "Lucía Torres countersigns your card. 'Counted on the circuit. Keep moving.'",
+            "next": null,
+            "advancesQuest": "q_foreman_circuit",
+            "atStages": [
+              1
+            ]
+          },
+          {
+            "id": "ask_shutter_permits",
+            "label": "Ask about the unpermitted shutters",
+            "response": "Half these shutters went up before the storm was named. Somebody warned the neighborhood early. Sawgrass reads the water before the news does. Confirm the timeline.",
+            "next": null,
+            "grantsQuest": "q_mia_shutter_permits"
           }
         ]
       }

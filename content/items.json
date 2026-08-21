@@ -131,5 +131,75 @@
     "description": "Adds 3 damage in cell encounters and reduces cell-operation suspicion by 2.",
     "rarity": "rare",
     "tradeable": false
+  },
+  {
+    "id": "honorary_spy_badge",
+    "name": "Honorary Spy Badge (Plastic)",
+    "description": "A badge from the informant circuit's unofficial census. Permanently reduces all suspicion gained from events by 1. It is plastic. It is official.",
+    "rarity": "rare",
+    "tradeable": false
+  },
+  {
+    "id": "union_punch_card",
+    "name": "Union Punch Card (Laminated)",
+    "description": "Foreman's circuit token. Recovers one extra unit of the primary material from environmental salvage.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "desk_stamp",
+    "name": "Self-Inking Desk Stamp",
+    "description": "Clerk circuit issue. Cuts the workbench licensing fee by 3 credits.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "grounds_master_key",
+    "name": "Groundskeeper's Master Key",
+    "description": "Opens every maintenance hatch on the circuit. Reduces suspicion from camera takedowns by 1.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "receipt_binder",
+    "name": "Weatherproof Receipt Binder",
+    "description": "Every purchase documented. Boomer circuit pride. Reduces market fees by 3%.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "demo_tape",
+    "name": "Demo Tape (Unmixed)",
+    "description": "Four tracks of raw circuit signal. Adds 1 damage in solo encounters.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "tide_tables",
+    "name": "Annotated Tide Tables",
+    "description": "Fisherman's circuit almanac. Reduces all travel costs by 10%.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "gallery_lanyard",
+    "name": "Gallery Lanyard (Opening Night)",
+    "description": "Artho circuit access pass. Improves espionage success odds by 5%.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "insider_prospectus",
+    "name": "Insider Prospectus (Marked Up)",
+    "description": "Finance circuit margin notes. Reduces market fees by a further 2% and looks excellent in a briefcase.",
+    "rarity": "uncommon",
+    "tradeable": false
+  },
+  {
+    "id": "lined_tinfoil_hat",
+    "name": "Tinfoil Hat (Lined)",
+    "description": "Schizo circuit standard. The lining is the difference. Reduces combat suspicion by 1.",
+    "rarity": "uncommon",
+    "tradeable": false
   }
 ]

@@ -12,6 +12,7 @@ import type {
 import {
   espionageOddsBonus,
   espionageSuspicionReduction,
+  eventSuspicionReduction,
   marketFeeReduction,
 } from "./item-effects.ts";
 
@@ -124,7 +125,8 @@ export function performEspionage(
       ...player,
       suspicion: player.suspicion + Math.max(
         0,
-        15 - espionageSuspicionReduction(player),
+        15 - espionageSuspicionReduction(player) -
+          eventSuspicionReduction(player),
       ),
       flags: [...player.flags, flag],
       // A second flag in the same region gets the player restricted from it.
@@ -151,7 +153,12 @@ export function performEspionage(
     currency: player.currency + payout,
     suspicion: Math.max(
       0,
-      player.suspicion + Math.max(0, 5 - espionageSuspicionReduction(player)),
+      player.suspicion +
+        Math.max(
+          0,
+          5 - espionageSuspicionReduction(player) -
+            eventSuspicionReduction(player),
+        ),
     ),
     intel: {
       ...player.intel,
