@@ -20,6 +20,8 @@ import {
   renderDialogueBlock,
   renderDialogueOptions,
   renderPage,
+  renderQuestAdvance,
+  renderQuestProgressNotifications,
   renderQuestReveal,
   renderQuestTurnIn,
   renderReset,
@@ -213,6 +215,19 @@ ${extra}
 </form>`;
 }
 
+function consumeQuestNotifications(player: Player): {
+  player: Player;
+  rendered: string;
+} {
+  const notifications = player.questNotifications ?? [];
+  return {
+    player: notifications.length > 0
+      ? { ...player, questNotifications: [] }
+      : player,
+    rendered: renderQuestProgressNotifications(notifications),
+  };
+}
+
 function authenticatedPlayer(headers: Headers): Promise<Player | null> {
   const token = sessionTokenFromCookie(headers.get("cookie"));
   return token ? getPlayerForSession(token) : Promise.resolve(null);
@@ -387,6 +402,11 @@ playRouter.get("/", async (context) => {
     context.response.body = renderOpening(player);
     return;
   }
+  const questProgress = consumeQuestNotifications(player);
+  if (questProgress.player !== player) {
+    player = questProgress.player;
+    await savePlayer(player);
+  }
   const region = await getRegion(player.region);
   if (!region) {
     context.response.status = 500;
@@ -422,6 +442,7 @@ playRouter.get("/", async (context) => {
     }/${PLAYER_HP} · suspicion ${player.suspicion}${
       postButton("logout", "End Session")
     }</div>
+${questProgress.rendered}
 <p class="eyebrow">${escapeHtml(region.name)}</p>
 <h2>${escapeHtml(location.name)}</h2>
 <p>${escapeHtml(location.description)}</p>
@@ -1396,12 +1417,15 @@ playRouter.post("/", async (context) => {
             { type: "espionage.success", region: player.region },
           ).player;
         }
+        const questProgress = consumeQuestNotifications(player);
+        player = questProgress.player;
         await savePlayer(player);
         context.response.type = "text/html";
         context.response.body = renderPage({
           title: "Fieldwork",
           body: `<h2>Fieldwork</h2>
 <p>${escapeHtml(outcome.narrative)}</p>
+${questProgress.rendered}
 ${
             outcome.success
               ? `<p>Intel in ${escapeHtml(region.name)}: ${
@@ -1502,6 +1526,8 @@ ${postButton("home", "Melt into the crowd")}`,
             },
           ).player;
         }
+        const questProgress = consumeQuestNotifications(player);
+        player = questProgress.player;
         await savePlayer(player);
         if (turn.state.status === "ongoing") {
           await saveEncounter(turn.state);
@@ -1512,6 +1538,7 @@ ${postButton("home", "Melt into the crowd")}`,
         context.response.body = renderPage({
           title: encounter.name,
           body: `<h2>${escapeHtml(encounter.name)}</h2>
+${questProgress.rendered}
 ${
             renderDialogueBlock(
               turn.state.quip
@@ -1705,12 +1732,12 @@ ${postButton("home", "Back")}
     }
 
     // Hidden quest reveal (spec §3.1): accept and announce only on selection.
-    let reveal: string | null = null;
+    const reveals: string[] = [];
     if (result.grantedQuest) {
       player = acceptQuest(player, result.grantedQuest);
       const objective = result.grantedQuest.stages[0]?.objective ??
         "Await instructions.";
-      reveal = renderQuestReveal(result.grantedQuest.title, objective);
+      reveals.push(renderQuestReveal(result.grantedQuest.title, objective));
     }
 
     // Stage progression / turn-in for held quests.
@@ -1724,11 +1751,23 @@ ${postButton("home", "Back")}
       const adv = advanceStage(player, result.advancesQuest);
       player = adv.player;
       if (adv.turnedIn) {
-        reveal = renderQuestTurnIn(
+        reveals.unshift(renderQuestTurnIn(
           result.advancesQuest.title,
           result.advancesQuest.rewards.currency,
           formatMaterials(result.advancesQuest.rewards.materials),
+        ));
+      } else if (adv.completedObjective) {
+        const state = player.quests.find((quest) =>
+          quest.questId === result.advancesQuest!.id
         );
+        const nextObjective = result.advancesQuest.stages[
+          state?.stageIndex ?? 0
+        ]?.objective ?? null;
+        reveals.unshift(renderQuestAdvance(
+          result.advancesQuest.title,
+          adv.completedObjective,
+          nextObjective,
+        ));
       }
     }
 
@@ -1738,7 +1777,7 @@ ${postButton("home", "Back")}
       speakerArt: npc.art,
       speakerName: npc.name,
       line: result.option.response,
-      reveal,
+      reveal: reveals.length > 0 ? reveals.join("\n") : null,
     }, player);
     return;
   }

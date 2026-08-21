@@ -99,6 +99,39 @@ ${
 </aside>`;
 }
 
+/** A one-shot notice shown when gameplay advances an accepted quest. */
+export function renderQuestAdvance(
+  questTitle: string,
+  completedObjective: string,
+  nextObjective: string | null,
+): string {
+  return `<aside class="quest-reveal quest-advance">
+<p class="quest-reveal-title">Quest Advanced: ${escapeHtml(questTitle)}</p>
+<p>Completed: ${escapeHtml(completedObjective)}</p>
+<p><strong>${
+    nextObjective
+      ? `Next: ${escapeHtml(nextObjective)}`
+      : "Assignment complete."
+  }</strong></p>
+</aside>`;
+}
+
+export function renderQuestProgressNotifications(
+  notifications: Array<{
+    questTitle: string;
+    completedObjective: string;
+    nextObjective: string | null;
+  }>,
+): string {
+  return notifications.map((notice) =>
+    renderQuestAdvance(
+      notice.questTitle,
+      notice.completedObjective,
+      notice.nextObjective,
+    )
+  ).join("\n");
+}
+
 /** A generic "start the conversation over" control (next === "reset"). */
 export function renderReset(npcId: string): string {
   return `<form method="post" action="/">

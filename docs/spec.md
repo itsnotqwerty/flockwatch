@@ -163,6 +163,9 @@ Requirements for implementation:
   espionage, encounter, boss, and cell-operation events are emitted only after
   their server-side action succeeds; matching event, region, and optional target
   advance the stage.
+- Every successful stage advance must render a one-shot notice containing the
+  quest title, completed objective, and next objective. Redirecting actions
+  persist the notice until the destination page consumes it.
 - The quest log must distinguish `accepted`, `completed`, and `failed` quests;
   undiscovered quests are never listed.
 

@@ -97,6 +97,27 @@ Deno.test("untouched pre-opening mill spawns migrate into the introduction", asy
   assertEquals(migrated?.location, "memorial_park_service_tunnel");
 });
 
+Deno.test("completed provisional saves receive the missing national quest", async () => {
+  const store = createMemoryStore();
+  const existing = {
+    ...defaultPlayer("handoff", "Provisional Citizen"),
+    openingStep: "complete" as const,
+    inventory: ["temporary_flock_credential"],
+    quests: [{
+      questId: "q_provisional_existence",
+      status: "completed" as const,
+      stageIndex: 2,
+    }],
+  };
+  await store.set(["players", existing.id], existing);
+
+  const migrated = await getPlayer(existing.id, store);
+  assertEquals(
+    migrated?.quests.find((quest) => quest.questId === "q_the_discrepancy"),
+    { questId: "q_the_discrepancy", status: "accepted", stageIndex: 0 },
+  );
+});
+
 Deno.test("legacy player regions migrate to city ids and a valid sublocation", async () => {
   const store = createMemoryStore();
   await store.set(["players", "legacy"], {

@@ -33,6 +33,11 @@ crafting, camera work, market activity, combat, and the Boston fight against
 Regional Director Hale. The final return to Cleveland offers five permanent
 narrative dispositions for the player's identity record.
 
+Every quest-changing action produces a one-shot notification naming the quest,
+the objective just completed, and the next required objective. Redirecting
+activities show it on the returned world screen; fieldwork, combat, and dialogue
+show it directly in their result panels.
+
 ### Dialogue
 
 In-game dialogue and character rendering is handled by an implementation of

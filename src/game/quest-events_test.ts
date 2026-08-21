@@ -63,6 +63,13 @@ Deno.test("quest events advance only a matching action in the required region", 
   });
   assertEquals(matched.player.quests[0].stageIndex, 1);
   assertEquals(matched.advancedQuestIds, [quest.id]);
+  assertEquals(matched.notifications, [{
+    questId: quest.id,
+    questTitle: quest.title,
+    completedObjective: "Install in Cleveland.",
+    nextObjective: "Return to the clerk.",
+  }]);
+  assertEquals(matched.player.questNotifications, matched.notifications);
 });
 
 Deno.test("dialogue-only stages ignore gameplay events", () => {
@@ -74,6 +81,7 @@ Deno.test("dialogue-only stages ignore gameplay events", () => {
   });
   assertEquals(result.player.quests[0].stageIndex, 1);
   assertEquals(result.advancedQuestIds, []);
+  assertEquals(result.notifications, []);
 });
 
 Deno.test("Cleveland onboarding awards the travel credential and opens the campaign", () => {
@@ -106,21 +114,21 @@ Deno.test("Cleveland onboarding awards the travel credential and opens the campa
     current,
     quests,
   )!;
+  assertEquals(issue.grantedQuest?.id, "q_the_discrepancy");
+  current = acceptQuest(current, issue.grantedQuest!);
   current = advanceStage(current, issue.advancesQuest!).player;
   assertEquals(current.quests[0].status, "completed");
   assertEquals(current.inventory.includes("temporary_flock_credential"), true);
   assertEquals(
-    availableOptions(clerk, "start", current).some((option) =>
-      option.id === "open_continuity_case"
-    ),
-    true,
+    current.quests.find((held) => held.questId === "q_the_discrepancy")?.status,
+    "accepted",
+  );
+  assertEquals(
+    issue.grantedQuest?.stages[0].requirement?.region,
+    "new_orleans",
   );
 
   // The five dispositions stay unavailable until the last national stage.
-  current = acceptQuest(
-    current,
-    quests.find((candidate) => candidate.id === "q_the_discrepancy")!,
-  );
   assertEquals(
     availableOptions(clerk, "start", current).some((option) =>
       option.setsIdentityResolution

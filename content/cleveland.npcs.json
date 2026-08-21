@@ -118,17 +118,17 @@
           {
             "id": "issue_temporary_credential",
             "label": "Present the recovered camera serial plate",
-            "response": "You have demonstrated reversible employment. This badge makes you provisionally real in all twelve jurisdictions. Do not lose it.",
+            "response": "You have demonstrated reversible employment. This badge makes you provisionally real. Your Continuity case is now open: begin in New Orleans and reconcile every jurisdictional record.",
             "next": null,
+            "grantsQuest": "q_the_discrepancy",
             "advancesQuest": "q_provisional_existence",
             "atStages": [2]
           },
           {
             "id": "open_continuity_case",
-            "label": "Ask why the credential calls you provisional",
-            "response": "Every jurisdiction has a different record of you. Gather proof through their own systems. When all records agree, decide which truth survives.",
+            "label": "Review the Continuity case",
+            "response": "Every jurisdiction has a different record of you. Begin with successful fieldwork in New Orleans. The assignment log carries the complete route.",
             "next": null,
-            "grantsQuest": "q_the_discrepancy",
             "requiresQuestCompleted": "q_provisional_existence"
           },
           {

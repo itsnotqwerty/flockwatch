@@ -43,7 +43,7 @@
     "hidden": true,
     "trigger": {
       "npc": "clerk",
-      "dialogueOption": "open_continuity_case"
+      "dialogueOption": "issue_temporary_credential"
     },
     "stages": [
       {

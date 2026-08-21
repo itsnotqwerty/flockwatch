@@ -45,6 +45,12 @@ function needsOpeningMigration(raw: Player): boolean {
 function normalizePlayer(raw: Player): Player {
   const region = LEGACY_REGIONS[raw.region] ?? raw.region;
   const migrateOpening = needsOpeningMigration(raw);
+  const heldQuests = raw.quests ?? [];
+  const needsDiscrepancyHandoff =
+    heldQuests.some((quest) =>
+      quest.questId === "q_provisional_existence" &&
+      quest.status === "completed"
+    ) && !heldQuests.some((quest) => quest.questId === "q_the_discrepancy");
   return {
     ...raw,
     region,
@@ -52,6 +58,14 @@ function normalizePlayer(raw: Player): Player {
       ? CLEVELAND_MEMORIAL_PARK
       : raw.location ?? DEFAULT_LOCATIONS[region] ?? "cuyahoga_rolling_mill",
     openingStep: raw.openingStep ?? (migrateOpening ? "letter" : "complete"),
+    quests: needsDiscrepancyHandoff
+      ? [...heldQuests, {
+        questId: "q_the_discrepancy",
+        status: "accepted",
+        stageIndex: 0,
+      }]
+      : heldQuests,
+    questNotifications: raw.questNotifications ?? [],
     flags: raw.flags ?? [],
     intel: raw.intel ?? {},
     restricted: raw.restricted ?? [],
@@ -73,6 +87,7 @@ export function defaultPlayer(id: string, name: string): Player {
     region: "cleveland",
     location: CLEVELAND_MEMORIAL_PARK,
     quests: [],
+    questNotifications: [],
     openingStep: "letter",
     flags: [],
     intel: {},

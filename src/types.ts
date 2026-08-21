@@ -42,6 +42,13 @@ export interface QuestEvent {
   target?: string;
 }
 
+export interface QuestProgressNotification {
+  questId: string;
+  questTitle: string;
+  completedObjective: string;
+  nextObjective: string | null;
+}
+
 export interface QuestRewards {
   currency: number;
   items: string[];
@@ -473,6 +480,8 @@ export interface Player {
   /** Current travelable sublocation within `region`. */
   location: string;
   quests: PlayerQuest[];
+  /** One-shot notices consumed by the next rendered gameplay response. */
+  questNotifications?: QuestProgressNotification[];
   /** New-character narrative sequence; legacy saves normalize to complete. */
   openingStep?: OpeningStep;
   /** End-state selected when the national Continuity case is resolved. */
