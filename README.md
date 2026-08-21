@@ -24,8 +24,8 @@ to what NPCs say — the deepstate rewards the observant and files away the rest
 
 ### Dialogue
 
-In-game dialogue and character rendering is handled by
-[`grillsay`](tools/grillsay/README.md), a `cowsay`-style engine in which every
+In-game dialogue and character rendering is handled by an implementation of
+[`grillsay`](https://github.com/itsnotqwerty/grillsay), a `cowsay`-style engine in which every
 character is delivered with the gravitas of a man guarding his lawn. Dialogue
 lines are word-wrapped into speech bubbles above the character art.
 
@@ -103,12 +103,24 @@ deno task start
 
 Then open [http://localhost:8000](http://localhost:8000).
 
+### Persistence
+
+Game state is stored in Supabase (Postgres) when configured, with Deno KV as
+the local fallback. To use Supabase:
+
+1. Create a project at [supabase.com](https://supabase.com) and run
+   [supabase/schema.sql](supabase/schema.sql) in the SQL editor.
+2. Copy [.env.example](.env.example) to `.env` and set `SUPABASE_URL` and
+   `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE_SECRET_KEY`).
+3. To move existing KV data over, run `deno task migrate-to-supabase` with the
+   same environment set. Note that sessions are copied without their expiry, so
+   players may need to log in again.
+
 ## Documentation
 
 - [docs/spec.md](docs/spec.md) — technical and game design specification
 - [docs/design.md](docs/design.md) — design notes
 - [docs/roadmap.md](docs/roadmap.md) — planned features and milestones
-- [tools/grillsay/README.md](tools/grillsay/README.md) — the dialogue engine
 
 ## Contributing
 
