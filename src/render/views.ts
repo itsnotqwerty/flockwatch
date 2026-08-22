@@ -132,6 +132,60 @@ export function renderQuestProgressNotifications(
   ).join("\n");
 }
 
+export interface QuestJournalEntry {
+  id: string;
+  title: string;
+  status: "accepted" | "completed" | "failed";
+  objective: string;
+  shareable: boolean;
+}
+
+export function renderQuestJournal(entries: QuestJournalEntry[]): string {
+  const renderEntries = (
+    filtered: QuestJournalEntry[],
+    emptyMessage: string,
+  ): string =>
+    filtered.length
+      ? filtered.map((entry) =>
+        `<li><strong>${escapeHtml(entry.title)}</strong> — ${
+          escapeHtml(entry.objective)
+        }${
+          entry.shareable
+            ? `<form method="post" action="/">
+  <input type="hidden" name="a" value="share_quest">
+  <input type="hidden" name="quest" value="${escapeHtml(entry.id)}">
+  <button type="submit" class="link-button">Share with nearby cell</button>
+</form>`
+            : ""
+        }</li>`
+      ).join("\n")
+      : `<li class="quest-log-empty">${emptyMessage}</li>`;
+
+  const active = entries.filter((entry) => entry.status !== "completed");
+  const completed = entries.filter((entry) => entry.status === "completed");
+  return `<section class="quest-journal" data-tabs>
+<div class="quest-tabs" role="tablist" aria-label="Quest journal">
+  <button type="button" role="tab" id="active-quests-tab" aria-selected="true" aria-controls="active-quests">Active <span>${active.length}</span></button>
+  <button type="button" role="tab" id="completed-quests-tab" aria-selected="false" aria-controls="completed-quests" tabindex="-1">Completed <span>${completed.length}</span></button>
+</div>
+<section role="tabpanel" id="active-quests" aria-labelledby="active-quests-tab">
+  <ul class="quest-log">
+${
+    renderEntries(
+      active,
+      "No active assignments. You have not asked the right questions yet.",
+    )
+  }
+  </ul>
+</section>
+<section role="tabpanel" id="completed-quests" aria-labelledby="completed-quests-tab" hidden>
+  <ul class="quest-log">
+${renderEntries(completed, "No completed assignments.")}
+  </ul>
+</section>
+</section>`;
+}
+
 /** A generic "start the conversation over" control (next === "reset"). */
 export function renderReset(npcId: string): string {
   return `<form method="post" action="/">

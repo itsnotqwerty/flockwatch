@@ -1,6 +1,7 @@
 import { assert, assertEquals } from "$assert";
 import {
   renderPage,
+  renderQuestJournal,
   renderQuestProgressNotifications,
   renderReset,
 } from "./views.ts";
@@ -36,4 +37,52 @@ Deno.test("quest progress notices identify the completed and next objectives", (
   assert(notice.includes("Quest Advanced: The Discrepancy"));
   assert(notice.includes("Completed: Recover the New Orleans trace."));
   assert(notice.includes("Next: Craft an artifact in Seattle."));
+});
+
+Deno.test("quest journal separates active and completed assignments", () => {
+  const journal = renderQuestJournal([
+    {
+      id: "active_quest",
+      title: "Current Business",
+      status: "accepted",
+      objective: "File the form.",
+      shareable: true,
+    },
+    {
+      id: "completed_quest",
+      title: "Filed Business",
+      status: "completed",
+      objective: "Completed. The Forms thank you.",
+      shareable: false,
+    },
+  ]);
+
+  assert(journal.includes('id="active-quests-tab" aria-selected="true"'));
+  assert(journal.includes('id="completed-quests"'));
+  assert(
+    journal.includes(
+      'id="completed-quests" aria-labelledby="completed-quests-tab" hidden',
+    ),
+  );
+  assert(/id="active-quests"[^]*Current Business[^]*<\/section>/.test(journal));
+  assert(
+    /id="completed-quests"[^]*Filed Business[^]*<\/section>/.test(journal),
+  );
+  assertEquals(journal.match(/name="a" value="share_quest"/g)?.length, 1);
+});
+
+Deno.test("quest journal renders empty states and escapes quest text", () => {
+  const empty = renderQuestJournal([]);
+  assert(empty.includes("No active assignments."));
+  assert(empty.includes("No completed assignments."));
+
+  const journal = renderQuestJournal([{
+    id: "quest_1",
+    title: "Forms < Birds",
+    status: "failed",
+    objective: 'Retry the "filing".',
+    shareable: false,
+  }]);
+  assert(journal.includes("Forms &lt; Birds"));
+  assert(journal.includes("Retry the &quot;filing&quot;."));
 });

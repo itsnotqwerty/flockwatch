@@ -32,4 +32,32 @@
       }
     }
   });
+
+  for (const tabs of document.querySelectorAll("[data-tabs]")) {
+    const buttons = [...tabs.querySelectorAll('[role="tab"]')];
+    const selectTab = (selected) => {
+      for (const button of buttons) {
+        const isSelected = button === selected;
+        button.setAttribute("aria-selected", String(isSelected));
+        button.tabIndex = isSelected ? 0 : -1;
+        const panel = document.getElementById(button.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !isSelected;
+      }
+    };
+
+    for (const [index, button] of buttons.entries()) {
+      button.addEventListener("click", () => selectTab(button));
+      button.addEventListener("keydown", (event) => {
+        let nextIndex;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % buttons.length;
+        if (event.key === "ArrowLeft") nextIndex = (index - 1 + buttons.length) % buttons.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = buttons.length - 1;
+        if (nextIndex === undefined) return;
+        event.preventDefault();
+        selectTab(buttons[nextIndex]);
+        buttons[nextIndex].focus();
+      });
+    }
+  }
 })();

@@ -415,6 +415,47 @@ ul.quest-log li {
   border-bottom: 1px dotted var(--line);
 }
 
+.quest-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.quest-tabs button {
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  padding: 0.55rem 0.75rem;
+}
+
+.quest-tabs button:hover,
+.quest-tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--stamp);
+}
+
+.quest-tabs button:focus-visible {
+  outline: 2px solid var(--stamp);
+  outline-offset: 2px;
+}
+
+.quest-tabs span {
+  display: inline-block;
+  min-width: 1.5rem;
+  margin-left: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  background: var(--panel-2);
+  color: var(--ink);
+  text-align: center;
+}
+
+.quest-log-empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
 /* generic forms stack with breathing room */
 main form {
   margin: 0.5rem 0;

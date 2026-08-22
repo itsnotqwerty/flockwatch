@@ -21,6 +21,7 @@ import {
   renderDialogueOptions,
   renderPage,
   renderQuestAdvance,
+  renderQuestJournal,
   renderQuestProgressNotifications,
   renderQuestReveal,
   renderQuestTurnIn,
@@ -1587,32 +1588,19 @@ ${postButton("home", "Continue")}`,
     const player = await ensurePlayer(authenticated.id, authenticated.name);
     const cell = await getCellForPlayer(player.id);
     const entries = visibleQuests(player, await getQuests());
-    const items = entries.length
-      ? entries
-        .map(
-          (e) =>
-            `<li><strong>${e.quest.title}</strong> [${e.state.status}] — ${
-              escapeHtml(objectiveText(e))
-            }${
-              cell && e.state.status === "accepted"
-                ? `<form method="post" action="/">
-  <input type="hidden" name="a" value="share_quest">
-  <input type="hidden" name="quest" value="${escapeHtml(e.quest.id)}">
-  <button type="submit" class="link-button">Share with nearby cell</button>
-</form>`
-                : ""
-            }</li>`,
-        )
-        .join("\n")
-      : `<li>No assignments. You have not asked the right questions yet.</li>`;
+    const journal = renderQuestJournal(entries.map((entry) => ({
+      id: entry.quest.id,
+      title: entry.quest.title,
+      status: entry.state.status,
+      objective: objectiveText(entry),
+      shareable: Boolean(cell) && entry.state.status === "accepted",
+    })));
     context.response.type = "text/html";
     context.response.body = renderPage({
       title: "Assignments",
       body: `<h2>Your Assignments</h2>
 <p>Funds: ${player.currency} credits</p>
-<ul class="quest-log">
-${items}
-</ul>
+${journal}
 ${postButton("home", "Back")}`,
     });
     return;
