@@ -11,6 +11,7 @@ import {
   authSendRecovery,
   authSignUp,
   authUpdatePassword,
+  installAuthEmailStub,
   installAuthFetchStub,
 } from "./supabase-auth.ts";
 
@@ -55,6 +56,7 @@ export function resetAuthStub(): void {
 
 /** Test hook: wire fetch so GoTrue calls hit the in-memory stub. */
 export function installAuthStub(): void {
+  installAuthEmailStub(() => Promise.resolve());
   installAuthFetchStub((input, init) => {
     const url = new URL(String(input));
     const body = init?.body ? JSON.parse(String(init.body)) : {};
@@ -65,18 +67,29 @@ export function installAuthStub(): void {
           headers: { "Content-Type": "application/json" },
         }),
       );
-    if (url.pathname.endsWith("/signup")) {
+    if (url.pathname.endsWith("/admin/generate_link")) {
       const email = String(body.email ?? "").toLowerCase();
-      if (stubUsers.has(email)) {
-        return json({ msg: "User already registered" }, 422);
+      if (body.type === "signup") {
+        if (stubUsers.has(email)) {
+          return json({ msg: "User already registered" }, 422);
+        }
+        const user = {
+          id: crypto.randomUUID(),
+          email,
+          password: String(body.password ?? ""),
+        };
+        stubUsers.set(email, user);
+        return json({
+          action_link: "https://auth.stub/verify?type=signup&token=stub",
+          user: { id: user.id, email: user.email },
+        });
       }
-      const user = {
-        id: crypto.randomUUID(),
-        email,
-        password: String(body.password ?? ""),
-      };
-      stubUsers.set(email, user);
-      return json({ user: { id: user.id, email: user.email } });
+      if (body.type === "recovery" && stubUsers.has(email)) {
+        return json({
+          action_link: "https://auth.stub/verify?type=recovery&token=stub",
+        });
+      }
+      return json({ msg: "User not found" }, 404);
     }
     if (url.pathname.includes("/token")) {
       const email = String(body.email ?? "").toLowerCase();
@@ -89,9 +102,6 @@ export function installAuthStub(): void {
         refresh_token: "stub_refresh",
         user: { id: user.id, email: user.email },
       });
-    }
-    if (url.pathname.endsWith("/recover")) {
-      return json({});
     }
     if (url.pathname.endsWith("/user") && init?.method === "PUT") {
       const token = String(
@@ -237,11 +247,11 @@ export async function logIn(
   return { ok: true, reason: null, account, session, player };
 }
 
-// ── Password reset (Supabase recovery email + access token) ────────────────
+// ── Password reset (Resend delivery + Supabase access token) ───────────────
 
 /**
- * Ask Supabase Auth to email a recovery link. Always resolves — callers
- * render the same response whether or not the email exists.
+ * Generate a Supabase recovery link and deliver it through Resend. Always
+ * resolves so callers render the same response whether the email exists.
  */
 export async function requestPasswordReset(emailInput: string): Promise<void> {
   const email = normalizeEmail(emailInput);

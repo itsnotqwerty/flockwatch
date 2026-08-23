@@ -7,12 +7,14 @@ import {
   logIn,
   normalizeCharacterName,
   normalizeEmail,
+  requestPasswordReset,
   resetAuthStub,
   resetPassword,
   sessionCookie,
   sessionTokenFromCookie,
   signUp,
 } from "./accounts.ts";
+import { installAuthEmailStub } from "./supabase-auth.ts";
 import { createMemoryStore } from "./store.ts";
 
 // Route GoTrue calls to the in-memory stub (no network in tests).
@@ -84,6 +86,34 @@ Deno.test("signup creates an email account and rejects duplicates", async () => 
   assert(!dupName.ok);
   const short = await signUp("new@example.com", "short", "New Name", store);
   assert(!short.ok);
+});
+
+Deno.test("signup and recovery emails use generated Supabase links", async () => {
+  resetAuthStub();
+  const messages: Array<{ to: string; subject: string; html: string }> = [];
+  installAuthEmailStub((message) => {
+    messages.push(message);
+    return Promise.resolve();
+  });
+
+  try {
+    await signUp(
+      "jane@example.com",
+      "correct horse battery",
+      "Citizen Jane",
+      createMemoryStore(),
+    );
+    await requestPasswordReset("jane@example.com");
+
+    assertEquals(messages.length, 2);
+    assertEquals(messages[0].to, "jane@example.com");
+    assert(messages[0].subject.includes("Confirm"));
+    assert(messages[0].html.includes("type=signup&amp;token=stub"));
+    assert(messages[1].subject.includes("Reset"));
+    assert(messages[1].html.includes("type=recovery&amp;token=stub"));
+  } finally {
+    installAuthEmailStub(() => Promise.resolve());
+  }
 });
 
 Deno.test("login verifies the password and opens a session", async () => {

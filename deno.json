@@ -9,7 +9,8 @@
   },
   "imports": {
     "oak": "npm:@oakserver/oak",
-    "$assert": "jsr:@std/assert"
+    "$assert": "jsr:@std/assert",
+    "resend": "npm:resend"
   },
   "exclude": [
     "**/*.js"

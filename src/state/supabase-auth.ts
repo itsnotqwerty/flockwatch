@@ -1,11 +1,9 @@
 /**
  * Minimal client for Supabase Auth (GoTrue) over its REST API.
- * Server-side only — uses the service role key for admin operations and the
- * anon key (or service key as fallback) for user-facing endpoints.
- *
- * Tests set FLOCKWATCH_AUTH=stub and intercept fetch via
- * installAuthFetchStub, so no network is required.
+ * Supabase owns credentials and generates action links; Resend delivers them.
  */
+
+import { Resend } from "resend";
 
 export interface AuthUser {
   id: string;
@@ -18,13 +16,29 @@ export interface AuthTokens {
   user: AuthUser;
 }
 
+export interface EmailResponse {
+  id: string;
+}
+
 type FetchLike = typeof fetch;
+type SendEmail = (message: {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+}) => Promise<void>;
 
 let fetchStub: FetchLike | null = null;
+let emailStub: SendEmail | null = null;
 
 /** Test hook: replace the fetch used to reach GoTrue. */
 export function installAuthFetchStub(stub: FetchLike | null): void {
   fetchStub = stub;
+}
+
+/** Test hook: replace Resend delivery. */
+export function installAuthEmailStub(stub: SendEmail | null): void {
+  emailStub = stub;
 }
 
 function baseUrl(): string | null {
@@ -38,6 +52,56 @@ function anonKey(): string {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ??
     Deno.env.get("SUPABASE_SECRET_KEY") ??
     "";
+}
+
+function serviceKey(): string {
+  return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ??
+    Deno.env.get("SUPABASE_SECRET_KEY") ??
+    "";
+}
+
+function origin(): string {
+  return (Deno.env.get("MAIL_ORIGIN_URL") ?? "http://localhost:8000").replace(
+    /\/$/,
+    "",
+  );
+}
+
+function emailFrom(): string {
+  return Deno.env.get("RESEND_FROM_EMAIL") ??
+    "FlockWatch <noreply@coolfreakingames.dev>";
+}
+
+function escapeHtml(value: string): string {
+  return value.replaceAll("&", "&amp;").replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+async function sendEmail(
+  to: string,
+  subject: string,
+  linkLabel: string,
+  actionLink: string,
+): Promise<void> {
+  const message = {
+    from: emailFrom(),
+    to,
+    subject,
+    html: `<p>${linkLabel} <a href="${
+      escapeHtml(actionLink)
+    }">this link</a>.</p>`,
+  };
+  if (emailStub) {
+    await emailStub(message);
+    return;
+  }
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  if (!apiKey) {
+    console.error("email delivery failed: RESEND_API_KEY is not configured");
+    return;
+  }
+  const { error } = await new Resend(apiKey).emails.send(message);
+  if (error) console.error("email delivery failed:", error.message);
 }
 
 async function call(
@@ -91,7 +155,15 @@ export async function authSignUp(
   email: string,
   password: string,
 ): Promise<{ user: AuthUser | null; error: string | null }> {
-  const { status, data } = await call("/signup", { body: { email, password } });
+  const { status, data } = await call("/admin/generate_link", {
+    key: serviceKey(),
+    body: {
+      type: "signup",
+      email,
+      password,
+      redirect_to: origin(),
+    },
+  });
   if (status === 0) {
     return {
       user: null,
@@ -106,9 +178,19 @@ export async function authSignUp(
   }
   const user = data?.user?.id
     ? { id: data.user.id, email: data.user.email ?? email }
-    : data?.id
-    ? { id: data.id, email: data.email ?? email }
     : null;
+  if (user && data?.action_link) {
+    try {
+      await sendEmail(
+        user.email,
+        "Confirm your FlockWatch account",
+        "Confirm your email by opening",
+        data.action_link,
+      );
+    } catch (error) {
+      console.error("email delivery failed:", error);
+    }
+  }
   return { user, error: user ? null : "Signup failed." };
 }
 
@@ -133,9 +215,27 @@ export async function authLogIn(
   return { tokens, error: tokens ? null : "Invalid email or password." };
 }
 
-/** Send a recovery (password reset) email. Always succeeds silently. */
+/** Generate and send a recovery link through Resend. Always succeeds silently. */
 export async function authSendRecovery(email: string): Promise<void> {
-  await call("/recover", { body: { email } });
+  const { status, data } = await call("/admin/generate_link", {
+    key: serviceKey(),
+    body: {
+      type: "recovery",
+      email,
+      redirect_to: `${origin()}/?reset_token=pending`,
+    },
+  });
+  if (status >= 400 || !data?.action_link) return;
+  try {
+    await sendEmail(
+      email,
+      "Reset your FlockWatch password",
+      "Reset your password by opening",
+      data.action_link,
+    );
+  } catch (error) {
+    console.error("email delivery failed:", error);
+  }
 }
 
 /** Set a new password using the access token from the recovery link. */

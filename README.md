@@ -133,7 +133,10 @@ local fallback. To use Supabase:
    [supabase/schema.sql](supabase/schema.sql) in the SQL editor.
 2. Copy [.env.example](.env.example) to `.env` and set `SUPABASE_URL` and
    `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE_SECRET_KEY`).
-3. To move existing KV data over, run `deno task migrate-to-supabase` with the
+3. Set `SUPABASE_ANON_KEY`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and
+   `MAIL_ORIGIN_URL` for account login and Resend-delivered signup/recovery links.
+   Add `MAIL_ORIGIN_URL` to the allowed redirect URLs in Supabase Auth settings.
+4. To move existing KV data over, run `deno task migrate-to-supabase` with the
    same environment set. Existing sessions retain their recorded expiry; legacy
    sessions without one expire 30 days after creation.
 
