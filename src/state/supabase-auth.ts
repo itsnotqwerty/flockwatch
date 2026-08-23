@@ -231,7 +231,7 @@ export async function authSendRecovery(email: string): Promise<void> {
     await sendEmail(
       email,
       "Reset your FlockWatch password",
-      "Reset your password by opening",
+      "A password reset has been requested for your account. To reset your password, please click",
       resetUrl.toString(),
     );
   } catch (error) {

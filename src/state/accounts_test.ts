@@ -111,7 +111,11 @@ Deno.test("signup and recovery emails use generated Supabase links", async () =>
     assert(messages[0].subject.includes("Confirm"));
     assert(messages[0].html.includes("type=signup&amp;token=stub"));
     assert(messages[1].subject.includes("Reset"));
+    assert(messages[1].html.startsWith(
+      '<p>A password reset has been requested for your account. To reset your password, please click <a href="',
+    ));
     assert(messages[1].html.includes("/?reset_token=stub_recovery_"));
+    assert(messages[1].html.endsWith('">this link</a>.</p>'));
     assert(!messages[1].html.includes("#access_token"));
   } finally {
     installAuthEmailStub(() => Promise.resolve());
