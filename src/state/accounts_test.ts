@@ -13,6 +13,7 @@ import {
   sessionCookie,
   sessionTokenFromCookie,
   signUp,
+  verifyPasswordResetToken,
 } from "./accounts.ts";
 import { installAuthEmailStub } from "./supabase-auth.ts";
 import { createMemoryStore } from "./store.ts";
@@ -110,7 +111,8 @@ Deno.test("signup and recovery emails use generated Supabase links", async () =>
     assert(messages[0].subject.includes("Confirm"));
     assert(messages[0].html.includes("type=signup&amp;token=stub"));
     assert(messages[1].subject.includes("Reset"));
-    assert(messages[1].html.includes("type=recovery&amp;token=stub"));
+    assert(messages[1].html.includes("/?reset_token=stub_recovery_"));
+    assert(!messages[1].html.includes("#access_token"));
   } finally {
     installAuthEmailStub(() => Promise.resolve());
   }
@@ -145,12 +147,13 @@ Deno.test("password reset via recovery access token", async () => {
   const store = createMemoryStore();
   await signUp("jane@example.com", "old password 1", "Citizen Jane", store);
 
-  // The recovery link carries the access token; the stub issues
-  // "stub_access_<userId>" on login, and PUT /user accepts it.
   const login = await logIn("jane@example.com", "old password 1", store);
   assert(login.ok);
   const account = login.account!;
-  const token = `stub_access_${account.authUserId}`;
+  const token = await verifyPasswordResetToken(
+    `stub_recovery_${account.authUserId}`,
+  );
+  assert(token);
 
   const short = await resetPassword(token, "short");
   assert(!short.ok);

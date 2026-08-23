@@ -222,20 +222,32 @@ export async function authSendRecovery(email: string): Promise<void> {
     body: {
       type: "recovery",
       email,
-      redirect_to: `${origin()}/?reset_token=pending`,
     },
   });
-  if (status >= 400 || !data?.action_link) return;
+  if (status >= 400 || !data?.hashed_token) return;
+  const resetUrl = new URL(origin());
+  resetUrl.searchParams.set("reset_token", data.hashed_token);
   try {
     await sendEmail(
       email,
       "Reset your FlockWatch password",
       "Reset your password by opening",
-      data.action_link,
+      resetUrl.toString(),
     );
   } catch (error) {
     console.error("email delivery failed:", error);
   }
+}
+
+/** Exchange an app-delivered recovery token for a Supabase access token. */
+export async function authVerifyRecovery(
+  tokenHash: string,
+): Promise<string | null> {
+  const { status, data } = await call("/verify", {
+    body: { type: "recovery", token_hash: tokenHash },
+  });
+  if (status >= 400) return null;
+  return toTokens(data)?.accessToken ?? null;
 }
 
 /** Set a new password using the access token from the recovery link. */

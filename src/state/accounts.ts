@@ -11,6 +11,7 @@ import {
   authSendRecovery,
   authSignUp,
   authUpdatePassword,
+  authVerifyRecovery,
   installAuthEmailStub,
   installAuthFetchStub,
 } from "./supabase-auth.ts";
@@ -85,11 +86,23 @@ export function installAuthStub(): void {
         });
       }
       if (body.type === "recovery" && stubUsers.has(email)) {
+        const user = stubUsers.get(email)!;
         return json({
-          action_link: "https://auth.stub/verify?type=recovery&token=stub",
+          hashed_token: `stub_recovery_${user.id}`,
         });
       }
       return json({ msg: "User not found" }, 404);
+    }
+    if (url.pathname.endsWith("/verify") && body.type === "recovery") {
+      const user = [...stubUsers.values()].find((candidate) =>
+        `stub_recovery_${candidate.id}` === body.token_hash
+      );
+      if (!user) return json({ msg: "invalid token" }, 401);
+      return json({
+        access_token: `stub_access_${user.id}`,
+        refresh_token: "stub_refresh",
+        user: { id: user.id, email: user.email },
+      });
     }
     if (url.pathname.includes("/token")) {
       const email = String(body.email ?? "").toLowerCase();
@@ -257,6 +270,13 @@ export async function requestPasswordReset(emailInput: string): Promise<void> {
   const email = normalizeEmail(emailInput);
   if (!email) return;
   await authSendRecovery(email);
+}
+
+/** Verify the token from an app-owned recovery URL. */
+export function verifyPasswordResetToken(
+  tokenHash: string,
+): Promise<string | null> {
+  return tokenHash ? authVerifyRecovery(tokenHash) : Promise.resolve(null);
 }
 
 /**

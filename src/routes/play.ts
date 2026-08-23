@@ -133,6 +133,7 @@ import {
   sessionCookie,
   sessionTokenFromCookie,
   signUp,
+  verifyPasswordResetToken,
 } from "../state/accounts.ts";
 import {
   acceptCellInvite,
@@ -324,43 +325,6 @@ ${error ? `<p class="flag-note">${escapeHtml(error)}</p>` : ""}
   });
 }
 
-/**
- * Landing page for Supabase recovery links. GoTrue appends the access token
- * in the URL hash (#access_token=...&type=recovery), which never reaches the
- * server — this script lifts it into a form field and swaps the form in.
- */
-function renderRecoveryLanding(): string {
-  return renderPage({
-    title: "Password Reset",
-    body: `<section class="account-gate">
-<h2>Password Reset</h2>
-<p id="recovery-status">Validating your reset link…</p>
-<form method="post" action="/" id="recovery-form" hidden>
-  <input type="hidden" name="a" value="reset_password">
-  <input type="hidden" name="token" id="recovery-token">
-  <label for="reset-password">New password</label>
-  <input id="reset-password" name="password" type="password" minlength="${MIN_PASSWORD_LENGTH}" required autocomplete="new-password">
-  <button type="submit" class="dialogue-option">Set Password</button>
-</form>
-</section>
-<script>
-(function () {
-  var params = new URLSearchParams(location.hash.slice(1));
-  var token = params.get("access_token");
-  var status = document.getElementById("recovery-status");
-  if (token && params.get("type") === "recovery") {
-    document.getElementById("recovery-token").value = token;
-    document.getElementById("recovery-form").hidden = false;
-    status.textContent = "Enter a new password.";
-    history.replaceState(null, "", "/?reset_token=pending");
-  } else {
-    status.textContent = "That reset link is invalid or expired.";
-  }
-})();
-</script>`,
-  });
-}
-
 function respondWithNotice(
   response: { type?: string; body: unknown; status?: number },
   title: string,
@@ -381,20 +345,26 @@ ${postButton("home", "Return")}
 
 // ── GET / — the park. The only address the player ever sees. ────────────────
 playRouter.get("/", async (context) => {
+  const params = context.request.url.searchParams;
+  const resetToken = params.get("reset_token");
+  if (resetToken !== null) {
+    const accessToken = await verifyPasswordResetToken(resetToken);
+    context.response.type = "text/html";
+    context.response.body = renderResetForm(
+      accessToken ?? "",
+      accessToken ? null : "That reset link is invalid or expired.",
+    );
+    return;
+  }
+
   const authenticated = await authenticatedPlayer(context.request.headers);
   if (!authenticated) {
-    const params = context.request.url.searchParams;
-    const resetToken = params.get("reset_token");
     const gate = params.get("gate");
     context.response.type = "text/html";
-    if (resetToken !== null) {
-      context.response.body = renderRecoveryLanding();
-    } else {
-      context.response.body = renderAccountGate(
-        null,
-        gate === "signup" || gate === "forgot" ? gate : "login",
-      );
-    }
+    context.response.body = renderAccountGate(
+      null,
+      gate === "signup" || gate === "forgot" ? gate : "login",
+    );
     return;
   }
   let player = await touchPlayer(authenticated);
