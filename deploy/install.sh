@@ -102,7 +102,7 @@ if [[ "$USE_SERVICE" -eq 1 ]]; then
 
   # Environment config: rsync excludes .env* so secrets never enter git or get
   # clobbered on redeploy; install .env only when the server lacks one.
-  if [[ ! -f "$APP_DIR/.env" && -f "$SRC_DIR/.env" ]]; then
+  if [[ -f "$SRC_DIR/.env" ]]; then
     log "installing .env"
     install -m 600 -o flockwatch "$SRC_DIR/.env" "$APP_DIR/.env"
   elif [[ ! -f "$APP_DIR/.env" ]]; then
