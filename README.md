@@ -91,11 +91,19 @@ city has an isolated event channel for presence, message-board posts, market and
 camera changes, region ticks, and cooperative operations; clients reconnect with
 bounded exponential backoff.
 
-Production reverse proxies must preserve WebSocket upgrades. The included nginx
-template forwards `Upgrade` and `Connection`, disables proxy buffering, and
-keeps regional channels open between heartbeat events. After updating an
-existing installation, render the new template and reload nginx with
-`sudo nginx -t && sudo systemctl reload nginx`.
+Production reverse proxies must preserve WebSocket upgrades. Deployment tooling
+is provided by the [DONUT Deploy](https://github.com/itsnotqwerty/donut-deploy)
+submodule, whose nginx template forwards `Upgrade` and `Connection`. Initialize
+and run it with this application's settings:
+
+```sh
+git submodule update --init deploy
+sudo ./deploy/install.sh \
+   --name flockwatch \
+   --domain flockwatch.coolfreakingames.dev \
+   --command "/usr/local/bin/deno task start" \
+   --env .env
+```
 
 ### A Nation Under Watch
 

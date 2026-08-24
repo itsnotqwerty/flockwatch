@@ -1,3 +1,6 @@
 [submodule "grillsay"]
 	path = grillsay
 	url = https://github.com/itsnotqwerty/grillsay
+[submodule "deploy"]
+	path = deploy
+	url = https://github.com/itsnotqwerty/donut-deploy
