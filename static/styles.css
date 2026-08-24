@@ -281,7 +281,7 @@ footer a:hover {
 footer a.donate {
   display: inline-block;
   background: #f7931a;
-  color: #fff;
+  color: #000;
   font-weight: 700;
   text-decoration: none;
   border-bottom: none;
@@ -292,7 +292,7 @@ footer a.donate {
 
 footer a.donate:hover {
   background: #e0830f;
-  color: #fff;
+  color: #000;
   border-bottom: none;
 }
 
