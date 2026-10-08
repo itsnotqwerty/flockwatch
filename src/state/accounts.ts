@@ -12,9 +12,10 @@ import {
   authSignUp,
   authUpdatePassword,
   authVerifyRecovery,
-  installAuthEmailStub,
-  installAuthFetchStub,
-} from "./supabase-auth.ts";
+  type Credential,
+  credentialKey,
+  tokenHash,
+} from "./local-auth.ts";
 
 export const SESSION_COOKIE = "flockwatch_session";
 export const MAX_CHARACTER_NAME_LENGTH = 24;
@@ -22,7 +23,9 @@ export const MIN_PASSWORD_LENGTH = 8;
 
 const accountKey = (id: string) => ["accounts", id];
 const accountByEmailKey = (email: string) => ["account_emails", email];
-const sessionKey = (token: string) => ["sessions", token];
+const sessionKey = async (
+  token: string,
+) => ["sessions", await tokenHash(token)];
 export const SESSION_TTL_MS = 30 * 24 * 60 * 60_000;
 
 export function normalizeCharacterName(input: string): string | null {
@@ -38,104 +41,12 @@ export function normalizeEmail(input: string): string | null {
     : null;
 }
 
-// ── In-memory auth backend for tests ────────────────────────────────────────
-// Enabled by FLOCKWATCH_AUTH=stub; mirrors GoTrue's semantics closely enough
-// for unit tests without network access.
-
-interface StubUser {
-  id: string;
-  email: string;
-  password: string;
-}
-
-const stubUsers = new Map<string, StubUser>(); // email -> user
-
-/** Test hook: clear all stubbed auth users. */
-export function resetAuthStub(): void {
-  stubUsers.clear();
-}
-
-/** Test hook: wire fetch so GoTrue calls hit the in-memory stub. */
-export function installAuthStub(): void {
-  installAuthEmailStub(() => Promise.resolve());
-  installAuthFetchStub((input, init) => {
-    const url = new URL(String(input));
-    const body = init?.body ? JSON.parse(String(init.body)) : {};
-    const json = (data: unknown, status = 200) =>
-      Promise.resolve(
-        new Response(JSON.stringify(data), {
-          status,
-          headers: { "Content-Type": "application/json" },
-        }),
-      );
-    if (url.pathname.endsWith("/admin/generate_link")) {
-      const email = String(body.email ?? "").toLowerCase();
-      if (body.type === "signup") {
-        if (stubUsers.has(email)) {
-          return json({ msg: "User already registered" }, 422);
-        }
-        const user = {
-          id: crypto.randomUUID(),
-          email,
-          password: String(body.password ?? ""),
-        };
-        stubUsers.set(email, user);
-        return json({
-          action_link: "https://auth.stub/verify?type=signup&token=stub",
-          user: { id: user.id, email: user.email },
-        });
-      }
-      if (body.type === "recovery" && stubUsers.has(email)) {
-        const user = stubUsers.get(email)!;
-        return json({
-          hashed_token: `stub_recovery_${user.id}`,
-        });
-      }
-      return json({ msg: "User not found" }, 404);
-    }
-    if (url.pathname.endsWith("/verify") && body.type === "recovery") {
-      const user = [...stubUsers.values()].find((candidate) =>
-        `stub_recovery_${candidate.id}` === body.token_hash
-      );
-      if (!user) return json({ msg: "invalid token" }, 401);
-      return json({
-        access_token: `stub_access_${user.id}`,
-        refresh_token: "stub_refresh",
-        user: { id: user.id, email: user.email },
-      });
-    }
-    if (url.pathname.includes("/token")) {
-      const email = String(body.email ?? "").toLowerCase();
-      const user = stubUsers.get(email);
-      if (!user || user.password !== String(body.password ?? "")) {
-        return json({ error_description: "Invalid login credentials" }, 400);
-      }
-      return json({
-        access_token: `stub_access_${user.id}`,
-        refresh_token: "stub_refresh",
-        user: { id: user.id, email: user.email },
-      });
-    }
-    if (url.pathname.endsWith("/user") && init?.method === "PUT") {
-      const token = String(
-        (init.headers as Record<string, string>)?.["Authorization"] ?? "",
-      ).replace("Bearer ", "");
-      const user = [...stubUsers.values()].find((u) =>
-        `stub_access_${u.id}` === token
-      );
-      if (!user) return json({ msg: "invalid token" }, 401);
-      user.password = String(body.password ?? "");
-      return json({ id: user.id, email: user.email });
-    }
-    return json({ msg: "not found" }, 404);
-  });
-}
-
 // ── Sessions ────────────────────────────────────────────────────────────────
 
 async function createSession(
   accountId: string,
   store: Store,
+  authVersion?: string,
 ): Promise<PlayerSession> {
   const token = crypto.randomUUID();
   const now = Date.now();
@@ -144,8 +55,10 @@ async function createSession(
     accountId,
     createdAt: new Date(now).toISOString(),
     expiresAt: new Date(now + SESSION_TTL_MS).toISOString(),
+    authVersion,
   };
-  await store.setIfAbsent(sessionKey(token), session, SESSION_TTL_MS);
+  const { token: _token, ...stored } = session;
+  await store.setIfAbsent(await sessionKey(token), stored, SESSION_TTL_MS);
   return session;
 }
 
@@ -206,7 +119,7 @@ export async function signUp(
   );
   if (duplicateName) return fail("That character name is already on file.");
 
-  const { user, error } = await authSignUp(email, password);
+  const { user, error } = await authSignUp(email, password, store);
   if (!user) return fail(error ?? "Signup failed.");
 
   const now = new Date().toISOString();
@@ -221,7 +134,7 @@ export async function signUp(
   await store.set(accountKey(account.id), account);
   await store.set(accountByEmailKey(email), account.id);
   await savePlayer(player, store);
-  const session = await createSession(account.id, store);
+  const session = await createSession(account.id, store, user.version);
   return { ok: true, reason: null, account, session, player };
 }
 
@@ -245,25 +158,25 @@ export async function logIn(
   if (!email) return fail("Invalid email or password.");
   const account = await findAccountByEmail(email, store);
   if (!account) return fail("Invalid email or password.");
-  const { tokens } = await authLogIn(email, password);
-  if (!tokens) return fail("Invalid email or password.");
-  if (account.authUserId && account.authUserId !== tokens.user.id) {
+  const user = await authLogIn(email, password, store);
+  if (!user) return fail("Invalid email or password.");
+  if (account.authUserId && account.authUserId !== user.id) {
     return fail("Invalid email or password.");
   }
   if (!account.authUserId) {
-    account.authUserId = tokens.user.id;
+    account.authUserId = user.id;
     await store.set(accountKey(account.id), account);
   }
   const player = await getPlayer(account.playerId, store);
   if (!player) return fail("Your character record is missing.");
-  const session = await createSession(account.id, store);
+  const session = await createSession(account.id, store, user.version);
   return { ok: true, reason: null, account, session, player };
 }
 
-// ── Password reset (Resend delivery + Supabase access token) ───────────────
+// ── Password reset ───────────────────────────────────────────────────────
 
 /**
- * Generate a Supabase recovery link and deliver it through Resend. Always
+ * Generate a local recovery link and deliver it through Resend. Always
  * resolves so callers render the same response whether the email exists.
  */
 export async function requestPasswordReset(emailInput: string): Promise<void> {
@@ -349,22 +262,30 @@ export async function getPlayerForSession(
 ): Promise<Player | null> {
   if (!token) return null;
   const store = s ?? await openStore();
-  const session = await store.get<PlayerSession>(sessionKey(token));
+  const session = await store.get<Omit<PlayerSession, "token">>(
+    await sessionKey(token),
+  );
   if (!session) return null;
   const expiresAt = session.expiresAt
     ? Date.parse(session.expiresAt)
     : Date.parse(session.createdAt) + SESSION_TTL_MS;
   if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
-    await store.delete(sessionKey(token));
+    await store.delete(await sessionKey(token));
     return null;
   }
   const account = await store.get<Account>(accountKey(session.accountId));
+  if (account?.email) {
+    const credential = await store.get<Credential>(
+      credentialKey(account.email),
+    );
+    if (!credential || credential.version !== session.authVersion) return null;
+  }
   return account ? getPlayer(account.playerId, store) : null;
 }
 
 export async function deleteSession(token: string, s?: Store): Promise<void> {
   if (!token) return;
-  await (s ?? await openStore()).delete(sessionKey(token));
+  await (s ?? await openStore()).delete(await sessionKey(token));
 }
 
 export function sessionTokenFromCookie(
@@ -380,9 +301,12 @@ export function sessionTokenFromCookie(
 }
 
 export function sessionCookie(token: string): string {
+  const secure = Deno.env.get("MAIL_ORIGIN_URL")?.startsWith("https://")
+    ? "; Secure"
+    : "";
   return `${SESSION_COOKIE}=${
     encodeURIComponent(token)
-  }; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`;
+  }; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000${secure}`;
 }
 
 export function expiredSessionCookie(): string {

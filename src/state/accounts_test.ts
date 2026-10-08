@@ -3,26 +3,22 @@ import {
   createCharacterAccount,
   expiredSessionCookie,
   getPlayerForSession,
-  installAuthStub,
   logIn,
   normalizeCharacterName,
   normalizeEmail,
   requestPasswordReset,
-  resetAuthStub,
   resetPassword,
   sessionCookie,
   sessionTokenFromCookie,
   signUp,
   verifyPasswordResetToken,
 } from "./accounts.ts";
-import { installAuthEmailStub } from "./supabase-auth.ts";
-import { createMemoryStore } from "./store.ts";
+import { authConfirmEmail, installAuthEmailStub } from "./local-auth.ts";
+import { createMemoryStore, useStore } from "./store.ts";
 
-// Route GoTrue calls to the in-memory stub (no network in tests).
-installAuthStub();
+installAuthEmailStub(() => Promise.resolve());
 
 Deno.test("character names are normalized and constrained", () => {
-  resetAuthStub();
   assertEquals(normalizeCharacterName("  Citizen   Jane  "), "Citizen Jane");
   assertEquals(normalizeCharacterName("x"), null);
   assertEquals(normalizeCharacterName("Citizen<script>"), null);
@@ -54,8 +50,18 @@ Deno.test("session cookies round-trip and expire", () => {
   assert(expiredSessionCookie().includes("Max-Age=0"));
 });
 
+Deno.test("HTTPS deployments set Secure session cookies", () => {
+  const origin = Deno.env.get("MAIL_ORIGIN_URL");
+  try {
+    Deno.env.set("MAIL_ORIGIN_URL", "https://flockwatch.example.com");
+    assert(sessionCookie("test-token").includes("; Secure"));
+  } finally {
+    if (origin === undefined) Deno.env.delete("MAIL_ORIGIN_URL");
+    else Deno.env.set("MAIL_ORIGIN_URL", origin);
+  }
+});
+
 Deno.test("signup creates an email account and rejects duplicates", async () => {
-  resetAuthStub();
   const store = createMemoryStore();
   const created = await signUp(
     "Jane@Example.com",
@@ -89,8 +95,9 @@ Deno.test("signup creates an email account and rejects duplicates", async () => 
   assert(!short.ok);
 });
 
-Deno.test("signup and recovery emails use generated Supabase links", async () => {
-  resetAuthStub();
+Deno.test("signup and recovery emails use local one-use links", async () => {
+  const store = createMemoryStore();
+  useStore(store);
   const messages: Array<{ to: string; subject: string; html: string }> = [];
   installAuthEmailStub((message) => {
     messages.push(message);
@@ -102,19 +109,22 @@ Deno.test("signup and recovery emails use generated Supabase links", async () =>
       "jane@example.com",
       "correct horse battery",
       "Citizen Jane",
-      createMemoryStore(),
+      store,
     );
     await requestPasswordReset("jane@example.com");
 
     assertEquals(messages.length, 2);
     assertEquals(messages[0].to, "jane@example.com");
     assert(messages[0].subject.includes("Confirm"));
-    assert(messages[0].html.includes("type=signup&amp;token=stub"));
+    const confirm = new URL(messages[0].html.match(/href="([^"]+)"/)![1])
+      .searchParams.get("confirm_token")!;
+    assert(await authConfirmEmail(confirm));
+    assertEquals(await authConfirmEmail(confirm), false);
     assert(messages[1].subject.includes("Reset"));
     assert(messages[1].html.startsWith(
       '<p>A password reset has been requested for your account. To reset your password, please click <a href="',
     ));
-    assert(messages[1].html.includes("/?reset_token=stub_recovery_"));
+    assert(messages[1].html.includes("/?reset_token="));
     assert(messages[1].html.endsWith('">this link</a>.</p>'));
     assert(!messages[1].html.includes("#access_token"));
   } finally {
@@ -123,7 +133,6 @@ Deno.test("signup and recovery emails use generated Supabase links", async () =>
 });
 
 Deno.test("login verifies the password and opens a session", async () => {
-  resetAuthStub();
   const store = createMemoryStore();
   await signUp(
     "jane@example.com",
@@ -147,17 +156,23 @@ Deno.test("login verifies the password and opens a session", async () => {
 });
 
 Deno.test("password reset via recovery access token", async () => {
-  resetAuthStub();
   const store = createMemoryStore();
+  useStore(store);
+  const messages: string[] = [];
+  installAuthEmailStub((message) => {
+    messages.push(message.html);
+    return Promise.resolve();
+  });
   await signUp("jane@example.com", "old password 1", "Citizen Jane", store);
 
   const login = await logIn("jane@example.com", "old password 1", store);
   assert(login.ok);
-  const account = login.account!;
-  const token = await verifyPasswordResetToken(
-    `stub_recovery_${account.authUserId}`,
-  );
+  await requestPasswordReset("jane@example.com");
+  const recoveryToken = new URL(messages.at(-1)!.match(/href="([^"]+)"/)![1])
+    .searchParams.get("reset_token")!;
+  const token = await verifyPasswordResetToken(recoveryToken);
   assert(token);
+  assertEquals(await verifyPasswordResetToken(recoveryToken), null);
 
   const short = await resetPassword(token, "short");
   assert(!short.ok);
@@ -166,7 +181,35 @@ Deno.test("password reset via recovery access token", async () => {
 
   const reset = await resetPassword(token, "new password 2");
   assert(reset.ok, reset.reason ?? "reset failed");
+  assertEquals(await getPlayerForSession(login.session!.token, store), null);
+  assertEquals((await resetPassword(token, "another password")).ok, false);
 
   assert(!(await logIn("jane@example.com", "old password 1", store)).ok);
   assert((await logIn("jane@example.com", "new password 2", store)).ok);
+  installAuthEmailStub(() => Promise.resolve());
+});
+
+Deno.test("recovery tokens expire and unknown emails do not send mail", async () => {
+  const store = createMemoryStore();
+  useStore(store);
+  const messages: string[] = [];
+  installAuthEmailStub((message) => {
+    messages.push(message.html);
+    return Promise.resolve();
+  });
+  const originalNow = Date.now;
+  try {
+    await signUp("expiry@example.com", "test password", "Expiry Test", store);
+    await requestPasswordReset("nobody@example.com");
+    assertEquals(messages.length, 1);
+    await requestPasswordReset("expiry@example.com");
+    const token = new URL(messages.at(-1)!.match(/href="([^"]+)"/)![1])
+      .searchParams.get("reset_token")!;
+    const future = originalNow() + 31 * 60_000;
+    Date.now = () => future;
+    assertEquals(await verifyPasswordResetToken(token), null);
+  } finally {
+    Date.now = originalNow;
+    installAuthEmailStub(() => Promise.resolve());
+  }
 });

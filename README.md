@@ -134,19 +134,22 @@ Then open [http://localhost:8000](http://localhost:8000).
 
 ### Persistence
 
-Game state is stored in Supabase (Postgres) when configured, with Deno KV as the
-local fallback. To use Supabase:
+Game state, credentials, and sessions are stored in local PostgreSQL using
+`DATABASE_URL`. The JSON key/value format is unchanged. Passwords use bcrypt;
+session and email tokens are hashed, expire, and recovery tokens are one-use.
+Password changes invalidate existing sessions. Resend still delivers email.
 
-1. Create a project at [supabase.com](https://supabase.com) and run
-   [supabase/schema.sql](supabase/schema.sql) in the SQL editor.
-2. Copy [.env.example](.env.example) to `.env` and set `SUPABASE_URL` and
-   `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE_SECRET_KEY`).
-3. Set `SUPABASE_ANON_KEY`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and
-   `MAIL_ORIGIN_URL` for account login and Resend-delivered signup/recovery links.
-   Add `MAIL_ORIGIN_URL` to the allowed redirect URLs in Supabase Auth settings.
-4. To move existing KV data over, run `deno task migrate-to-supabase` with the
-   same environment set. Existing sessions retain their recorded expiry; legacy
-   sessions without one expire 30 days after creation.
+1. Provision PostgreSQL and apply [db/schema.sql](db/schema.sql).
+2. Configure [.env.example](.env.example) with `DATABASE_URL`,
+   `DENO_ENV=production`, and your existing Resend settings. Export these variables
+   for `deno task start`, or use `deno task dev` to load the local environment file.
+3. Follow [docs/postgres.md](docs/postgres.md) to import existing Supabase data
+   and credentials before switching the service over.
+
+Production requires PostgreSQL. Deno KV remains a development fallback;
+`DENO_KV_PATH=memory` is a development/test option. No Supabase service is needed
+at runtime. Historical files under `supabase/` are retained only as migration
+reference. Run one application process for the game scheduler.
 
 ## Documentation
 

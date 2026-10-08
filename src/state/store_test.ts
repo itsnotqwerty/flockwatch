@@ -1,5 +1,10 @@
 import { assert, assertEquals } from "$assert";
-import { createMemoryStore, encodeKey, encodePrefix } from "./store.ts";
+import {
+  createMemoryStore,
+  createPostgresStore,
+  encodeKey,
+  encodePrefix,
+} from "./store.ts";
 
 Deno.test("encodeKey round-trips through JSON", () => {
   const key = ["market", "cleveland", "listing_1"];
@@ -45,4 +50,41 @@ Deno.test("memory setIfAbsent honors expiry", async () => {
   } finally {
     Date.now = originalNow;
   }
+});
+
+Deno.test({
+  name:
+    "Postgres store preserves keys, TTLs, atomic claims and token consumption",
+  ignore: !Deno.env.get("TEST_DATABASE_URL"),
+  async fn() {
+    const store = createPostgresStore(Deno.env.get("TEST_DATABASE_URL")!);
+    const prefix = ["store_test", crypto.randomUUID(), "%_\\"];
+    try {
+      await store.set(prefix, { root: true });
+      await store.set([...prefix, "child"], { child: true });
+      assertEquals((await store.list(prefix)).length, 2);
+      assertEquals(await store.get(prefix), { root: true });
+      const claims = await Promise.all(
+        Array.from(
+          { length: 10 },
+          () => store.setIfAbsent([...prefix, "lock"], true),
+        ),
+      );
+      assertEquals(claims.filter(Boolean).length, 1);
+      const tokens = await Promise.all(
+        Array.from({ length: 10 }, () => store.take([...prefix, "lock"])),
+      );
+      assertEquals(tokens.filter(Boolean).length, 1);
+      await store.setIfAbsent([...prefix, "expired"], true, -1);
+      assertEquals(await store.get([...prefix, "expired"]), null);
+      assertEquals(await store.take([...prefix, "expired"]), null);
+      assert(await store.setIfAbsent([...prefix, "expired"], false));
+      assertEquals(await store.take([...prefix, "expired"]), false);
+    } finally {
+      for (const suffix of [[], ["child"], ["lock"], ["expired"]]) {
+        await store.delete([...prefix, ...suffix]);
+      }
+      await store.close();
+    }
+  },
 });

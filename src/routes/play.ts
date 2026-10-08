@@ -346,8 +346,26 @@ ${postButton("home", "Return")}
 // ── GET / — the park. The only address the player ever sees. ────────────────
 playRouter.get("/", async (context) => {
   const params = context.request.url.searchParams;
+  const confirmToken = params.get("confirm_token");
+  if (confirmToken !== null) {
+    const { authConfirmEmail } = await import("../state/local-auth.ts");
+    const confirmed = await authConfirmEmail(confirmToken);
+    context.response.headers.set("Referrer-Policy", "no-referrer");
+    context.response.headers.set("Cache-Control", "no-store");
+    respondWithNotice(
+      context.response,
+      "Email Confirmation",
+      confirmed
+        ? "Your email is confirmed."
+        : "That link is invalid or expired.",
+      confirmed,
+    );
+    return;
+  }
   const resetToken = params.get("reset_token");
   if (resetToken !== null) {
+    context.response.headers.set("Referrer-Policy", "no-referrer");
+    context.response.headers.set("Cache-Control", "no-store");
     const accessToken = await verifyPasswordResetToken(resetToken);
     context.response.type = "text/html";
     context.response.body = renderResetForm(

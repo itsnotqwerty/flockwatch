@@ -334,7 +334,7 @@ export interface Account {
   /** Normalized (lowercase, trimmed) login email. Optional for legacy
    *  character-only accounts created before email auth. */
   email?: string;
-  /** Supabase Auth (auth.users) id backing this account, when migrated. */
+  /** Credential identity; retained when importing existing accounts. */
   authUserId?: string;
 }
 
@@ -343,6 +343,7 @@ export interface PlayerSession {
   accountId: string;
   createdAt: string;
   expiresAt?: string;
+  authVersion?: string;
 }
 
 export interface Cell {

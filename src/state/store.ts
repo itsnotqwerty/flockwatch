@@ -1,11 +1,14 @@
 /**
  * Persistence layer. The only module that touches storage (design §3.2).
- * Uses Supabase (Postgres) when SUPABASE_URL and a service key are set,
- * Deno KV otherwise, and an in-memory map for tests.
+ * Uses local PostgreSQL in production, Deno KV for legacy development,
+ * and an in-memory map for tests.
  */
+
+import postgres from "postgres";
 
 export interface Store {
   get<T>(key: string[]): Promise<T | null>;
+  take<T>(key: string[]): Promise<T | null>;
   set<T>(key: string[], value: T): Promise<void>;
   setIfAbsent<T>(
     key: string[],
@@ -14,7 +17,7 @@ export interface Store {
   ): Promise<boolean>;
   delete(key: string[]): Promise<void>;
   list<T>(prefix: string[]): Promise<Array<{ key: string[]; value: T }>>;
-  close(): void;
+  close(): void | Promise<void>;
 }
 
 /** In-memory store for tests and offline development. */
@@ -38,6 +41,11 @@ export function createMemoryStore(): Store {
   return {
     get<T>(key: string[]): Promise<T | null> {
       const entry = liveEntry(encode(key));
+      return Promise.resolve(entry === undefined ? null : (entry.value as T));
+    },
+    take<T>(key: string[]): Promise<T | null> {
+      const entry = liveEntry(encode(key));
+      map.delete(encode(key));
       return Promise.resolve(entry === undefined ? null : (entry.value as T));
     },
     set<T>(key: string[], value: T): Promise<void> {
@@ -88,6 +96,12 @@ export function createKvStore(kv: Deno.Kv): Store {
       const entry = await kv.get<T>(key);
       return entry.value;
     },
+    async take<T>(key: string[]): Promise<T | null> {
+      const entry = await kv.get<T>(key);
+      if (entry.value === null) return null;
+      const result = await kv.atomic().check(entry).delete(key).commit();
+      return result.ok ? entry.value : null;
+    },
     async set<T>(key: string[], value: T): Promise<void> {
       await kv.set(key, value);
     },
@@ -123,7 +137,7 @@ export function createKvStore(kv: Deno.Kv): Store {
 let store: Store | null = null;
 
 /**
- * Key encoding for the Supabase table: JSON.stringify preserves segments
+ * Key encoding for the database table: JSON.stringify preserves segments
  * exactly. A prefix becomes a JSON fragment ('["npcs"]' -> '["npcs",')
  * that matches all its children under LIKE. Exported for tests.
  */
@@ -131,87 +145,78 @@ export const encodeKey = (key: string[]): string => JSON.stringify(key);
 export const encodePrefix = (prefix: string[]): string =>
   prefix.length === 0 ? "[" : JSON.stringify(prefix).replace(/\]$/, ",");
 
-interface SupabaseStoreOptions {
-  url: string;
-  serviceKey: string;
-}
-
-/**
- * Supabase-backed store. Talks to PostgREST RPC functions defined in
- * supabase/schema.sql (kv_get, kv_set, kv_set_if_absent, kv_delete,
- * kv_list). Uses the service role key; the table has RLS enabled.
- */
-export function createSupabaseStore(opts: SupabaseStoreOptions): Store {
-  const rpc = async (fn: string, body: Record<string, unknown>) => {
-    const res = await fetch(`${opts.url}/rest/v1/rpc/${fn}`, {
-      method: "POST",
-      headers: {
-        "apikey": opts.serviceKey,
-        "Authorization": `Bearer ${opts.serviceKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      throw new Error(
-        `Supabase rpc ${fn} failed: ${res.status} ${await res.text()}`,
-      );
-    }
-    const text = await res.text();
-    return text === "" ? null : JSON.parse(text);
-  };
+export function createPostgresStore(url: string): Store {
+  const sql = postgres(url, { max: 5 });
   return {
     async get<T>(key: string[]): Promise<T | null> {
-      return (await rpc("kv_get", { k: encodeKey(key) })) as T | null;
+      const [row] = await sql`SELECT value FROM kv_store WHERE key = ${
+        encodeKey(key)
+      }
+        AND (expires_at IS NULL OR expires_at > now())`;
+      return row ? row.value as T : null;
+    },
+    async take<T>(key: string[]): Promise<T | null> {
+      const [row] = await sql`DELETE FROM kv_store WHERE key = ${encodeKey(key)}
+        AND (expires_at IS NULL OR expires_at > now()) RETURNING value`;
+      return row ? row.value as T : null;
     },
     async set<T>(key: string[], value: T): Promise<void> {
-      await rpc("kv_set", { k: encodeKey(key), v: value });
+      await sql`INSERT INTO kv_store (key, value, expires_at)
+        VALUES (${encodeKey(key)}, ${
+        sql.json(value as postgres.JSONValue)
+      }, NULL)
+        ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, expires_at = NULL`;
     },
     async setIfAbsent<T>(
       key: string[],
       value: T,
       expireIn?: number,
     ): Promise<boolean> {
-      return (await rpc("kv_set_if_absent", {
-        k: encodeKey(key),
-        v: value,
-        expire_ms: expireIn ?? null,
-      })) as boolean;
+      const rows = await sql`INSERT INTO kv_store (key, value, expires_at)
+        VALUES (${encodeKey(key)}, ${sql.json(value as postgres.JSONValue)},
+          CASE WHEN ${expireIn ?? null}::bigint IS NULL THEN NULL
+            ELSE now() + ${expireIn ?? 0} * interval '1 millisecond' END)
+        ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, expires_at = EXCLUDED.expires_at
+          WHERE kv_store.expires_at <= now()
+        RETURNING key`;
+      return rows.length === 1;
     },
     async delete(key: string[]): Promise<void> {
-      await rpc("kv_delete", { k: encodeKey(key) });
+      await sql`DELETE FROM kv_store WHERE key = ${encodeKey(key)}`;
     },
     async list<T>(
       prefix: string[],
     ): Promise<Array<{ key: string[]; value: T }>> {
-      const rows = (await rpc("kv_list", {
-        prefix: encodePrefix(prefix),
-      })) as Array<{ key: string; value: T }>;
-      return rows.map((r) => ({
-        key: JSON.parse(r.key) as string[],
-        value: r.value,
+      const encoded = encodePrefix(prefix);
+      const rows = await sql`SELECT key, value FROM kv_store
+        WHERE (key = ${encodeKey(prefix)} OR starts_with(key, ${encoded}))
+          AND (expires_at IS NULL OR expires_at > now()) ORDER BY key`;
+      return rows.map((row) => ({
+        key: JSON.parse(row.key) as string[],
+        value: row.value as T,
       }));
     },
-    close() {
-      // PostgREST is stateless; nothing to close.
+    async close() {
+      await sql.end();
     },
   };
 }
 
 /**
- * Open the shared store. Supabase when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
- * (or SUPABASE_SECRET_KEY) are set, KV otherwise, memory when
- * DENO_KV_PATH=memory (used by tests).
+ * Open the shared store using DATABASE_URL; memory is available for tests.
  */
 export async function openStore(): Promise<Store> {
   if (store) return store;
-  const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ??
-    Deno.env.get("SUPABASE_SECRET_KEY");
-  if (Deno.env.get("DENO_KV_PATH") === "memory") {
+  const databaseUrl = Deno.env.get("DATABASE_URL");
+  const production = Deno.env.get("DENO_ENV") === "production" ||
+    Deno.env.get("DENO_DEPLOYMENT_ID");
+  if (production && !databaseUrl) {
+    throw new Error("DATABASE_URL is required in production");
+  }
+  if (!production && Deno.env.get("DENO_KV_PATH") === "memory") {
     store = createMemoryStore();
-  } else if (supabaseUrl && supabaseKey) {
-    store = createSupabaseStore({ url: supabaseUrl, serviceKey: supabaseKey });
+  } else if (databaseUrl) {
+    store = createPostgresStore(databaseUrl);
   } else {
     const kv = await Deno.openKv(Deno.env.get("DENO_KV_PATH") || undefined);
     store = createKvStore(kv);
